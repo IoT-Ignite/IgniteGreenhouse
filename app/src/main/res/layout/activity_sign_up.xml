@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/login_activity"
+    tools:context="com.ardic.android.iotignite.greenhouse.activities.login.LoginActivity"
+    android:background="@drawable/farm_background1"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
+
+
+    <ToggleButton
+        android:id="@+id/activity_sign_up_tb_show_hide_password"
+        android:layout_width="@dimen/edit_text_icon"
+        android:layout_height="@dimen/edit_text_icon"
+        android:background="@drawable/toggle_selector"
+        android:textOff=""
+        android:textOn=""
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_email" />
+
+    <ToggleButton
+        android:id="@+id/activity_sign_up_tb_show_hide_confirm_password"
+        android:layout_width="@dimen/edit_text_icon"
+        android:layout_height="@dimen/edit_text_icon"
+        android:background="@drawable/toggle_selector"
+        android:textOff=""
+        android:textOn=""
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="@dimen/edit_text_distance"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_password" />
+
+    <ImageView
+        android:id="@+id/activity_sign_up_img_mail_validation"
+        android:layout_width="@dimen/edit_text_icon"
+        android:layout_height="@dimen/edit_text_icon"
+        app:srcCompat="@drawable/cancel"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_last_name" />
+
+    <EditText
+        android:id="@+id/activity_sign_up_edt_first_name"
+        android:layout_width="@dimen/login_signup_edit_text_width"
+        android:layout_height="@dimen/login_signup_edit_text_height"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="43dp"
+        android:ems="10"
+        android:hint="first name"
+        android:inputType="textPersonName"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+    <EditText
+        android:id="@+id/activity_sign_up_edt_last_name"
+        android:layout_width="@dimen/login_signup_edit_text_width"
+        android:layout_height="@dimen/login_signup_edit_text_height"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="@dimen/edit_text_distance"
+        android:ems="10"
+        android:hint="last name"
+        android:inputType="textPersonName"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_first_name"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/activity_sign_up_edt_email"
+        android:layout_width="@dimen/login_signup_edit_text_width"
+        android:layout_height="@dimen/login_signup_edit_text_height"
+        android:layout_marginLeft="8dp"
+        android:ems="10"
+        android:hint="mail@example.com"
+        android:inputType="textEmailAddress"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/edit_text_distance"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_last_name"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/activity_sign_up_edt_password"
+        android:layout_width="@dimen/login_signup_edit_text_width"
+        android:layout_height="@dimen/login_signup_edit_text_height"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="@dimen/edit_text_distance"
+        android:ems="10"
+        android:hint="password"
+        android:inputType="textPassword"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_email"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/activity_sign_up_edt_confirm_password"
+        android:layout_width="@dimen/login_signup_edit_text_width"
+        android:layout_height="@dimen/login_signup_edit_text_height"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="@dimen/edit_text_distance"
+        android:ems="10"
+        android:hint="confirm password"
+        android:inputType="textPassword"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_password"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <CheckBox
+        android:id="@+id/activity_sign_up_cb_accept_terms_of_use"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="36dp"
+        android:layout_marginTop="@dimen/edit_text_distance"
+        android:text="I have read and accept the Terms of Use."
+        android:textColor="@color/colorDarkGray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_confirm_password" />
+
+    <Button
+        android:id="@+id/activity_sign_up_btn_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:background="@drawable/button_shape"
+        android:text="SIGN UP"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="@dimen/edit_text_distance"
+        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_cb_accept_terms_of_use" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.82" />
+
+
+
+
+</android.support.constraint.ConstraintLayout>

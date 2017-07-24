@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <menu
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".RegisterGateway"
+        android:background="@color/ColorPrimaryDark"
+    >
+
+        <item
+            android:id="@+id/about"
+            android:orderInCategory="100"
+            android:title="About"
+            app:showAsAction="never"
+            />
+        <item
+            android:id="@+id/buy_device"
+            android:orderInCategory="200"
+            android:title="Buy Device"
+            android:icon="@drawable/tick"
+            app:showAsAction="never"
+            ></item>
+    <item
+        android:id="@+id/faq"
+        android:orderInCategory="300"
+        android:title="FAQ"
+        android:icon="@drawable/cancel"></item>
+
+</menu>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Greenhouse</string>
+    <string name="not_a_member">"Don't have an account? Sign up now ▶"</string>
+    <string name="reset_pessword">"Forgot your password?"</string>
+    <string name="title_activity_add_gateway">AddGateway</string>
+
+    <string name="title_activity_qrscan">QRScanActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_dashboard">Greenhouse Dashboard</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>

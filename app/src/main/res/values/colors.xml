@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="ColorPrimary">#555555</color>
+    <color name="ColorPrimaryDark">#383838</color>
+
+    <color name="colorDarkGray">#383838</color>
+    <color name="colorGray">#555555</color>
+    <color name="colorLightGray">#8D8D8D</color>
+    <color name="white">#FFFFFF</color>
+
+
+    <color name="colorIconLightBlue">#3F51B5</color>
+    <color name="colorIconDarkBlue">#2944b0</color>
+    <color name="colorIconLightGreen">#c3ea21</color>
+    <color name="colorIconDarkGreen">#8adb53</color>
+    <color name="colorIotIgniteBlue">#167efb</color>
+
+    <color name="black_overlay">#66000000</color>
+
+
+</resources>

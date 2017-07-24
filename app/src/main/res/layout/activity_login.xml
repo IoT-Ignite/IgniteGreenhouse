@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/login_activity"
+    tools:context="com.ardic.android.iotignite.greenhouse.activities.LoginActivity"
+    android:background="@drawable/farm_background1"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
+
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar"></include>
+
+    <ImageView
+        android:id="@+id/activity_login_img_greenhouse_icon"
+        android:layout_width="175dp"
+        android:layout_height="175dp"
+        app:srcCompat="@drawable/greenhouse_icon512"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="54dp"
+        app:layout_constraintRight_toLeftOf="@+id/guideline3"
+        android:layout_marginRight="0dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="0.448" />
+
+    <EditText
+        android:id="@+id/activity_login_edt_email"
+        android:layout_width="@dimen/login_signup_edit_text_width"
+        android:layout_height="@dimen/login_signup_edit_text_height"
+        android:layout_marginLeft="16dp"
+        android:ems="10"
+        android:hint="mail@example.com"
+        android:inputType="textEmailAddress"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_login_img_greenhouse_icon"
+        app:layout_constraintRight_toLeftOf="@+id/guideline3"
+        android:layout_marginRight="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        tools:layout_editor_absoluteY="187dp" />
+
+    <EditText
+        android:id="@+id/activity_login_edt_password"
+        android:layout_width="@dimen/login_signup_edit_text_width"
+        android:layout_height="@dimen/login_signup_edit_text_height"
+        android:layout_marginLeft="16dp"
+        android:ems="10"
+        android:hint="password"
+        android:inputType="textPassword"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="@dimen/edit_text_distance"
+        app:layout_constraintTop_toBottomOf="@+id/activity_login_edt_email"
+        tools:layout_editor_absoluteY="252dp" />
+
+    <Button
+        android:id="@+id/activity_login_btn_sign_in"
+        android:layout_width="232dp"
+        android:layout_height="54dp"
+        android:text="SIGN IN"
+        android:textColor="@android:color/white"
+        android:background="@drawable/button_shape"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="11dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_login_cb_remember_me" />
+
+    <TextView
+        android:id="@+id/activity_login_txt_sign_up_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/not_a_member"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_login_btn_sign_in"
+        app:layout_constraintHorizontal_bias="0.503" />
+
+    <TextView
+        android:id="@+id/activity_login_txt_forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset_pessword"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_login_txt_sign_up_now"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp" />
+
+    <ImageView
+        android:id="@+id/activity_login_img_mail_validation"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="34dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.023"
+        app:srcCompat="@drawable/cancel"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_login_img_greenhouse_icon" />
+
+    <ToggleButton
+        android:id="@+id/activity_login_tb_show_hide_password"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/toggle_selector"
+        android:textOff=""
+        android:textOn=""
+        android:layout_marginTop="31dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_login_img_mail_validation"
+        android:layout_marginEnd="28dp"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <CheckBox
+        android:id="@+id/activity_login_cb_remember_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember Me"
+        android:textColor="@color/colorDarkGray"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/activity_login_edt_password" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="16dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.82" />
+
+
+
+</android.support.constraint.ConstraintLayout>
