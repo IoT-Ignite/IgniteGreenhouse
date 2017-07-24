@@ -27,9 +27,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.SignUpActivity" />
-        <activity android:name=".activities.GatewayDashboardActivity" />
         <activity android:name=".activities.ForgotPasswordActivity" />
         <activity android:name=".activities.QRScanActivity" />
+        <activity
+            android:name=".activities.GatewayDashboardActivity"
+            android:label="@string/title_activity_gateway_dashboard"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.SensorDashboardActivity"
+            android:label="@string/title_activity_sensor_dashboard"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
