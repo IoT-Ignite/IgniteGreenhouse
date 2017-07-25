@@ -77,9 +77,9 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
             super(view);
 
             cardViewSensor = view.findViewById(R.id.content_sensor_dashboard_card_view_item_card_view);
-            txtSensorId = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_id);
-            txtSensorValue = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_status);
-            imgSensorStatus = view.findViewById(R.id.content_gateway_dashboard_card_view_item_img_gateway_status);
+            txtSensorId = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_id);
+            txtSensorValue = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_value);
+            imgSensorStatus = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_status);
 
         }
     }

@@ -44,12 +44,16 @@ public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGateway
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
+        holder.txtGatewayLabel.setText(list_gateway.get(position).getGatewayLabel());
         holder.txtGatewayId.setText(list_gateway.get(position).getGatewayId());
 
         if (list_gateway.get(position).isGatewayOnline()) {
             holder.imgGatewayStatus.setImageResource(R.drawable.raspberry_pi_online);
+            holder.txtGatewayStatus.setText("Connected");
         } else {
             holder.imgGatewayStatus.setImageResource(R.drawable.offline_raspberrypi);
+            holder.txtGatewayStatus.setText("Disconnected");
+
         }
     }
 
@@ -65,7 +69,9 @@ public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGateway
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        public TextView txtGatewayLabel;
         public TextView txtGatewayId;
+        public TextView txtGatewayStatus;
         public ImageView imgGatewayStatus;
         public CardView cardViewGateway;
 
@@ -74,7 +80,9 @@ public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGateway
             super(view);
 
             cardViewGateway = view.findViewById(R.id.content_gateway_dashboard_card_view_item_card_view);
+            txtGatewayLabel = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_label);
             txtGatewayId = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_id);
+            txtGatewayStatus = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_status);
             imgGatewayStatus = view.findViewById(R.id.content_gateway_dashboard_card_view_item_img_gateway_status);
 
         }

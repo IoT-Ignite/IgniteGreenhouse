@@ -19,7 +19,12 @@ public class Constants {
 
     public static final int READ_QR_CODE = 1;
     public static final int CREATE_NEW_ACCOUNT = 2;
-
+    /**
+     * Shared Pref names.
+     */
+    public static final String IS_REMEMBER_ME_CHECKED = "is-remember-me-checked";
+    public static final String REMEMBER_MAIL = "remember-mail";
+    public static final String REMEMBER_PASSWORD = "remember-password";
 
     public class Actions {
         public static final String ACTION_SIGN_UP_SUCCESS = "sign-up-success";
@@ -32,11 +37,5 @@ public class Constants {
         public static final String EXTRA_GW_QR_CODE = "gw-qr-data";
     }
 
-    /**
-     * Shared Pref names.
-     */
-    public static final String IS_REMEMBER_ME_CHECKED = "is-remember-me-checked";
-    public static final String REMEMBER_MAIL="remember-mail";
-    public static final String REMEMBER_PASSWORD = "remember-password";
 
 }

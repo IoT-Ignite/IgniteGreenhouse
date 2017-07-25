@@ -91,7 +91,8 @@ public class SensorDashboardActivity extends AppCompatActivity
             public void onItemClick(View v, int position) {
                 Log.i("position", "Position on recycler view:" + position);
                 SensorViewModel sensor = sensor_list.get(position);
-                Toast.makeText(getApplicationContext(), "position:" + " " + position + " " + "Sensor ID:" + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "position:" + " " + position + " "
+                        + "Sensor ID:" + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
             }
         });
 

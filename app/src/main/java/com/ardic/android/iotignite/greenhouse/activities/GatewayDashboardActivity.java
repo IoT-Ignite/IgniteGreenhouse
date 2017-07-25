@@ -62,25 +62,8 @@ public class GatewayDashboardActivity extends AppCompatActivity
         getDeviceInfo();
 
         //use "add" function onActivityResult method with result values.
-        gateway_list.add(new GatewayViewModel("My Potatoes Raspberry PI", true));
-        gateway_list.add(new GatewayViewModel("Raspberry PI ASDS1224", false));
-
-
-        adapter_items = new RecyclerGatewayAdapter(gateway_list, new CustomCardViewClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Log.i(TAG, "Position on recycler view:" + position);
-                GatewayViewModel gateway = gateway_list.get(position);
-                Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
-            }
-        });
-        recycler_view.setHasFixedSize(true);
-
-        recycler_view.setAdapter(adapter_items);
-
-        recycler_view.setItemAnimator(new DefaultItemAnimator());
-
+        gateway_list.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
+        gateway_list.add(new GatewayViewModel("Tomatoes", "Raspberry PI ASDS1224", true));
     }
 
     private void initUI() {
@@ -109,12 +92,17 @@ public class GatewayDashboardActivity extends AppCompatActivity
         recycler_view.setLayoutManager(layoutManager);
 
         gateway_list = new ArrayList<>();
+        adapter_items = new RecyclerGatewayAdapter(gateway_list, this);
+
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setAdapter(adapter_items);
+        recycler_view.setItemAnimator(new DefaultItemAnimator());
 
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -142,7 +130,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -217,6 +205,9 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(View v, int position) {
-
+        Log.i(TAG, "Position on recycler view:" + position);
+        GatewayViewModel gateway = gateway_list.get(position);
+        Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
     }
 }
