@@ -14,4 +14,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <string name="title_activity_gateway_dashboard">Gateway Dashboard</string>
+
+    <string name="gateway_status_online">Online</string>
+    <string name="gateway_status_offline">Offline</string>
+    <string name="title_activity_sensor_dashboard">SensorDashboardActivity</string>
+
+
 </resources>

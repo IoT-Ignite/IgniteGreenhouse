@@ -123,13 +123,13 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
         int id = item.getItemId();
 
-        if (id == R.id.about) {
+        if (id == R.id.menu_main_about) {
             Toast.makeText(this, "About Clicked", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (id == R.id.buy_device) {
+        } else if (id == R.id.menu_main_buy_device) {
             Toast.makeText(this, "Buying Device Clicked", Toast.LENGTH_SHORT).show();
             return true;
-        } else if (id == R.id.faq) {
+        } else if (id == R.id.menu_main_faq) {
             Toast.makeText(this, "FAQ Clicked", Toast.LENGTH_SHORT).show();
             return true;
         } else {
