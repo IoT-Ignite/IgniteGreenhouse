@@ -3,27 +3,27 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".RegisterGateway"
         android:background="@color/ColorPrimaryDark"
+        tools:context=".RegisterGateway"
     >
 
         <item
-            android:id="@+id/about"
+            android:id="@+id/menu_main_about"
             android:orderInCategory="100"
             android:title="About"
             app:showAsAction="never"
             />
         <item
-            android:id="@+id/buy_device"
+            android:id="@+id/menu_main_buy_device"
+            android:icon="@drawable/tick"
             android:orderInCategory="200"
             android:title="Buy Device"
-            android:icon="@drawable/tick"
             app:showAsAction="never"
             ></item>
     <item
-        android:id="@+id/faq"
+        android:id="@+id/menu_main_faq"
+        android:icon="@drawable/cancel"
         android:orderInCategory="300"
-        android:title="FAQ"
-        android:icon="@drawable/cancel"></item>
+        android:title="FAQ"></item>
 
 </menu>

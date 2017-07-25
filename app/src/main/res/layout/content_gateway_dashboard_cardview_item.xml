@@ -1,127 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/gateway_dashboard_item"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="16dp"
+    tools:showIn="@layout/content_sensor_dashboard">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
+        android:id="@+id/content_gateway_dashboard_card_view_item_card_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         card_view:cardCornerRadius="4dp">
 
-        <android.support.constraint.ConstraintLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:background="#CC000000"
-                card_view:layout_constraintHorizontal_bias="0.0"
-                card_view:layout_constraintLeft_toLeftOf="parent"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/content_gateway_dashboard_cardview_item_txt_gateway_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="My Potatoes"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    card_view:layout_constraintBottom_toBottomOf="parent"
-                    card_view:layout_constraintLeft_toLeftOf="parent"
-                    card_view:layout_constraintRight_toRightOf="parent"
-                    card_view:layout_constraintTop_toTopOf="parent" />
-
-            </android.support.constraint.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/content_gateway_dashboard_cardview_item_txt_gateway_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="160dp"
-                android:text="@string/gateway_status_online"
-                android:textSize="20sp"
-                card_view:layout_constraintHorizontal_bias="0.231"
-                card_view:layout_constraintLeft_toRightOf="@+id/textView3"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/content_gateway_dashboard_gateway_id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="120dp"
-                android:text="xxx"
-                android:textSize="20sp"
-                card_view:layout_constraintHorizontal_bias="0.0"
-                card_view:layout_constraintLeft_toRightOf="@+id/textView3"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="120dp"
-                android:text="ID : "
-                android:textSize="20sp"
-                card_view:layout_constraintHorizontal_bias="0.025"
-                card_view:layout_constraintLeft_toLeftOf="parent"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/content_gateway_dashboard_cardview_item_txt_gateway_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="160dp"
-                android:text="Status :"
-                android:textSize="20sp"
-                card_view:layout_constraintHorizontal_bias="0.034"
-                card_view:layout_constraintLeft_toLeftOf="parent"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/content_gateway_dashboard_card_view_item_img_gateway_status"
                 android:layout_width="50dp"
-                android:layout_height="65dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:srcCompat="@drawable/raspberry_pi_online" />
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="16dp" />
 
-        </android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/content_gateway_dashboard_card_view_item_img_gateway_status"
+                android:textSize="30sp" />
+
+            <TextView
+                android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/content_gateway_dashboard_card_view_item_txt_gateway_id"
+                android:layout_toRightOf="@+id/content_gateway_dashboard_card_view_item_img_gateway_status" />
+
+        </RelativeLayout>
+
     </android.support.v7.widget.CardView>
+
 </LinearLayout>
