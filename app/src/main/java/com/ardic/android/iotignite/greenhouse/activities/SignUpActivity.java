@@ -186,7 +186,6 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
             Toast.makeText(SignUpActivity.this, "Confirm password cannot be empty", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         return true;
     }
 
@@ -217,7 +216,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         Intent intent = new Intent(Constants.Actions.ACTION_SIGN_UP_SUCCESS);
         intent.putExtra(Constants.Extra.EXTRA_USERNAME, email);
         intent.putExtra(Constants.Extra.EXTRA_PASSWORD, password);
-        setResult(RESULT_OK,intent);
+        setResult(RESULT_OK, intent);
         finish();
     }
 

@@ -15,7 +15,7 @@ import com.ardic.android.iotignite.greenhouse.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity implements View.OnFocusChangeListener, View.OnClickListener {
 
-    private String TAG = ForgotPasswordActivity.class.getSimpleName();
+    private static final String TAG = ForgotPasswordActivity.class.getSimpleName();
     private String email;
 
     private EditText edtMail;
