@@ -2,6 +2,7 @@ package com.ardic.android.iotignite.greenhouse;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,13 @@ import java.util.List;
 
 public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAdapter.ViewHolder> {
 
-    List<SensorViewModel> list_sensor;
+    private static final String TAG = RecyclerSensorAdapter.class.getSimpleName();
+    List<SensorViewModel> sensorList;
     CustomCardViewClickListener listenerSensorCardViewClick;
 
-    public RecyclerSensorAdapter(List<SensorViewModel> list_sensor, CustomCardViewClickListener listenerSensorCardViewClick) {
+    public RecyclerSensorAdapter(List<SensorViewModel> sensorList, CustomCardViewClickListener listenerSensorCardViewClick) {
 
-        this.list_sensor = list_sensor;
+        this.sensorList = sensorList;
         this.listenerSensorCardViewClick = listenerSensorCardViewClick;
     }
 
@@ -45,10 +47,13 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.txtSensorId.setText(list_sensor.get(position).getSensorId());
-        holder.txtSensorValue.setText(list_sensor.get(position).getSensorValue());
+        Log.e(TAG, "TxtSensor : " + holder.txtSensorId);
+        Log.e(TAG, "TxtValue : " + holder.txtSensorValue);
+        Log.e(TAG, "List : " + sensorList);
+        holder.txtSensorId.setText(sensorList.get(position).getSensorId());
+        holder.txtSensorValue.setText(sensorList.get(position).getSensorValue());
 
-        if (list_sensor.get(position).isSensorOnline()) {
+        if (sensorList.get(position).isSensorOnline()) {
             holder.imgSensorStatus.setImageResource(R.drawable.raspberry_pi_online);
         } else {
             holder.imgSensorStatus.setImageResource(R.drawable.offline_raspberrypi);
@@ -57,7 +62,7 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
 
     @Override
     public int getItemCount() {
-        return list_sensor.size();
+        return sensorList.size();
     }
 
     @Override
@@ -77,9 +82,9 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
             super(view);
 
             cardViewSensor = view.findViewById(R.id.content_sensor_dashboard_card_view_item_card_view);
-            txtSensorId = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_id);
-            txtSensorValue = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_status);
-            imgSensorStatus = view.findViewById(R.id.content_gateway_dashboard_card_view_item_img_gateway_status);
+            txtSensorId = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_id);
+            txtSensorValue = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_value);
+            imgSensorStatus = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_status);
 
         }
     }

@@ -36,7 +36,7 @@ public class SensorDashboardActivity extends AppCompatActivity
 
 
     private RecyclerView recycler_view;
-    private List<SensorViewModel> sensor_list;
+    private List<SensorViewModel> sensorList;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
@@ -56,8 +56,8 @@ public class SensorDashboardActivity extends AppCompatActivity
         initUI();
 
         //use "add" function onActivityResult method with result values.
-        sensor_list.add(new SensorViewModel("Temperature", "25 C", true));
-        sensor_list.add(new SensorViewModel("Humidity", "42%", false));
+        sensorList.add(new SensorViewModel("Temperature", "25 C", true));
+        sensorList.add(new SensorViewModel("Humidity", "42%", false));
 
     }
 
@@ -84,13 +84,13 @@ public class SensorDashboardActivity extends AppCompatActivity
         recycler_view = (RecyclerView) findViewById(R.id.content_sensor_dashboard_recycler_view);
         recycler_view.setLayoutManager(layoutManager);
 
-        sensor_list = new ArrayList<>();
-        adapter_items = new RecyclerSensorAdapter(sensor_list, new CustomCardViewClickListener() {
+        sensorList = new ArrayList<>();
+        adapter_items = new RecyclerSensorAdapter(sensorList, new CustomCardViewClickListener() {
 
             @Override
             public void onItemClick(View v, int position) {
                 Log.i("position", "Position on recycler view:" + position);
-                SensorViewModel sensor = sensor_list.get(position);
+                SensorViewModel sensor = sensorList.get(position);
                 Toast.makeText(getApplicationContext(), "position:" + " " + position + " " + "Sensor ID:" + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
             }
         });

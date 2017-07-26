@@ -2,6 +2,7 @@ package com.ardic.android.iotignite.greenhouse.controllers;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.ardic.android.iotignite.greenhouse.activities.LoginActivity;
@@ -49,9 +50,8 @@ public class DeviceController extends AsyncTask<Void, Void, Device> {
         Log.i(TAG, "Device : " + device);
 
         for (DeviceContent content : device.getDeviceContents()) {
-            if (content.getCurrentUser().getMail().equals(user)) {
+            if (content.getCurrentUser() != null && !TextUtils.isEmpty(content.getCurrentUser().getMail()) && content.getCurrentUser().getMail().equals(user)) {
                 Log.i(TAG, "Device Content: \n" + content);
-
             }
         }
     }

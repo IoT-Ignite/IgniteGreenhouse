@@ -66,15 +66,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
         gateway_list.add(new GatewayViewModel("Raspberry PI ASDS1224", false));
 
 
-        adapter_items = new RecyclerGatewayAdapter(gateway_list, new CustomCardViewClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Log.i(TAG, "Position on recycler view:" + position);
-                GatewayViewModel gateway = gateway_list.get(position);
-                Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
-            }
-        });
+        adapter_items = new RecyclerGatewayAdapter(gateway_list, this);
         recycler_view.setHasFixedSize(true);
 
         recycler_view.setAdapter(adapter_items);
@@ -217,6 +209,9 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(View v, int position) {
-
+        Log.i(TAG, "Position on recycler view:" + position);
+        GatewayViewModel gateway = gateway_list.get(position);
+        Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
     }
 }
