@@ -39,10 +39,7 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        long firstAnim = getResources().getInteger(R.integer.anim_frame_duration_first);
-        long anims = getResources().getInteger(R.integer.anim_frame_duration);
-        duration = 1000 + firstAnim + (18 * anims);
-
+        duration = 1000 + getResources().getInteger(R.integer.anim_frame_duration_first) + (18 * getResources().getInteger(R.integer.anim_frame_duration));
 
         animationHandler = new Handler(Looper.getMainLooper());
         animationHandler.postDelayed(animationRunnable, duration);

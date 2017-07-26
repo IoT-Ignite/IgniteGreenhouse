@@ -25,6 +25,8 @@ import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.RecyclerGatewayAdapter;
 import com.ardic.android.iotignite.greenhouse.controllers.DROMController;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceController;
+import com.ardic.android.iotignite.lib.restclient.model.Device;
+import com.ardic.android.iotignite.lib.restclient.model.DeviceContent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private String activeUserPassword;
     private DROMController mDromController;
     private DeviceController mDeviceController;
+    private Device devices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +62,26 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         initUI();
 
-        getDeviceInfo();
+
 
         //use "add" function onActivityResult method with result values.
-        
-        gateway_list.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
+
+         gateway_list.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
         gateway_list.add(new GatewayViewModel("Tomatoes", "Raspberry PI ASDS1224", true));
 
 
         adapter_items = new RecyclerGatewayAdapter(gateway_list, this);
         recycler_view.setHasFixedSize(true);
 
+
         recycler_view.setAdapter(adapter_items);
 
         recycler_view.setItemAnimator(new DefaultItemAnimator());
 
-      
+
+        getDeviceInfo();
+
+
     }
 
     private void initUI() {
@@ -212,6 +219,21 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private void getDeviceInfo() {
         mDeviceController = new DeviceController(this, activeUser, activeUserPassword);
         mDeviceController.execute();
+
+        //TODO : LOADING...
+
+        try {
+            devices = mDeviceController.get();
+
+            for (DeviceContent cnt : devices.getDeviceContents()) {
+                Log.i(TAG, "DEVICES: " + cnt.getDeviceId());
+                gateway_list.add(new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), true));
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

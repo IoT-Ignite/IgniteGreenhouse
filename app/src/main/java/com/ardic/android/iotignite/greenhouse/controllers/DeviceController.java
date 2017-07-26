@@ -38,7 +38,7 @@ public class DeviceController extends AsyncTask<Void, Void, Device> {
 
         mIgniteRestClient = mIgniteRestClientManager.createClient(user, password, true);
         try {
-            device = mIgniteRestClient.getDeviceInfo();
+            device = mIgniteRestClient.getDeviceSummary(user);
         } catch (IgniteRestClientException e) {
             Log.e(TAG, "DeviceController:" + e);
         }
@@ -47,6 +47,7 @@ public class DeviceController extends AsyncTask<Void, Void, Device> {
 
     @Override
     protected void onPostExecute(Device device) {
+        super.onPostExecute(device);
         Log.i(TAG, "Device : " + device);
 
         for (DeviceContent content : device.getDeviceContents()) {
