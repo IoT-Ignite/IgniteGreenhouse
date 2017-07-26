@@ -7,6 +7,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -33,19 +34,20 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class GatewayDashboardActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, CustomCardViewClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, CustomCardViewClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = GatewayDashboardActivity.class.getSimpleName();
     private FloatingActionButton fabAddGateway;
     private Toolbar toolbar;
 
-    private RecyclerView recycler_view;
-    private List<GatewayViewModel> gateway_list;
+    private RecyclerView recyclerView;
+    private List<GatewayViewModel> gatewayList;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private LinearLayoutManager layoutManager;
-    private RecyclerGatewayAdapter adapter_items;
+    private RecyclerGatewayAdapter recyclerGatewayAdapter;
+    private SwipeRefreshLayout gatewaySwipeRefreshLayout;
 
     private String activeUser;
     private String activeUserPassword;
@@ -62,31 +64,15 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         initUI();
 
-
-
-        //use "add" function onActivityResult method with result values.
-
-         gateway_list.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
-        gateway_list.add(new GatewayViewModel("Tomatoes", "Raspberry PI ASDS1224", true));
-
-
-        adapter_items = new RecyclerGatewayAdapter(gateway_list, this);
-        recycler_view.setHasFixedSize(true);
-
-
-        recycler_view.setAdapter(adapter_items);
-
-        recycler_view.setItemAnimator(new DefaultItemAnimator());
-
-
-        getDeviceInfo();
-
+        //use these onActivityResult method with result values.
+        gatewayList.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
+        gatewayList.add(new GatewayViewModel("Tomatoes", "Raspberry PI ASDS1224", true));
 
     }
 
     private void initUI() {
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.app_bar_gateway_dashboard_toolbar);
         setSupportActionBar(toolbar);
 
         fabAddGateway = (FloatingActionButton) findViewById(R.id.fab);
@@ -106,16 +92,18 @@ public class GatewayDashboardActivity extends AppCompatActivity
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
 
-        recycler_view = (RecyclerView) findViewById(R.id.content_gateway_dashboard_recycler_view);
-        recycler_view.setLayoutManager(layoutManager);
+        recyclerView = (RecyclerView) findViewById(R.id.content_gateway_dashboard_recycler_view);
+        recyclerView.setLayoutManager(layoutManager);
 
-        gateway_list = new ArrayList<>();
-        adapter_items = new RecyclerGatewayAdapter(gateway_list, this);
+        gatewayList = new ArrayList<>();
+        recyclerGatewayAdapter = new RecyclerGatewayAdapter(gatewayList, this);
 
-        recycler_view.setHasFixedSize(true);
-        recycler_view.setAdapter(adapter_items);
-        recycler_view.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(recyclerGatewayAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        gatewaySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.app_bar_gateway_swipe_refresh_layout);
+        gatewaySwipeRefreshLayout.setOnRefreshListener(this);
     }
 
     @Override
@@ -191,6 +179,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
                         @Override
                         public void run() {
                             Toast.makeText(GatewayDashboardActivity.this, "AWESOME ! DEVICE LICENCED SUCCESSFULLY. ", Toast.LENGTH_LONG).show();
+                            // refreshContent();
                         }
                     });
                 }
@@ -239,8 +228,35 @@ public class GatewayDashboardActivity extends AppCompatActivity
     @Override
     public void onItemClick(View v, int position) {
         Log.i(TAG, "Position on recycler view:" + position);
-        GatewayViewModel gateway = gateway_list.get(position);
+        GatewayViewModel gateway = gatewayList.get(position);
         Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
         startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
     }
+
+    /**
+     * Called when a swipe gesture triggers a refresh.
+     */
+    @Override
+    public void onRefresh() {
+
+        updateDashboard();
+
+    }
+
+
+    private void updateDashboard() {
+        // TODO : GET DEVICE INFO HERE!!!!!!
+
+
+        //delete this add methods. its just for trying.
+        //gatewayList.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
+        //gatewayList.add(new GatewayViewModel("Tomatoes", "Raspberry PI ASDS1224", true));
+
+
+        recyclerGatewayAdapter.notifyDataSetChanged();
+        gatewaySwipeRefreshLayout.setRefreshing(false);
+
+    }
+
 }
+

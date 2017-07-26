@@ -3,12 +3,13 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/ColorPrimary</item>
+        <item name="colorPrimary">@color/ColorPrimaryDark</item>
         <item name="colorPrimaryDark">@color/ColorPrimaryDark</item>
         <!-- Customize your theme here. -->
         <item name="actionBarStyle">@style/MyActionBar</item>
         <item name="android:itemTextAppearance">@style/MyActionBar.MenuTextStyle</item>
         <item name="android:itemBackground">@color/ColorPrimaryDark</item>
+        <item name="colorAccent">@color/colorIconDarkBlue</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -43,6 +44,10 @@
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
         <item name="android:background">@color/black_overlay</item>
+    </style>
+
+    <style name="GreenhouseTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorAccent">@color/colorIconDarkBlue</item>
     </style>
 
 </resources>

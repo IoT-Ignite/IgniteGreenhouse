@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Greenhouse</string>
-    <string name="not_a_member">"Don't have an account? Sign up now ▶"</string>
+    <string name="activity_login_dont_have_an_acount_sign_up_now">"Don't have an account?  <b> Sign up now ▶</b> "</string>
     <string name="reset_pessword">"Forgot your password?"</string>
     <string name="title_activity_add_gateway">AddGateway</string>
 
@@ -20,6 +20,8 @@
     <string name="gateway_status_online">Online</string>
     <string name="gateway_status_offline">Offline</string>
     <string name="title_activity_sensor_dashboard">SensorDashboardActivity</string>
+
+    <string name="activity_sign_up_check_box_terms_of_use">I have read and accept the <a href="https://www.iot-ignite.com/terms-of-use/">Terms of Use</a>.</string>
 
 
 </resources>
