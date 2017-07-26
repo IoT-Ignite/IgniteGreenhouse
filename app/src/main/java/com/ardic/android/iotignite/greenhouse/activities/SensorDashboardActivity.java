@@ -1,11 +1,13 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -28,20 +30,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SensorDashboardActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = SensorDashboardActivity.class.getSimpleName();
-    private FloatingActionButton fabAddGateway;
+    private FloatingActionButton fabAddSensor;
     private Toolbar toolbar;
 
 
-    private RecyclerView recycler_view;
+    private RecyclerView recyclerView;
     private List<SensorViewModel> sensorList;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
     private LinearLayoutManager layoutManager;
-    private RecyclerSensorAdapter adapter_items;
+    private RecyclerSensorAdapter recyclerSensorAdapter;
+    private SwipeRefreshLayout sensorSwipeRefreshLayout;
 
     private String activeUser;
     private String activeUserPassword;
@@ -62,15 +66,15 @@ public class SensorDashboardActivity extends AppCompatActivity
     }
 
     private void initUI() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.app_bar_sensor_dashboard_toolbar);
         setSupportActionBar(toolbar);
 
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
 
-        fabAddGateway = (FloatingActionButton) findViewById(R.id.fab);
-        fabAddGateway.setOnClickListener(this);
+        fabAddSensor = (FloatingActionButton) findViewById(R.id.fab);
+        fabAddSensor.setOnClickListener(this);
 
         drawer = (DrawerLayout) findViewById(R.id.activity_sensor_dashboard_drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -81,11 +85,11 @@ public class SensorDashboardActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        recycler_view = (RecyclerView) findViewById(R.id.content_sensor_dashboard_recycler_view);
-        recycler_view.setLayoutManager(layoutManager);
+        recyclerView = (RecyclerView) findViewById(R.id.content_sensor_dashboard_recycler_view);
+        recyclerView.setLayoutManager(layoutManager);
 
         sensorList = new ArrayList<>();
-        adapter_items = new RecyclerSensorAdapter(sensorList, new CustomCardViewClickListener() {
+        recyclerSensorAdapter = new RecyclerSensorAdapter(sensorList, new CustomCardViewClickListener() {
 
             @Override
             public void onItemClick(View v, int position) {
@@ -96,10 +100,12 @@ public class SensorDashboardActivity extends AppCompatActivity
             }
         });
 
-        recycler_view.setHasFixedSize(true);
-        recycler_view.setAdapter(adapter_items);
-        recycler_view.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(recyclerSensorAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        sensorSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.app_bar_sensor_swipe_refresh_layout);
+        sensorSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
 
@@ -141,10 +147,56 @@ public class SensorDashboardActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view) {
-        if (view.equals(fabAddGateway)) {
+        if (view.equals(fabAddSensor)) {
             Snackbar.make(view, "Scan QR code for register your sensor.", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
     }
+
+    /**
+     * Called when a swipe gesture triggers a refresh.
+     */
+    @Override
+    public void onRefresh() {
+        //delete this add methods. its just for trying.
+        sensorList.add(new SensorViewModel("Temperature", "30'C", false));
+        sensorList.add(new SensorViewModel("Humidity", "25%", true));
+        //
+
+        refreshContent();
+    }
+
+
+    private void refreshContent() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sensorList = getNewSensorList();
+                //      recyclerSensorAdapter = new RecyclerSensorAdapter(sensorList, SensorDashboardActivity.this);
+                recyclerView.setAdapter(recyclerSensorAdapter);
+                sensorSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 10);
+    }
+
+    /**
+     * Get new gateway values
+     */
+    private List<SensorViewModel> getNewSensorList() {
+        List<SensorViewModel> newSensorList = new ArrayList<>();
+
+        // do something here for get new data with rest call,
+        //newGatewayList.add(new GatewayViewModel("gateway label here", "gateway id", "gateway status, online:true, offline:false");
+        //like this:
+        //newGatewayList.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
+
+        //you can delete this "for loop" it is just for trying.
+        for (int i = 1; i < sensorList.size(); i++) {
+            newSensorList.add(sensorList.get(i));
+        }
+
+        return newSensorList;
+    }
+
 }
 

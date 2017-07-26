@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -63,7 +66,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     private void initUI() {
 
         setContentView(R.layout.activity_sign_up);
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        toolbar = (Toolbar) findViewById(R.id.activity_sign_up_tool_bar);
         editTextFirstName = (EditText) findViewById(R.id.activity_sign_up_edt_first_name);
         editTextLastName = (EditText) findViewById(R.id.activity_sign_up_edt_last_name);
         editTextMail = (EditText) findViewById(R.id.activity_sign_up_edt_email);
@@ -74,6 +77,8 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         tbShowHideConfirmPassword = (ToggleButton) findViewById(R.id.activity_sign_up_tb_show_hide_confirm_password);
         cbAcceptTermsOfUse = (CheckBox) findViewById(R.id.activity_sign_up_cb_accept_terms_of_use);
         btnSignUp = (Button) findViewById(R.id.activity_sign_up_btn_sign_up);
+
+        cbAcceptTermsOfUse.setMovementMethod(LinkMovementMethod.getInstance());
 
         imgMailValidate.setVisibility(View.INVISIBLE);
 
@@ -91,6 +96,39 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
 
         setSupportActionBar(toolbar);
 
+    }
+
+    /**
+     * @param menu adds items to the action bar if it is present
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    /**
+     * Handle action bar item clicks here. The action bar will
+     * automatically handle clicks on the Home/Up button, so long
+     * as you specify a parent activity in AndroidManifest.xml.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.menu_main_about) {
+            Toast.makeText(this, "About Clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.menu_main_buy_device) {
+            Toast.makeText(this, "Buying Device Clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.menu_main_faq) {
+            Toast.makeText(this, "FAQ Clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
 
@@ -121,12 +159,15 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
             } else {
                 editTextConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
+            editTextConfirmPassword.setSelection(editTextConfirmPassword.getText().length());
+
         } else if (compoundButton.equals(tbShowHidePassword)) {
             if (isChecked) {
                 editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT);
             } else {
                 editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
+            editTextPassword.setSelection(editTextPassword.getText().length());
         }
     }
 
@@ -136,17 +177,18 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
 
         if (view.equals(btnSignUp) && assignEditTextValues()) {
 
-            ValidationResult result = ValidationUtils.checkSignUpCredentials(email, firstName, lastName, password, confirmPassword, cbAcceptTermsOfUse.isChecked());
+            ValidationResult result = ValidationUtils.checkSignUpCredentials(email,
+                    firstName, lastName, password, confirmPassword, cbAcceptTermsOfUse.isChecked());
             if (ValidationResult.OK == result) {
 
                 if (createAccount()) {
                     startLoginActivity();
                 } else {
-                    Toast.makeText(SignUpActivity.this, "An error occured please try again.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUpActivity.this, "An error occured please try again.", Toast.LENGTH_SHORT).show();
                 }
 
             } else {
-                Toast.makeText(SignUpActivity.this, result.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(SignUpActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
 

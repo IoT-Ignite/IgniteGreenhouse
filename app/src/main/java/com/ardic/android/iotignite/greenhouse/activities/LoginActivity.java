@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
         setContentView(R.layout.activity_login);
 
-        toolbar = (Toolbar) findViewById(R.id.tool_bar);
+        toolbar = (Toolbar) findViewById(R.id.activity_login_tool_bar);
         editTextMail = (EditText) findViewById(R.id.activity_login_edt_email);
         imgMailValidate = (ImageView) findViewById(R.id.activity_login_img_mail_validation);
         editTextPassword = (EditText) findViewById(R.id.activity_login_edt_password);
@@ -198,11 +198,13 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         if (compoundButton.equals(tbShowHidePassword)) {
             if (isChecked) {
                 editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+
             } else {
                 editTextPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         }
 
+        editTextPassword.setSelection(editTextPassword.getText().length());
     }
 
     @Override
