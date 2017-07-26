@@ -1,9 +1,9 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -39,6 +39,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     private ToggleButton tbShowHideConfirmPassword;
     private CheckBox cbAcceptTermsOfUse;
     private Button btnSignUp;
+    private Toolbar toolbar;
 
     private SignUpController mSignUpController;
 
@@ -62,6 +63,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     private void initUI() {
 
         setContentView(R.layout.activity_sign_up);
+        toolbar = (Toolbar) findViewById(R.id.tool_bar);
         editTextFirstName = (EditText) findViewById(R.id.activity_sign_up_edt_first_name);
         editTextLastName = (EditText) findViewById(R.id.activity_sign_up_edt_last_name);
         editTextMail = (EditText) findViewById(R.id.activity_sign_up_edt_email);
@@ -86,6 +88,8 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
 
         //Click on SIGN UP button, check the inputs
         btnSignUp.setOnClickListener(this);
+
+        setSupportActionBar(toolbar);
 
     }
 

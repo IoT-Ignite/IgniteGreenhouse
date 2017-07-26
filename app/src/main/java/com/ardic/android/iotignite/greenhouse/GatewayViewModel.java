@@ -6,15 +6,24 @@ package com.ardic.android.iotignite.greenhouse;
 
 public class GatewayViewModel {
 
+    private String gatewayLabel;
     private String gatewayId;
     private Boolean isGatewayOnline;
 
 
-    public GatewayViewModel(String gatewayId, Boolean isGatewayOnline) {
+    public GatewayViewModel(String gatewayLabel, String gatewayId, Boolean isGatewayOnline) {
+        this.gatewayLabel = gatewayLabel;
         this.gatewayId = gatewayId;
         this.isGatewayOnline = isGatewayOnline;
     }
 
+    public GatewayViewModel() {
+    }
+
+    public String getGatewayLabel() {
+        return gatewayLabel;
+    }
+    
     public String getGatewayId() {
         return gatewayId;
     }

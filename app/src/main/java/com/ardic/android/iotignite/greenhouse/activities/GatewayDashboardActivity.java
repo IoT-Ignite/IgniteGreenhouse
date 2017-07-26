@@ -62,8 +62,9 @@ public class GatewayDashboardActivity extends AppCompatActivity
         getDeviceInfo();
 
         //use "add" function onActivityResult method with result values.
-        gateway_list.add(new GatewayViewModel("My Potatoes Raspberry PI", true));
-        gateway_list.add(new GatewayViewModel("Raspberry PI ASDS1224", false));
+        
+        gateway_list.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
+        gateway_list.add(new GatewayViewModel("Tomatoes", "Raspberry PI ASDS1224", true));
 
 
         adapter_items = new RecyclerGatewayAdapter(gateway_list, this);
@@ -73,6 +74,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         recycler_view.setItemAnimator(new DefaultItemAnimator());
 
+      
     }
 
     private void initUI() {
@@ -101,12 +103,17 @@ public class GatewayDashboardActivity extends AppCompatActivity
         recycler_view.setLayoutManager(layoutManager);
 
         gateway_list = new ArrayList<>();
+        adapter_items = new RecyclerGatewayAdapter(gateway_list, this);
+
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setAdapter(adapter_items);
+        recycler_view.setItemAnimator(new DefaultItemAnimator());
 
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -134,7 +141,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
