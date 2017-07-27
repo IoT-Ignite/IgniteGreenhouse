@@ -110,8 +110,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
         gatewaySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.app_bar_gateway_swipe_refresh_layout);
         gatewaySwipeRefreshLayout.setOnRefreshListener(this);
 
-     //   progressBarLayout = (LinearLayout) findViewById(R.id.progressbar_view);
-
     }
 
     @Override
@@ -245,13 +243,16 @@ public class GatewayDashboardActivity extends AppCompatActivity
     @Override
     public void onRefresh() {
         updateDashboard();
+
     }
 
     private void updateDashboard() {
         // TODO : GET DEVICE INFO HERE!!!!!!
         recyclerGatewayAdapter.notifyDataSetChanged();
         gatewaySwipeRefreshLayout.setRefreshing(false);
+
     }
+
 
 }
 
