@@ -1,7 +1,9 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
@@ -34,7 +37,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class GatewayDashboardActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, CustomCardViewClickListener, SwipeRefreshLayout.OnRefreshListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
+        CustomCardViewClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = GatewayDashboardActivity.class.getSimpleName();
     private FloatingActionButton fabAddGateway;
@@ -48,6 +52,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private LinearLayoutManager layoutManager;
     private RecyclerGatewayAdapter recyclerGatewayAdapter;
     private SwipeRefreshLayout gatewaySwipeRefreshLayout;
+    private LinearLayout progressBarLayout;
 
     private String activeUser;
     private String activeUserPassword;
@@ -103,6 +108,8 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         gatewaySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.app_bar_gateway_swipe_refresh_layout);
         gatewaySwipeRefreshLayout.setOnRefreshListener(this);
+
+        progressBarLayout = (LinearLayout) findViewById(R.id.progressbar_view);
     }
 
     @Override
@@ -147,12 +154,25 @@ public class GatewayDashboardActivity extends AppCompatActivity
          */
         if (view.equals(fabAddGateway)) {
 
-            Snackbar.make(view, "Scan your gateway", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-
             //TODO : Check camera permission here. - RunTime and Manifest.
-            Intent intent = new Intent(GatewayDashboardActivity.this, QRScanActivity.class);
-            startActivityForResult(intent, Constants.READ_QR_CODE);
+
+            Snackbar.make(view, "Scan your QR code to register your gateway.", Snackbar.LENGTH_SHORT)
+                    .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+
+                        @Override
+                        public void onDismissed(Snackbar transientBottomBar, int event) {
+                            super.onDismissed(transientBottomBar, event);
+                            Intent intent = new Intent(GatewayDashboardActivity.this, QRScanActivity.class);
+                            startActivityForResult(intent, Constants.READ_QR_CODE);
+                        }
+
+                        @Override
+                        public void onShown(Snackbar transientBottomBar) {
+                            super.onShown(transientBottomBar);
+                        }
+                    }).setAction("Action", null).show();
+
+
 
         }
     }
@@ -243,15 +263,15 @@ public class GatewayDashboardActivity extends AppCompatActivity
         updateDashboard();
     }
 
-
     private void updateDashboard() {
-
+        // TODO : GET DEVICE INFO HERE!!!!!!
 
         getDeviceInfo();
 
         recyclerGatewayAdapter.notifyDataSetChanged();
         gatewaySwipeRefreshLayout.setRefreshing(false);
-    }
+	}
+
 
 }
 
