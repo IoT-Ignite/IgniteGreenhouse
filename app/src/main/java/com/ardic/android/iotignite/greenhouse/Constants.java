@@ -15,6 +15,7 @@ public class Constants {
     public static final String MASTER_POLICY = "Default";
     public static final String MASTER_PROFILE = "Default";
     public static final String USER_CONFIG_MODE = "none";
+    public static final int ANIM_FRAME_COUNT = 18;
 
 
     public static final int READ_QR_CODE = 1;

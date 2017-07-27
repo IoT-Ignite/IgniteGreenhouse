@@ -232,8 +232,8 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         mLoginController = new LoginController(LoginActivity.this, email, password);
         mLoginController.execute();
 
+        // TODO : user login loading start....
         try {
-
             result = mLoginController.get();
             Log.i(TAG, "Login RESULT" + result);
         } catch (InterruptedException e) {
@@ -243,6 +243,8 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             result = false;
             Log.e(TAG, "ExecutionException on doLogin() function: " + e);
         }
+
+        // TODO : user login loading end....
         return result;
     }
 

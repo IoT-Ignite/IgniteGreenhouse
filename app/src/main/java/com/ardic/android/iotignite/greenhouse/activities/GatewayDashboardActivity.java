@@ -64,9 +64,8 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         initUI();
 
-        //use these onActivityResult method with result values.
-        gatewayList.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
-        gatewayList.add(new GatewayViewModel("Tomatoes", "Raspberry PI ASDS1224", true));
+        // get previous configured gateways..
+        updateDashboard();
 
     }
 
@@ -116,7 +115,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -172,12 +170,14 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
             mDromController.execute();
 
+            //TODO: LOADING....
             try {
                 if (mDromController.get()) {
 
                     GatewayDashboardActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            //TODO End of LOADING
                             Toast.makeText(GatewayDashboardActivity.this, "AWESOME ! DEVICE LICENCED SUCCESSFULLY. ", Toast.LENGTH_LONG).show();
                             // refreshContent();
                         }
@@ -188,7 +188,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
             } catch (ExecutionException e) {
                 Log.e(TAG, "ExecutionException on onActivityResult function:" + e);
             }
-
         }
     }
 
@@ -209,20 +208,23 @@ public class GatewayDashboardActivity extends AppCompatActivity
         mDeviceController = new DeviceController(this, activeUser, activeUserPassword);
         mDeviceController.execute();
 
-        //TODO : LOADING...
-
+        // TODO : LOADING - Getting devices...
         try {
             devices = mDeviceController.get();
 
             for (DeviceContent cnt : devices.getDeviceContents()) {
                 Log.i(TAG, "DEVICES: " + cnt.getDeviceId());
-                gateway_list.add(new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), true));
+                GatewayViewModel model = new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), true);
+                if (!gatewayList.contains(model)) {
+                    gatewayList.add(model);
+                }
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e(TAG, "getDeviceInfo(): " + e);
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            Log.e(TAG, "getDeviceInfo(): " + e);
         }
+        // TODO : LOADING - Getting device end...
     }
 
     @Override
@@ -230,7 +232,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
         Log.i(TAG, "Position on recycler view:" + position);
         GatewayViewModel gateway = gatewayList.get(position);
         Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
+        // startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
     }
 
     /**
@@ -238,24 +240,17 @@ public class GatewayDashboardActivity extends AppCompatActivity
      */
     @Override
     public void onRefresh() {
-
         updateDashboard();
-
     }
 
 
     private void updateDashboard() {
-        // TODO : GET DEVICE INFO HERE!!!!!!
 
 
-        //delete this add methods. its just for trying.
-        //gatewayList.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
-        //gatewayList.add(new GatewayViewModel("Tomatoes", "Raspberry PI ASDS1224", true));
-
+        getDeviceInfo();
 
         recyclerGatewayAdapter.notifyDataSetChanged();
         gatewaySwipeRefreshLayout.setRefreshing(false);
-
     }
 
 }

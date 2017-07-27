@@ -241,6 +241,8 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         mSignUpController = new SignUpController(SignUpActivity.this, firstName, lastName, email, password);
 
         mSignUpController.execute();
+
+        // TODO : Creating account LOADING... start
         try {
             mCreatedUser = mSignUpController.get();
             if (mCreatedUser != null) {
@@ -254,6 +256,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
             return result;
         }
 
+        // TODO : Creating account LOADING end
         return result;
     }
 

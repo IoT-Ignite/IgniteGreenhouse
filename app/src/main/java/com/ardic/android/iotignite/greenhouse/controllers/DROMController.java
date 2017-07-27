@@ -96,6 +96,8 @@ public class DROMController extends AsyncTask<Void, Void, Boolean> {
                     Log.i(TAG, "Pushing drom to device...");
                     if (mIgniteRestClient.pushDromToDevice(deviceId)) {
                         Log.i(TAG, "Drom pushed to device successfully");
+
+                        //TODO : check drom state until it finishes or timeout.
                         return true;
                     }
                 }

@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.ardic.android.iotignite.greenhouse.Constants;
 import com.ardic.android.iotignite.greenhouse.R;
 
 /**
@@ -39,7 +40,8 @@ public class SplashScreenActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        duration = 1000 + getResources().getInteger(R.integer.anim_frame_duration_first) + (18 * getResources().getInteger(R.integer.anim_frame_duration));
+        duration = 1000 + getResources().getInteger(R.integer.anim_frame_duration_first) +
+                (Constants.ANIM_FRAME_COUNT * getResources().getInteger(R.integer.anim_frame_duration));
 
         animationHandler = new Handler(Looper.getMainLooper());
         animationHandler.postDelayed(animationRunnable, duration);
@@ -55,6 +57,5 @@ public class SplashScreenActivity extends Activity {
     private void startLoginActivity() {
         Intent i = new Intent(SplashScreenActivity.this, LoginActivity.class);
         startActivity(i);
-
     }
 }
