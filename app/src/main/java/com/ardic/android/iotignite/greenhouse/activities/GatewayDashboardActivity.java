@@ -111,6 +111,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
         gatewaySwipeRefreshLayout.setOnRefreshListener(this);
 
      //   progressBarLayout = (LinearLayout) findViewById(R.id.progressbar_view);
+
     }
 
     @Override
@@ -244,45 +245,13 @@ public class GatewayDashboardActivity extends AppCompatActivity
     @Override
     public void onRefresh() {
         updateDashboard();
-      //  new Task().execute();
     }
 
     private void updateDashboard() {
         // TODO : GET DEVICE INFO HERE!!!!!!
         recyclerGatewayAdapter.notifyDataSetChanged();
         gatewaySwipeRefreshLayout.setRefreshing(false);
-
     }
-
-//    class Task extends AsyncTask<String, Integer, Boolean> {
-//        @Override
-//        protected void onPreExecute() {
-//            progressBarLayout.setVisibility(View.VISIBLE);
-//            recyclerView.setVisibility(View.GONE);
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Boolean result) {
-//            progressBarLayout.setVisibility(View.GONE);
-//            recyclerView.setVisibility(View.VISIBLE);
-//            recyclerGatewayAdapter.notifyDataSetChanged();
-//            super.onPostExecute(result);
-//        }
-//
-//        @Override
-//        protected Boolean doInBackground(String... params) {
-//            gatewayList.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
-//            gatewayList.add(new GatewayViewModel("Tomatoes", "Raspberry PI ASDS1224", true));
-//            try {
-//                Thread.sleep(3000);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//    }
-
 
 }
 
