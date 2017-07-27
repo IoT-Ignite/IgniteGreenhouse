@@ -1,7 +1,8 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ardic.android.iotignite.greenhouse.Constants;
 import com.ardic.android.iotignite.greenhouse.CustomCardViewClickListener;
 import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.RecyclerSensorAdapter;
@@ -31,7 +33,7 @@ import java.util.List;
 
 public class SensorDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener, CustomCardViewClickListener {
 
     private static final String TAG = SensorDashboardActivity.class.getSimpleName();
     private FloatingActionButton fabAddSensor;
@@ -148,55 +150,66 @@ public class SensorDashboardActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         if (view.equals(fabAddSensor)) {
-            Snackbar.make(view, "Scan QR code for register your sensor.", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
+
+            Snackbar.make(view, "Scan QR code for register your sensor.", Snackbar.LENGTH_SHORT)
+                    .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+
+                        @Override
+                        public void onDismissed(Snackbar transientBottomBar, int event) {
+                            super.onDismissed(transientBottomBar, event);
+                            startActivityForResult(new Intent(SensorDashboardActivity.this, QRScanActivity.class), Constants.READ_QR_CODE);
+                        }
+
+                        @Override
+                        public void onShown(Snackbar transientBottomBar) {
+                            super.onShown(transientBottomBar);
+                        }
+                    }).setAction("Action", null).show();
+
+
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == RESULT_OK) {
+
+            String qr = data.getStringExtra(Constants.Extra.EXTRA_GW_QR_CODE);
+            Log.i(TAG, "QR Code Received !" + qr);
+            Toast.makeText(this, "QR Code Received !" + qr, Toast.LENGTH_LONG).show();
+
+            //Register sensor here
+
+        }
+    }
+
 
     /**
      * Called when a swipe gesture triggers a refresh.
      */
     @Override
     public void onRefresh() {
-        //delete this add methods. its just for trying.
-        sensorList.add(new SensorViewModel("Temperature", "30'C", false));
-        sensorList.add(new SensorViewModel("Humidity", "25%", true));
-        //
-
-        refreshContent();
-    }
-
-
-    private void refreshContent() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                sensorList = getNewSensorList();
-                //      recyclerSensorAdapter = new RecyclerSensorAdapter(sensorList, SensorDashboardActivity.this);
-                recyclerView.setAdapter(recyclerSensorAdapter);
-                sensorSwipeRefreshLayout.setRefreshing(false);
-            }
-        }, 10);
-    }
-
-    /**
-     * Get new gateway values
-     */
-    private List<SensorViewModel> getNewSensorList() {
-        List<SensorViewModel> newSensorList = new ArrayList<>();
-
-        // do something here for get new data with rest call,
-        //newGatewayList.add(new GatewayViewModel("gateway label here", "gateway id", "gateway status, online:true, offline:false");
-        //like this:
-        //newGatewayList.add(new GatewayViewModel("My Potatoes", "Raspberry PI 121SDHB", false));
-
-        //you can delete this "for loop" it is just for trying.
-        for (int i = 1; i < sensorList.size(); i++) {
-            newSensorList.add(sensorList.get(i));
+        updateDashboard();
         }
 
-        return newSensorList;
+    /**
+     * Get new sensor values
+     */
+
+    private void updateDashboard() {
+        // TODO : GET SENSOR INFO HERE!!!!!!
+        recyclerSensorAdapter.notifyDataSetChanged();
+        sensorSwipeRefreshLayout.setRefreshing(false);
+
     }
 
+    @Override
+    public void onItemClick(View v, int position) {
+        Log.i(TAG, "Position on recycler view:" + position);
+        SensorViewModel sensor = sensorList.get(position);
+        Toast.makeText(getApplicationContext(), " Position: " + position + " Sensor ID: " + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
+
+    }
 }
 
