@@ -16,7 +16,6 @@ public class Constants {
     public static final String MASTER_PROFILE = "Default";
     public static final String USER_CONFIG_MODE = "none";
 
-
     public static final int READ_QR_CODE = 1;
     public static final int CREATE_NEW_ACCOUNT = 2;
     /**

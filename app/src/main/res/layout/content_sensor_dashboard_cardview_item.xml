@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-    tools:showIn="@layout/content_sensor_dashboard">
+    android:padding="16dp">
 
     <android.support.v7.widget.CardView
         android:id="@+id/content_sensor_dashboard_card_view_item_card_view"
-        android:layout_width="match_parent"
+        android:layout_width="113dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         card_view:cardCornerRadius="4dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="110dp"
+            android:layout_height="202dp"
             android:padding="16dp">
 
             <ImageView
@@ -43,7 +41,7 @@
                 android:layout_below="@+id/content_sensor_dashboard_card_view_item_txt_sensor_id"
                 android:layout_toRightOf="@+id/content_sensor_dashboard_card_view_item_img_sensor_status" />
 
-        </RelativeLayout>
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
 
