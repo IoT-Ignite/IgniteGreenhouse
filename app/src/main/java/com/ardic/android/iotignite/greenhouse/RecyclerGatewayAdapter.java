@@ -16,13 +16,13 @@ import java.util.List;
 
 public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGatewayAdapter.ViewHolder> {
 
-    List<GatewayViewModel> list_gateway;
-    CustomCardViewClickListener listenerGatewayCardViewClick;
+    private List<GatewayViewModel> gatewayList;
+    private CustomCardViewClickListener gatewayCardViewClickListener;
 
-    public RecyclerGatewayAdapter(List<GatewayViewModel> list_gateway, CustomCardViewClickListener listenerGatewayCardViewClick) {
+    public RecyclerGatewayAdapter(List<GatewayViewModel> gatewayList, CustomCardViewClickListener gatewayCardViewClickListener) {
 
-        this.list_gateway = list_gateway;
-        this.listenerGatewayCardViewClick = listenerGatewayCardViewClick;
+        this.gatewayList = gatewayList;
+        this.gatewayCardViewClickListener = gatewayCardViewClickListener;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGateway
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listenerGatewayCardViewClick.onItemClick(v, view_holder.getAdapterPosition());
+                gatewayCardViewClickListener.onItemClick(v, view_holder.getAdapterPosition());
             }
         });
 
@@ -44,10 +44,10 @@ public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGateway
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        holder.txtGatewayLabel.setText(list_gateway.get(position).getGatewayLabel());
-        holder.txtGatewayId.setText(list_gateway.get(position).getGatewayId());
+        holder.txtGatewayLabel.setText(gatewayList.get(position).getGatewayLabel());
+        holder.txtGatewayId.setText(gatewayList.get(position).getGatewayId());
 
-        if (list_gateway.get(position).isGatewayOnline()) {
+        if (gatewayList.get(position).isGatewayOnline()) {
             holder.imgGatewayStatus.setImageResource(R.drawable.raspberry_pi_online);
             holder.txtGatewayStatus.setText("Connected");
         } else {
@@ -59,7 +59,7 @@ public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGateway
 
     @Override
     public int getItemCount() {
-        return list_gateway.size();
+        return gatewayList.size();
     }
 
     @Override

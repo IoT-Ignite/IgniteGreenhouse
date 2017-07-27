@@ -27,6 +27,8 @@ import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import com.ardic.android.iotignite.lib.restclient.model.CreateRestrictedUser;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class SignUpActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnFocusChangeListener, View.OnClickListener {
 
@@ -244,18 +246,20 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
 
         // TODO : Creating account LOADING... start
         try {
-            mCreatedUser = mSignUpController.get();
+            mCreatedUser = mSignUpController.get(Constants.ASYNC_GET_TIMEOUT, TimeUnit.MILLISECONDS);
             if (mCreatedUser != null) {
                 result = true;
             }
         } catch (InterruptedException e) {
-            Log.e(TAG, "InterruptedException on createAccount() function: " + e);
+            Log.e(TAG, "createAccount(): " + e);
             return result;
         } catch (ExecutionException e) {
-            Log.e(TAG, "ExecutionException on createAccount() function: " + e);
+            Log.e(TAG, "createAccount(): " + e);
+            return result;
+        } catch (TimeoutException e) {
+            Log.e(TAG, "createAccount(): " + e);
             return result;
         }
-
         // TODO : Creating account LOADING end
         return result;
     }

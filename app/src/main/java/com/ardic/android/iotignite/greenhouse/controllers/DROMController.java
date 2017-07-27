@@ -81,7 +81,7 @@ public class DROMController extends AsyncTask<Void, Void, Boolean> {
 
 
                 dromConfiguration = new DromConfiguration(dromConfigurationParameters,
-                        mail,
+                        mail+deviceId,
                         Constants.MASTER_TENANT_DOMAIN);
 
 

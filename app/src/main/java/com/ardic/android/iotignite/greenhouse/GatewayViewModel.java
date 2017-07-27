@@ -17,9 +17,6 @@ public class GatewayViewModel {
         this.isGatewayOnline = isGatewayOnline;
     }
 
-    public GatewayViewModel() {
-    }
-
     public String getGatewayLabel() {
         return gatewayLabel;
     }

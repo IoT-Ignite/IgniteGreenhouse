@@ -29,6 +29,8 @@ import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -228,20 +230,22 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
     private boolean doLogin() {
 
-        boolean result;
+        boolean result = false;
         mLoginController = new LoginController(LoginActivity.this, email, password);
         mLoginController.execute();
 
         // TODO : user login loading start....
         try {
-            result = mLoginController.get();
+            result = mLoginController.get(Constants.ASYNC_GET_TIMEOUT, TimeUnit.MILLISECONDS);
             Log.i(TAG, "Login RESULT" + result);
         } catch (InterruptedException e) {
             result = false;
-            Log.e(TAG, "InterruptedException on doLogin() function: " + e);
+            Log.e(TAG, "doLogin(): " + e);
         } catch (ExecutionException e) {
             result = false;
-            Log.e(TAG, "ExecutionException on doLogin() function: " + e);
+            Log.e(TAG, "doLogin(): " + e);
+        } catch (TimeoutException e) {
+            Log.e(TAG, "doLogin(): " + e);
         }
 
         // TODO : user login loading end....

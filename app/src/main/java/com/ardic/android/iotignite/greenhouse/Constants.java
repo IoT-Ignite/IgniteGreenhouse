@@ -16,6 +16,10 @@ public class Constants {
     public static final String MASTER_PROFILE = "Default";
     public static final String USER_CONFIG_MODE = "none";
     public static final int ANIM_FRAME_COUNT = 18;
+    public static final long ASYNC_GET_TIMEOUT = 10000L;
+    public static final int DROM_TRY_COUNT = 5;
+    public static final String ONLINE_DEVICE = "ONLINE";
+    public static final String OFFLINE_DEVICE = "OFFLINE";
 
 
     public static final int READ_QR_CODE = 1;

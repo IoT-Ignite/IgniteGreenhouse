@@ -50,9 +50,11 @@ public class DeviceController extends AsyncTask<Void, Void, Device> {
         super.onPostExecute(device);
         Log.i(TAG, "Device : " + device);
 
-        for (DeviceContent content : device.getDeviceContents()) {
-            if (content.getCurrentUser() != null && !TextUtils.isEmpty(content.getCurrentUser().getMail()) && content.getCurrentUser().getMail().equals(user)) {
-                Log.i(TAG, "Device Content: \n" + content);
+        if (device != null) {
+            for (DeviceContent content : device.getDeviceContents()) {
+                if (content.getCurrentUser() != null && !TextUtils.isEmpty(content.getCurrentUser().getMail()) && content.getCurrentUser().getMail().equals(user)) {
+                    Log.i(TAG, "Device Content: \n" + content);
+                }
             }
         }
     }

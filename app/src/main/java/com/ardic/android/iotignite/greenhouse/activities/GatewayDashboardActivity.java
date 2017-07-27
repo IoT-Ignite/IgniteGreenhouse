@@ -1,8 +1,8 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -35,6 +35,8 @@ import com.ardic.android.iotignite.lib.restclient.model.DeviceContent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class GatewayDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
@@ -45,7 +47,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private Toolbar toolbar;
 
     private RecyclerView recyclerView;
-    private List<GatewayViewModel> gatewayList;
+    private List<GatewayViewModel> gatewayList = new ArrayList<>();
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
@@ -59,6 +61,42 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private DROMController mDromController;
     private DeviceController mDeviceController;
     private Device devices;
+    private String deviceId;
+
+
+    private Handler dromDeviceHandler = new Handler();
+    private int dromDeviceTryCount = 0;
+    private Runnable dromDeviceRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+
+
+            if (dromDeviceTryCount < Constants.DROM_TRY_COUNT) {
+                if (!updateDevice()) {
+                    Log.i(TAG, "Waiting Device...");
+                    dromDeviceTryCount++;
+                    dromDeviceHandler.postDelayed(this, 3000L);
+                } else {
+                    dromDeviceHandler.removeCallbacks(this);
+                    updateDashboard();
+                    deviceId = null;
+                    dromDeviceTryCount = 0;
+                    // success
+                    GatewayDashboardActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //TODO End of LOADING
+                            Toast.makeText(GatewayDashboardActivity.this, "AWESOME ! DEVICE LICENCED SUCCESSFULLY. ", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            } else {
+                Toast.makeText(GatewayDashboardActivity.this, "DROM LICENCED FAILURE !!", Toast.LENGTH_LONG).show();
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +127,8 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        // drawer.addDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         layoutManager = new LinearLayoutManager(this);
@@ -130,15 +169,15 @@ public class GatewayDashboardActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
+            //TODO :
         } else if (id == R.id.nav_slideshow) {
-
+            //TODO :
         } else if (id == R.id.nav_manage) {
-
+            //TODO :
         } else if (id == R.id.nav_share) {
-
+            //TODO :
         } else if (id == R.id.nav_send) {
-
+            //TODO :
         }
 
         drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
@@ -171,9 +210,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
                             super.onShown(transientBottomBar);
                         }
                     }).setAction("Action", null).show();
-
-
-
         }
     }
 
@@ -193,15 +229,12 @@ public class GatewayDashboardActivity extends AppCompatActivity
             //TODO: LOADING....
             try {
                 if (mDromController.get()) {
+                    Log.i(TAG, "Starting dromDeviceHandler...");
+                    dromDeviceHandler.postDelayed(dromDeviceRunnable, 2000L);
+                    deviceId = qr;
 
-                    GatewayDashboardActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //TODO End of LOADING
-                            Toast.makeText(GatewayDashboardActivity.this, "AWESOME ! DEVICE LICENCED SUCCESSFULLY. ", Toast.LENGTH_LONG).show();
-                            // refreshContent();
-                        }
-                    });
+                } else {
+                    Toast.makeText(GatewayDashboardActivity.this, "DROM LICENCED FAILURE PLEASE TRY AGAIN !!", Toast.LENGTH_LONG).show();
                 }
             } catch (InterruptedException e) {
                 Log.e(TAG, "InterruptedException on onActivityResult function:" + e);
@@ -224,27 +257,32 @@ public class GatewayDashboardActivity extends AppCompatActivity
         }
     }
 
-    private void getDeviceInfo() {
+    private synchronized void getDeviceInfo() {
+
         mDeviceController = new DeviceController(this, activeUser, activeUserPassword);
+
         mDeviceController.execute();
 
         // TODO : LOADING - Getting devices...
         try {
-            devices = mDeviceController.get();
+            devices = mDeviceController.get(Constants.ASYNC_GET_TIMEOUT, TimeUnit.MILLISECONDS);
 
-            for (DeviceContent cnt : devices.getDeviceContents()) {
-                Log.i(TAG, "DEVICES: " + cnt.getDeviceId());
-                GatewayViewModel model = new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), true);
-                if (!gatewayList.contains(model)) {
-                    gatewayList.add(model);
-                }
-            }
+            updateGatewayList(devices);
+
         } catch (InterruptedException e) {
             Log.e(TAG, "getDeviceInfo(): " + e);
         } catch (ExecutionException e) {
             Log.e(TAG, "getDeviceInfo(): " + e);
+        } catch (TimeoutException e) {
+            Log.e(TAG, "getDeviceInfo(): " + e);
         }
         // TODO : LOADING - Getting device end...
+
+    }
+
+    private boolean updateDevice() {
+        getDeviceInfo();
+        return checkDevice();
     }
 
     @Override
@@ -252,7 +290,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
         Log.i(TAG, "Position on recycler view:" + position);
         GatewayViewModel gateway = gatewayList.get(position);
         Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
-        // startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
+        startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
     }
 
     /**
@@ -270,7 +308,25 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         recyclerGatewayAdapter.notifyDataSetChanged();
         gatewaySwipeRefreshLayout.setRefreshing(false);
-	}
+    }
+
+
+    private void updateGatewayList(Device device) {
+        gatewayList.clear();
+        for (DeviceContent cnt : device.getDeviceContents()) {
+            gatewayList.add(new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), Constants.ONLINE_DEVICE.equals(cnt.getPresence().getState()) ? true : false));
+        }
+        recyclerGatewayAdapter.notifyDataSetChanged();
+    }
+
+    private boolean checkDevice() {
+        for (GatewayViewModel mdl : gatewayList) {
+            if (mdl.getGatewayId().equals(deviceId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 }
