@@ -21,7 +21,6 @@ public class Constants {
     public static final String ONLINE_DEVICE = "ONLINE";
     public static final String OFFLINE_DEVICE = "OFFLINE";
 
-
     public static final int READ_QR_CODE = 1;
     public static final int CREATE_NEW_ACCOUNT = 2;
     /**
