@@ -32,13 +32,19 @@ public class Constants {
 
     public class Actions {
         public static final String ACTION_SIGN_UP_SUCCESS = "sign-up-success";
-        public static final String ACTION_GW_QR_CODE_SUCCESS = "gw-qr-code";
+        public static final String ACTION_GW_QR_CODE_SUCCESS = "gw-qr-code-success";
+        public static final String ACTION_SENSOR_QR_CODE_SUCCESS = "sensor-qr-code-success";
+        public static final String ACTION_GW_QR_CODE = "gw-qr-code";
+        public static final String ACTION_QR_CODE_FAILURE = "qr-code-failure";
+        public static final String ACTION_SENSOR_QR_CODE = "sensor-qr-code";
     }
 
     public class Extra {
         public static final String EXTRA_USERNAME = "username";
         public static final String EXTRA_PASSWORD = "password";
         public static final String EXTRA_GW_QR_CODE = "gw-qr-data";
+        public static final String EXTRA_SENSOR_QR_CODE = "sensor-qr-data";
+
     }
 
 

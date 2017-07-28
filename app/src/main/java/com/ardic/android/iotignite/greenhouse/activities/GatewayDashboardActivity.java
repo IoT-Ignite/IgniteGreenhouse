@@ -201,6 +201,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
                         public void onDismissed(Snackbar transientBottomBar, int event) {
                             super.onDismissed(transientBottomBar, event);
                             Intent intent = new Intent(GatewayDashboardActivity.this, QRScanActivity.class);
+                            intent.setAction(Constants.Actions.ACTION_GW_QR_CODE);
                             startActivityForResult(intent, Constants.READ_QR_CODE);
                         }
 
@@ -208,14 +209,15 @@ public class GatewayDashboardActivity extends AppCompatActivity
                         public void onShown(Snackbar transientBottomBar) {
                             super.onShown(transientBottomBar);
                         }
-                    }).setAction("Action", null).show();
+                    }).show();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && Constants.Actions.ACTION_GW_QR_CODE_SUCCESS.equals(data.getAction())) {
+
 
             String qr = data.getStringExtra(Constants.Extra.EXTRA_GW_QR_CODE);
             Log.i(TAG, "QR Code Received !" + qr);
@@ -231,7 +233,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
                     Log.i(TAG, "Starting dromDeviceHandler...");
                     dromDeviceHandler.postDelayed(dromDeviceRunnable, 2000L);
                     deviceId = qr;
-
                 } else {
                     Toast.makeText(GatewayDashboardActivity.this, "DROM LICENCED FAILURE PLEASE TRY AGAIN !!", Toast.LENGTH_LONG).show();
                 }
@@ -240,6 +241,8 @@ public class GatewayDashboardActivity extends AppCompatActivity
             } catch (ExecutionException e) {
                 Log.e(TAG, "ExecutionException on onActivityResult function:" + e);
             }
+        } else {
+            Toast.makeText(this, "QR Code Failure Please Try Again...", Toast.LENGTH_LONG).show();
         }
     }
 

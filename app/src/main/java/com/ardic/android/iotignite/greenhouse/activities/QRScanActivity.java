@@ -17,6 +17,7 @@ public class QRScanActivity extends AppCompatActivity implements ZXingScannerVie
 
     private static final String TAG = QRScanActivity.class.getSimpleName();
     private ZXingScannerView mScannerView;
+    private String action;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,19 +25,37 @@ public class QRScanActivity extends AppCompatActivity implements ZXingScannerVie
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);
 
+        Intent i = getIntent();
+
+        if (i != null) {
+            action = i.getAction();
+        }
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mScannerView.setResultHandler(this);
+        mScannerView.startCamera();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
-        mScannerView.startCamera();          // Start camera on resume
+        mScannerView.resumeCameraPreview(this);
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mScannerView.stopCamera();           // Stop camera on pause
+        mScannerView.stopCamera();
     }
 
     @Override
@@ -57,9 +76,21 @@ public class QRScanActivity extends AppCompatActivity implements ZXingScannerVie
 
     private void sendResult(String qrCode) {
 
-        Intent gwQRIntent = new Intent(Constants.Actions.ACTION_GW_QR_CODE_SUCCESS);
-        gwQRIntent.putExtra(Constants.Extra.EXTRA_GW_QR_CODE, qrCode);
-        setResult(RESULT_OK, gwQRIntent);
+
+        Intent resultIntent = new Intent();
+        if (action.equals(Constants.Actions.ACTION_GW_QR_CODE)) {
+            resultIntent.setAction(Constants.Actions.ACTION_GW_QR_CODE_SUCCESS);
+            resultIntent.putExtra(Constants.Extra.EXTRA_GW_QR_CODE, qrCode);
+            setResult(RESULT_OK, resultIntent);
+        } else if (action.equals(Constants.Actions.ACTION_SENSOR_QR_CODE)) {
+
+            resultIntent.setAction(Constants.Actions.ACTION_SENSOR_QR_CODE_SUCCESS);
+            resultIntent.putExtra(Constants.Extra.EXTRA_SENSOR_QR_CODE, qrCode);
+            setResult(RESULT_OK, resultIntent);
+        } else {
+            resultIntent.setAction(Constants.Actions.ACTION_QR_CODE_FAILURE);
+            setResult(RESULT_CANCELED, resultIntent);
+        }
         finish();
 
     }
