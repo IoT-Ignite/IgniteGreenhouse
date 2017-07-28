@@ -4,44 +4,96 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="8dp"
+    android:weightSum="1">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/content_sensor_dashboard_card_view_item_card_view"
-        android:layout_width="113dp"
+        android:id="@+id/content_gateway_dashboard_card_view_item_card_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="8dp"
         card_view:cardCornerRadius="4dp">
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="110dp"
-            android:layout_height="202dp"
-            android:padding="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/content_sensor_dashboard_card_view_item_img_sensor_status"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="16dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/cardview_dark_background"
+                android:gravity="end|center"
+                android:orientation="horizontal"
+                android:padding="8dp">
 
-            <TextView
-                android:id="@+id/content_sensor_dashboard_card_view_item_txt_sensor_id"
-                android:layout_width="wrap_content"
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/info" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/colorGray"
+                android:padding="8dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/content_sensor_dashboard_card_view_item_txt_sensor_thing_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Thing ID: "
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/content_sensor_dashboard_card_view_item_img_sensor_status"
-                android:textSize="30sp" />
+                android:weightSum="1">
 
-            <TextView
-                android:id="@+id/content_sensor_dashboard_card_view_item_txt_sensor_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/content_sensor_dashboard_card_view_item_txt_sensor_id"
-                android:layout_toRightOf="@+id/content_sensor_dashboard_card_view_item_img_sensor_status" />
 
-        </android.support.constraint.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/content_sensor_dashboard_card_view_item_img_sensor_type"
+                    android:layout_width="129dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.50"
+                    android:padding="16dp"
+                    android:src="@drawable/thermometer" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/content_sensor_dashboard_card_view_item_txt_sensor_value"
+                        android:layout_width="match_parent"
+                        android:layout_height="102dp"
+                        android:padding="30dp"
+                        android:text="30°C"
+                        android:textAlignment="center"
+                        android:textSize="35sp" />
+
+                    <TextView
+                        android:id="@+id/content_sensor_dashboard_card_view_item_txt_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:text="12.06.17 20:37 "
+                        android:textAlignment="center"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 

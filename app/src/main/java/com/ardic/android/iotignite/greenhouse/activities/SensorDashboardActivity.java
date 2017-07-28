@@ -29,8 +29,12 @@ import com.ardic.android.iotignite.greenhouse.controllers.DROMController;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceController;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceNodeInventoryController;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventory;
+import com.ardic.android.iotignite.lib.restclient.model.SensorAgentMessageResponse;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -58,6 +62,8 @@ public class SensorDashboardActivity extends AppCompatActivity
     private DROMController mDromController;
     private DeviceController mDeviceController;
     private DeviceNodeInventoryController mDeviceNodeInventoryController;
+    private Date date;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +74,17 @@ public class SensorDashboardActivity extends AppCompatActivity
         getGatewayAndUserInfo();
         initUI();
 
+        date = new Date(System.currentTimeMillis());
+
+        try {
+            date = sdf.parse(sdf.format(date));
+        } catch (ParseException e) {
+        }
 
         //use "add" function onActivityResult method with result values.
-        //sensorList.add(new SensorViewModel("Temperature", "25 C", true));
-        //sensorList.add(new SensorViewModel("Humidity", "42%", false));
+        sensorList.add(new SensorViewModel("sensor ID", "Temperature", "bu bir node ID", "25°C", date, true));
+
+        updateDashboard();
 
     }
 
@@ -83,7 +96,7 @@ public class SensorDashboardActivity extends AppCompatActivity
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
 
-        fabAddSensor = (FloatingActionButton) findViewById(R.id.fab);
+        fabAddSensor = (FloatingActionButton) findViewById(R.id.sensor_fab);
         fabAddSensor.setOnClickListener(this);
 
         drawer = (DrawerLayout) findViewById(R.id.activity_sensor_dashboard_drawer_layout);
@@ -165,7 +178,10 @@ public class SensorDashboardActivity extends AppCompatActivity
                         @Override
                         public void onDismissed(Snackbar transientBottomBar, int event) {
                             super.onDismissed(transientBottomBar, event);
-                            startActivityForResult(new Intent(SensorDashboardActivity.this, QRScanActivity.class), Constants.READ_QR_CODE);
+
+                            Intent intent = new Intent(SensorDashboardActivity.this, QRScanActivity.class);
+                            intent.setAction(Constants.Actions.ACTION_SENSOR_QR_CODE);
+                            startActivityForResult(intent, Constants.READ_QR_CODE);
                         }
 
                         @Override
@@ -212,6 +228,9 @@ public class SensorDashboardActivity extends AppCompatActivity
 
         try {
             mDeviceNodeInventory = mDeviceNodeInventoryController.get();
+
+
+            Log.i(TAG, "Device Inventory:" + mDeviceNodeInventory.toString());
         } catch (InterruptedException e) {
             Log.i(TAG, "updateDashboard:" + e);
         } catch (ExecutionException e) {
