@@ -27,9 +27,12 @@ import com.ardic.android.iotignite.greenhouse.RecyclerSensorAdapter;
 import com.ardic.android.iotignite.greenhouse.SensorViewModel;
 import com.ardic.android.iotignite.greenhouse.controllers.DROMController;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceController;
+import com.ardic.android.iotignite.greenhouse.controllers.DeviceNodeInventoryController;
+import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class SensorDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
@@ -49,21 +52,26 @@ public class SensorDashboardActivity extends AppCompatActivity
     private RecyclerSensorAdapter recyclerSensorAdapter;
     private SwipeRefreshLayout sensorSwipeRefreshLayout;
 
+    private String deviceId;
     private String activeUser;
     private String activeUserPassword;
     private DROMController mDromController;
     private DeviceController mDeviceController;
+    private DeviceNodeInventoryController mDeviceNodeInventoryController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_dashboard);
 
+
+        getGatewayAndUserInfo();
         initUI();
 
+
         //use "add" function onActivityResult method with result values.
-        sensorList.add(new SensorViewModel("Temperature", "25 C", true));
-        sensorList.add(new SensorViewModel("Humidity", "42%", false));
+        //sensorList.add(new SensorViewModel("Temperature", "25 C", true));
+        //sensorList.add(new SensorViewModel("Humidity", "42%", false));
 
     }
 
@@ -164,18 +172,16 @@ public class SensorDashboardActivity extends AppCompatActivity
                         public void onShown(Snackbar transientBottomBar) {
                             super.onShown(transientBottomBar);
                         }
-                    }).setAction("Action", null).show();
-
-
+                    }).show();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK && Constants.Actions.ACTION_SENSOR_QR_CODE_SUCCESS.equals(data.getAction())) {
 
-            String qr = data.getStringExtra(Constants.Extra.EXTRA_GW_QR_CODE);
+            String qr = data.getStringExtra(Constants.Extra.EXTRA_SENSOR_QR_CODE);
             Log.i(TAG, "QR Code Received !" + qr);
             Toast.makeText(this, "QR Code Received !" + qr, Toast.LENGTH_LONG).show();
 
@@ -191,7 +197,7 @@ public class SensorDashboardActivity extends AppCompatActivity
     @Override
     public void onRefresh() {
         updateDashboard();
-        }
+    }
 
     /**
      * Get new sensor values
@@ -199,6 +205,19 @@ public class SensorDashboardActivity extends AppCompatActivity
 
     private void updateDashboard() {
         // TODO : GET SENSOR INFO HERE!!!!!!
+
+        DeviceNodeInventory mDeviceNodeInventory = null;
+        mDeviceNodeInventoryController = new DeviceNodeInventoryController(this, activeUser, activeUserPassword, deviceId);
+        mDeviceNodeInventoryController.execute();
+
+        try {
+            mDeviceNodeInventory = mDeviceNodeInventoryController.get();
+        } catch (InterruptedException e) {
+            Log.i(TAG, "updateDashboard:" + e);
+        } catch (ExecutionException e) {
+            Log.i(TAG, "updateDashboard:" + e);
+        }
+
         recyclerSensorAdapter.notifyDataSetChanged();
         sensorSwipeRefreshLayout.setRefreshing(false);
 
@@ -210,6 +229,21 @@ public class SensorDashboardActivity extends AppCompatActivity
         SensorViewModel sensor = sensorList.get(position);
         Toast.makeText(getApplicationContext(), " Position: " + position + " Sensor ID: " + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
 
+    }
+
+    private void getGatewayAndUserInfo() {
+        if (getIntent() != null) {
+            Intent intent = getIntent();
+            if (intent.hasExtra(Constants.Extra.EXTRA_DEVICE_ID)) {
+                deviceId = intent.getStringExtra(Constants.Extra.EXTRA_DEVICE_ID);
+            }
+            if (intent.hasExtra(Constants.Extra.EXTRA_USERNAME)) {
+                activeUser = intent.getStringExtra(Constants.Extra.EXTRA_USERNAME);
+            }
+            if (intent.hasExtra(Constants.Extra.EXTRA_PASSWORD)) {
+                activeUserPassword = intent.getStringExtra(Constants.Extra.EXTRA_PASSWORD);
+            }
+        }
     }
 }
 

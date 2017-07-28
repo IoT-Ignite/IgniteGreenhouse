@@ -44,6 +44,7 @@ public class Constants {
         public static final String EXTRA_PASSWORD = "password";
         public static final String EXTRA_GW_QR_CODE = "gw-qr-data";
         public static final String EXTRA_SENSOR_QR_CODE = "sensor-qr-data";
+        public static final String EXTRA_DEVICE_ID = "device-id";
 
     }
 

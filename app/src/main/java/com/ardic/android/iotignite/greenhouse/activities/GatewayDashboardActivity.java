@@ -16,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -291,8 +292,15 @@ public class GatewayDashboardActivity extends AppCompatActivity
     public void onItemClick(View v, int position) {
         Log.i(TAG, "Position on recycler view:" + position);
         GatewayViewModel gateway = gatewayList.get(position);
-        Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class));
+
+        if (gateway != null && !TextUtils.isEmpty(gateway.getGatewayId())) {
+            Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
+            Intent startSensorDashboardActivity = new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class);
+            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_ID, gateway.getGatewayId());
+            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_USERNAME, activeUser);
+            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_PASSWORD, activeUserPassword);
+            startActivity(startSensorDashboardActivity);
+        }
     }
 
     /**
