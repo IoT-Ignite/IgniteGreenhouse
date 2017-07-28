@@ -2,73 +2,74 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/content_gateway_dashboard_card_view_item_card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        card_view:cardCornerRadius="4dp">
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:weightSum="1">
 
-        <android.support.constraint.ConstraintLayout
+    <android.support.v7.widget.CardView
+        android:id="@+id/content_sensor_dashboard_card_view_item_card_view"
             android:layout_width="match_parent"
-            android:layout_height="255dp"
-            android:padding="16dp">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="8dp"
+        card_view:cardCornerRadius="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:orientation="vertical"
+                android:weightSum="1.2">
+
+                <TextView
+                    android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_label"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_weight="0.6"
+                    android:gravity="center"
+                    android:text="Label"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.3"
+                    android:text="Gateway ID: "
+                    android:textSize="20sp"
+                    tools:layout_editor_absoluteX="156dp" />
+
+                <TextView
+                    android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_weight="0.3"
+                    android:text="Gateway Status: "
+                    android:textSize="20sp" />
+
+            </LinearLayout>
 
             <ImageView
                 android:id="@+id/content_gateway_dashboard_card_view_item_img_gateway_status"
-                android:layout_width="74dp"
-                android:layout_height="82dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="6dp"
-                android:layout_marginTop="16dp"
-                card_view:layout_constraintLeft_toLeftOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.3" />
 
-            <TextView
-                android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_label"
-                android:layout_width="180dp"
-                android:layout_height="46dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="-4dp"
-                android:layout_marginTop="16dp"
-                android:layout_toRightOf="@+id/content_gateway_dashboard_card_view_item_img_gateway_status"
-                android:textSize="20sp"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_id"
-                android:layout_width="180dp"
-                android:layout_height="49dp"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="-30dp"
-                android:layout_marginTop="15dp"
-                android:layout_toRightOf="@+id/content_gateway_dashboard_card_view_item_img_gateway_status"
-                android:textSize="20sp"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/content_gateway_dashboard_card_view_item_txt_gateway_label"
-                tools:layout_editor_absoluteX="156dp" />
+        </LinearLayout>
 
-            <TextView
-                android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_status"
-                android:layout_width="179dp"
-                android:layout_height="50dp"
-                android:layout_below="@+id/content_gateway_dashboard_card_view_item_txt_gateway_id"
-                android:layout_marginRight="-10dp"
-                android:layout_marginTop="15dp"
-                android:layout_toRightOf="@+id/content_gateway_dashboard_card_view_item_img_gateway_status"
-                android:textSize="20sp"
-                card_view:layout_constraintRight_toRightOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/content_gateway_dashboard_card_view_item_txt_gateway_id"
-                tools:layout_editor_absoluteX="157dp" />
-
-        </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
+
