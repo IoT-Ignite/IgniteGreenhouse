@@ -31,6 +31,7 @@ import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import java.util.concurrent.ExecutionException;
 
 
+
 /**
  * Created by pmirkelam on 12.07.2017.
  */
@@ -247,10 +248,16 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     }
 
     private void startGatewayDashboardActivity() {
+
+        //    AlertDialog dialog = new SpotsDialog(this);
+        //   dialog.show();
+
+
         Intent intent = new Intent(LoginActivity.this, GatewayDashboardActivity.class);
         intent.putExtra(Constants.Extra.EXTRA_USERNAME, email);
         intent.putExtra(Constants.Extra.EXTRA_PASSWORD, password);
         startActivity(intent);
+        //   dialog.dismiss();
     }
 
 

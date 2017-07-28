@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -258,11 +259,14 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     }
 
     private void startLoginActivity() {
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_loader);
+        progressBar.setVisibility(View.VISIBLE);
         Toast.makeText(SignUpActivity.this, "Sign Up Successful !", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Constants.Actions.ACTION_SIGN_UP_SUCCESS);
         intent.putExtra(Constants.Extra.EXTRA_USERNAME, email);
         intent.putExtra(Constants.Extra.EXTRA_PASSWORD, password);
         setResult(RESULT_OK, intent);
+        progressBar.setVisibility(View.GONE);
         finish();
     }
 

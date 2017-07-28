@@ -35,4 +35,5 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'me.dm7.barcodescanner:zxing:1.9.4'
     testCompile 'junit:junit:4.12'
+
 }
