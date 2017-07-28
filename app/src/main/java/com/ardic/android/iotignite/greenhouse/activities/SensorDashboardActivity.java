@@ -28,7 +28,10 @@ import com.ardic.android.iotignite.greenhouse.SensorViewModel;
 import com.ardic.android.iotignite.greenhouse.controllers.DROMController;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SensorDashboardActivity extends AppCompatActivity
@@ -53,6 +56,7 @@ public class SensorDashboardActivity extends AppCompatActivity
     private String activeUserPassword;
     private DROMController mDromController;
     private DeviceController mDeviceController;
+    private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +65,15 @@ public class SensorDashboardActivity extends AppCompatActivity
 
         initUI();
 
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            date = sdf.parse("28/07/2017");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         //use "add" function onActivityResult method with result values.
-        sensorList.add(new SensorViewModel("Temperature", "25 C", true));
-        sensorList.add(new SensorViewModel("Humidity", "42%", false));
+        sensorList.add(new SensorViewModel("sensor ID", "Temperature", "bu bir node ID", "25°C", date, true));
 
     }
 
@@ -75,7 +85,7 @@ public class SensorDashboardActivity extends AppCompatActivity
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
 
-        fabAddSensor = (FloatingActionButton) findViewById(R.id.fab);
+        fabAddSensor = (FloatingActionButton) findViewById(R.id.sensor_fab);
         fabAddSensor.setOnClickListener(this);
 
         drawer = (DrawerLayout) findViewById(R.id.activity_sensor_dashboard_drawer_layout);
@@ -164,7 +174,7 @@ public class SensorDashboardActivity extends AppCompatActivity
                         public void onShown(Snackbar transientBottomBar) {
                             super.onShown(transientBottomBar);
                         }
-                    }).setAction("Action", null).show();
+                    }).show();
 
 
         }

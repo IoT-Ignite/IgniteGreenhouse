@@ -1,7 +1,6 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
@@ -80,7 +79,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.app_bar_gateway_dashboard_toolbar);
         setSupportActionBar(toolbar);
 
-        fabAddGateway = (FloatingActionButton) findViewById(R.id.fab);
+        fabAddGateway = (FloatingActionButton) findViewById(R.id.gateway_fab);
         fabAddGateway.setOnClickListener(this);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
