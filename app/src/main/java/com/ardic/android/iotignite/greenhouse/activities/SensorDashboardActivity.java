@@ -65,6 +65,7 @@ public class SensorDashboardActivity extends AppCompatActivity
     private Date date;
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
