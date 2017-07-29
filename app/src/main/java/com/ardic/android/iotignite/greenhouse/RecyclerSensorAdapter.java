@@ -19,8 +19,8 @@ import java.util.List;
 public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAdapter.ViewHolder> {
 
     private static final String TAG = RecyclerSensorAdapter.class.getSimpleName();
-    List<SensorViewModel> sensorList;
-    CustomCardViewClickListener listenerSensorCardViewClick;
+    private List<SensorViewModel> sensorList;
+    private CustomCardViewClickListener listenerSensorCardViewClick;
 
     public RecyclerSensorAdapter(List<SensorViewModel> sensorList, CustomCardViewClickListener listenerSensorCardViewClick) {
 
@@ -74,6 +74,8 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
 
         public TextView txtSensorId;
         public TextView txtSensorValue;
+        public TextView txtLastDataTime;
+        public TextView txtNodeId;
         public ImageView imgSensorStatus;
         public CardView cardViewSensor;
 
@@ -84,6 +86,7 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
             cardViewSensor = view.findViewById(R.id.content_sensor_dashboard_card_view_item_card_view);
             txtSensorId = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_thing_id);
             txtSensorValue = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_value);
+            txtLastDataTime = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_date);
             //   imgSensorStatus = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_status);
 
         }

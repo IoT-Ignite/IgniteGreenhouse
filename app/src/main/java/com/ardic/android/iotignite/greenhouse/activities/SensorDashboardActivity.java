@@ -29,7 +29,9 @@ import com.ardic.android.iotignite.greenhouse.controllers.DROMController;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceController;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceNodeInventoryController;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventory;
-import com.ardic.android.iotignite.lib.restclient.model.SensorAgentMessageResponse;
+import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventoryExtras;
+import com.ardic.android.iotignite.lib.restclient.model.Node;
+import com.ardic.android.iotignite.lib.restclient.model.Thing;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,13 +59,7 @@ public class SensorDashboardActivity extends AppCompatActivity
     private SwipeRefreshLayout sensorSwipeRefreshLayout;
 
     private String deviceId;
-    private String activeUser;
-    private String activeUserPassword;
-    private DROMController mDromController;
-    private DeviceController mDeviceController;
     private DeviceNodeInventoryController mDeviceNodeInventoryController;
-    private Date date;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 
     @Override
@@ -72,18 +68,8 @@ public class SensorDashboardActivity extends AppCompatActivity
         setContentView(R.layout.activity_sensor_dashboard);
 
 
-        getGatewayAndUserInfo();
+        getGatewayInfo();
         initUI();
-
-        date = new Date(System.currentTimeMillis());
-
-        try {
-            date = sdf.parse(sdf.format(date));
-        } catch (ParseException e) {
-        }
-
-        //use "add" function onActivityResult method with result values.
-        sensorList.add(new SensorViewModel("sensor ID", "Temperature", "bu bir node ID", "25°C", date, true));
 
         updateDashboard();
 
@@ -238,6 +224,17 @@ public class SensorDashboardActivity extends AppCompatActivity
             Log.i(TAG, "updateDashboard:" + e);
         }
 
+        sensorList.clear();
+
+        DeviceNodeInventoryExtras extras = mDeviceNodeInventory.getExtras();
+
+        for (Node n : extras.getNodes()) {
+            for (Thing t : n.getThings()) {
+                SensorViewModel mdl = new SensorViewModel(t.getId(), t.getType(), n.getNodeId(), "N/A", new Date(System.currentTimeMillis()), t.getConnected() == 1 ? true : false);
+                sensorList.add(mdl);
+            }
+        }
+
         recyclerSensorAdapter.notifyDataSetChanged();
         sensorSwipeRefreshLayout.setRefreshing(false);
 
@@ -251,7 +248,7 @@ public class SensorDashboardActivity extends AppCompatActivity
 
     }
 
-    private void getGatewayAndUserInfo() {
+    private void getGatewayInfo() {
         if (getIntent() != null && getIntent().hasExtra(Constants.Extra.EXTRA_DEVICE_ID)) {
             Intent intent = getIntent();
             deviceId = intent.getStringExtra(Constants.Extra.EXTRA_DEVICE_ID);
