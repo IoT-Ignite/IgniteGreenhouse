@@ -55,10 +55,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private LinearLayoutManager layoutManager;
     private RecyclerGatewayAdapter recyclerGatewayAdapter;
     private SwipeRefreshLayout gatewaySwipeRefreshLayout;
-    private LinearLayout progressBarLayout;
-
-    private String activeUser;
-    private String activeUserPassword;
     private DROMController mDromController;
     private DeviceController mDeviceController;
     private Device devices;
@@ -104,10 +100,8 @@ public class GatewayDashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gateway_dashboard);
 
-        getLoginInfo();
 
         initUI();
-
         // get previous configured gateways..
         updateDashboard();
 
@@ -224,7 +218,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
             Log.i(TAG, "QR Code Received !" + qr);
             Toast.makeText(this, "QR Code Received !" + qr, Toast.LENGTH_LONG).show();
 
-            mDromController = new DROMController(this, activeUser, activeUserPassword, qr);
+            mDromController = new DROMController(this, qr);
 
             mDromController.execute();
 
@@ -247,22 +241,9 @@ public class GatewayDashboardActivity extends AppCompatActivity
         }
     }
 
-    private void getLoginInfo() {
-
-        Intent mIntent = getIntent();
-
-        if (mIntent != null && mIntent.hasExtra(Constants.Extra.EXTRA_USERNAME)) {
-            activeUser = mIntent.getStringExtra(Constants.Extra.EXTRA_USERNAME);
-        }
-
-        if (mIntent != null && mIntent.hasExtra(Constants.Extra.EXTRA_PASSWORD)) {
-            activeUserPassword = mIntent.getStringExtra(Constants.Extra.EXTRA_PASSWORD);
-        }
-    }
-
     private synchronized void getDeviceInfo() {
 
-        mDeviceController = new DeviceController(this, activeUser, activeUserPassword);
+        mDeviceController = new DeviceController(this);
 
         mDeviceController.execute();
 
@@ -297,8 +278,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
             Intent startSensorDashboardActivity = new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class);
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_ID, gateway.getGatewayId());
-            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_USERNAME, activeUser);
-            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_PASSWORD, activeUserPassword);
             startActivity(startSensorDashboardActivity);
         }
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ardic.android.iotignite.lib.restclient.exception.IgniteRestClientException;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClient;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClientManager;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventory;
@@ -15,27 +16,27 @@ import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventory;
 public class DeviceNodeInventoryController extends AsyncTask<Void, Void, DeviceNodeInventory> {
 
     private static final String TAG = DeviceNodeInventoryController.class.getSimpleName();
-    private String user;
-    private String password;
     private String deviceId;
-    private IgniteRestClientManager mIgniteRestClientManager;
     private IgniteRestClient mIgniteRestClient;
+    private Context appContext;
 
-    public DeviceNodeInventoryController(Context appContext, String user, String password, String deviceId) {
-        this.user = user;
-        this.password = password;
+    public DeviceNodeInventoryController(Context appContext, String deviceId) {
+        this.appContext = appContext;
         this.deviceId = deviceId;
-        mIgniteRestClientManager = IgniteRestClientManager.getInstance(appContext);
     }
 
     @Override
     protected DeviceNodeInventory doInBackground(Void... voids) {
         DeviceNodeInventory mDeviceNodeInventory = null;
 
-        mIgniteRestClient = mIgniteRestClientManager.createClient(user, password, false);
+        mIgniteRestClient = RestClientHolder.getInstance(appContext).getActiveClient();
 
-        mDeviceNodeInventory = mIgniteRestClient.getDeviceNodeInventory(deviceId);
+        try {
+            mDeviceNodeInventory = mIgniteRestClient.getDeviceNodeInventory(deviceId);
 
+        } catch (IgniteRestClientException e) {
+            Log.e(TAG, "DeviceNodeInventoryController: " + e);
+        }
         return mDeviceNodeInventory;
 
     }

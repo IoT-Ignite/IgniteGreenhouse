@@ -224,7 +224,7 @@ public class SensorDashboardActivity extends AppCompatActivity
         // TODO : GET SENSOR INFO HERE!!!!!!
 
         DeviceNodeInventory mDeviceNodeInventory = null;
-        mDeviceNodeInventoryController = new DeviceNodeInventoryController(this, activeUser, activeUserPassword, deviceId);
+        mDeviceNodeInventoryController = new DeviceNodeInventoryController(this, deviceId);
         mDeviceNodeInventoryController.execute();
 
         try {
@@ -252,17 +252,9 @@ public class SensorDashboardActivity extends AppCompatActivity
     }
 
     private void getGatewayAndUserInfo() {
-        if (getIntent() != null) {
+        if (getIntent() != null && getIntent().hasExtra(Constants.Extra.EXTRA_DEVICE_ID)) {
             Intent intent = getIntent();
-            if (intent.hasExtra(Constants.Extra.EXTRA_DEVICE_ID)) {
-                deviceId = intent.getStringExtra(Constants.Extra.EXTRA_DEVICE_ID);
-            }
-            if (intent.hasExtra(Constants.Extra.EXTRA_USERNAME)) {
-                activeUser = intent.getStringExtra(Constants.Extra.EXTRA_USERNAME);
-            }
-            if (intent.hasExtra(Constants.Extra.EXTRA_PASSWORD)) {
-                activeUserPassword = intent.getStringExtra(Constants.Extra.EXTRA_PASSWORD);
-            }
+            deviceId = intent.getStringExtra(Constants.Extra.EXTRA_DEVICE_ID);
         }
     }
 }

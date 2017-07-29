@@ -22,10 +22,8 @@ public class DROMController extends AsyncTask<Void, Void, Boolean> {
 
 
     private static final String TAG = DROMController.class.getSimpleName();
-    private IgniteRestClientManager mIgniteRestClientManager;
     private IgniteRestClient mIgniteRestClient;
-    private String mail;
-    private String password;
+    private Context appContext;
     private String deviceId;
     private String dromConfigId;
     private DromConfigurationParameters dromConfigurationParameters;
@@ -35,23 +33,19 @@ public class DROMController extends AsyncTask<Void, Void, Boolean> {
     private EndUserContent endUserContent;
 
 
-    public DROMController(Context appContext, String mail, String password, String deviceId) {
-        this.mail = mail;
-
-        //TODO remove password
-        this.password = password;
+    public DROMController(Context appContext, String deviceId) {
+        this.appContext = appContext;
         this.deviceId = deviceId;
-
-        mIgniteRestClientManager = IgniteRestClientManager.getInstance(appContext);
     }
 
     @Override
     protected Boolean doInBackground(Void... voids) {
 
-        Log.i(TAG, "Creating client...");
+        Log.i(TAG, "Getting client...");
         try {
-            mIgniteRestClient = mIgniteRestClientManager.createClient(Constants.MASTER_TENANT_USER, Constants.MASTER_TENANT_PASS, true);
+            mIgniteRestClient = RestClientHolder.getInstance(appContext).getMasterClient();
 
+            String mail = RestClientHolder.getInstance(appContext).getActiveUser();
 
             Log.i(TAG, "Getting active end user...");
             endUsers = mIgniteRestClient.getEndUser(mail);
@@ -81,7 +75,7 @@ public class DROMController extends AsyncTask<Void, Void, Boolean> {
 
 
                 dromConfiguration = new DromConfiguration(dromConfigurationParameters,
-                        mail+deviceId,
+                        mail + deviceId,
                         Constants.MASTER_TENANT_DOMAIN);
 
 

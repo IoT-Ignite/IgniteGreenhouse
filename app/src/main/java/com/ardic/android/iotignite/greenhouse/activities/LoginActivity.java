@@ -254,8 +254,6 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
     private void startGatewayDashboardActivity() {
         Intent intent = new Intent(LoginActivity.this, GatewayDashboardActivity.class);
-        intent.putExtra(Constants.Extra.EXTRA_USERNAME, email);
-        intent.putExtra(Constants.Extra.EXTRA_PASSWORD, password);
         startActivity(intent);
     }
 

@@ -16,24 +16,24 @@ public class LoginController extends AsyncTask<Void, Void, Boolean> {
 
 
     private static final String TAG = SignUpController.class.getSimpleName();
-    private IgniteRestClientManager mIgniteRestClientManager;
     private IgniteRestClient mIgniteRestClient;
     private String mail;
     private String password;
+    private Context appContext;
 
 
     public LoginController(Context appContext, String mail, String pass) {
+        this.appContext = appContext;
         this.mail = mail;
         this.password = pass;
-        mIgniteRestClientManager = IgniteRestClientManager.getInstance(appContext);
-
     }
 
     @Override
     protected Boolean doInBackground(Void... voids) {
         Log.i(TAG, "Creating client...");
         try {
-            mIgniteRestClient = mIgniteRestClientManager.createClient(mail, password, true);
+            RestClientHolder.getInstance(appContext).initClients(mail, password);
+            mIgniteRestClient = RestClientHolder.getInstance(appContext).getActiveClient();
         } catch (IgniteRestClientException e) {
             Log.e(TAG, "LoginController:" + e);
             return false;

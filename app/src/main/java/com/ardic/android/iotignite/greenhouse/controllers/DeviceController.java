@@ -19,24 +19,21 @@ import com.ardic.android.iotignite.lib.restclient.model.DeviceContent;
 
 public class DeviceController extends AsyncTask<Void, Void, Device> {
 
-    private static final String TAG = DROMController.class.getSimpleName();
-    private IgniteRestClientManager mIgniteRestClientManager;
+    private static final String TAG = DeviceController.class.getSimpleName();
     private IgniteRestClient mIgniteRestClient;
-    private String user;
-    private String password;
+    private Context appContext;
     private Device device;
+    private String user;
 
-    public DeviceController(Context appContext, String user, String password) {
-        this.user = user;
-        this.password = password;
-
-        mIgniteRestClientManager = IgniteRestClientManager.getInstance(appContext);
+    public DeviceController(Context appContext) {
+        this.appContext = appContext;
+        user = RestClientHolder.getInstance(appContext).getActiveUser();
     }
 
     @Override
     protected Device doInBackground(Void... voids) {
 
-        mIgniteRestClient = mIgniteRestClientManager.createClient(user, password, true);
+        mIgniteRestClient = RestClientHolder.getInstance(appContext).getActiveClient();
         try {
             device = mIgniteRestClient.getDeviceSummary(user);
         } catch (IgniteRestClientException e) {
