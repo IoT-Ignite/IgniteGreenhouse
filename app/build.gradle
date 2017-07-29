@@ -25,6 +25,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile(name: 'igniterestclientlib', ext: 'aar')
+
+
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:26.+'
@@ -34,6 +36,7 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'me.dm7.barcodescanner:zxing:1.9.4'
+    compile 'com.github.rey5137:material:1.2.4'
     testCompile 'junit:junit:4.12'
-
+    compile 'com.wang.avi:library:2.1.3'
 }

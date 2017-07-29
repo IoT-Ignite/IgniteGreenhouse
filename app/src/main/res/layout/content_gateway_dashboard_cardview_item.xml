@@ -1,76 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="0dp"
+    android:padding="8dp"
     android:weightSum="1">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/content_sensor_dashboard_card_view_item_card_view"
+        android:id="@+id/content_gateway_dashboard_card_view_item_card_view"
             android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="8dp"
-        card_view:cardCornerRadius="0dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
+        android:layout_margin="8dp"
+        card_view:cardCornerRadius="4dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:orientation="vertical"
-                android:weightSum="1.2">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_label"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_weight="0.6"
-                    android:gravity="center"
-                    android:text="Label"
-                    android:textColor="@color/cardview_dark_background"
-                    android:textSize="30sp" />
+                    android:layout_height="40dp"
+                    android:background="@color/cardview_dark_background"
+                    android:gravity="end|center"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_id"
+                    <TextView
+                        android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.6"
+                        android:text="Label"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/white"
+                        android:textSize="20sp" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/info" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="0.3"
-                    android:text="Gateway ID: "
-                    android:textSize="20sp"
-                    tools:layout_editor_absoluteX="156dp" />
+                    android:layout_height="40dp"
+                    android:background="@color/colorGray"
+                    android:padding="8dp"
+                    android:weightSum="1">
 
-                <TextView
-                    android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_status"
+                    <TextView
+                        android:id="@+id/content_gateway_dashboard_card_view_item_txt_gateway_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:text="Gateway ID: "
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="0.3"
-                    android:text="Gateway Status: "
-                    android:textSize="20sp" />
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
 
+                    <ImageView
+                        android:id="@+id/content_gateway_dashboard_card_view_item_img_gateway_type"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="0.50"
+                        android:padding="16dp"
+                        android:src="@drawable/raspberry_pi_online" />
+
+                    <ImageView
+                        android:id="@+id/content_gateway_dashboard_card_view_item_img_gateway_status"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_weight="0.50"
+                        android:padding="16dp"
+                        android:src="@drawable/wireless_error" />
+                </LinearLayout>
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/content_gateway_dashboard_card_view_item_img_gateway_status"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.3" />
-
-
-        </LinearLayout>
-
     </android.support.v7.widget.CardView>
 
 </LinearLayout>
+
+
+
+
 

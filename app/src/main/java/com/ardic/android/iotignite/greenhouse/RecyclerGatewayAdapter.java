@@ -48,11 +48,11 @@ public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGateway
         holder.txtGatewayId.setText(list_gateway.get(position).getGatewayId());
 
         if (list_gateway.get(position).isGatewayOnline()) {
-            holder.imgGatewayStatus.setImageResource(R.drawable.raspberry_pi_online);
-            holder.txtGatewayStatus.setText("Connected");
+            holder.imgGatewayStatus.setImageResource(R.drawable.wireless_signal);
+            //        holder.txtGatewayStatus.setText("Connected");
         } else {
-            holder.imgGatewayStatus.setImageResource(R.drawable.offline_raspberrypi);
-            holder.txtGatewayStatus.setText("Disconnected");
+            holder.imgGatewayStatus.setImageResource(R.drawable.wireless_error);
+            //        holder.txtGatewayStatus.setText("Disconnected");
 
         }
     }
@@ -82,7 +82,7 @@ public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGateway
             cardViewGateway = view.findViewById(R.id.content_gateway_dashboard_card_view_item_card_view);
             txtGatewayLabel = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_label);
             txtGatewayId = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_id);
-            txtGatewayStatus = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_status);
+            //   txtGatewayStatus = view.findViewById(R.id.content_gateway_dashboard_card_view_item_txt_gateway_status);
             imgGatewayStatus = view.findViewById(R.id.content_gateway_dashboard_card_view_item_img_gateway_status);
 
         }

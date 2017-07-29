@@ -53,11 +53,11 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
         holder.txtSensorId.setText(sensorList.get(position).getSensorId());
         holder.txtSensorValue.setText(sensorList.get(position).getSensorValue());
 
-        //      if (sensorList.get(position).isSensorOnline()) {
-        //          holder.imgSensorStatus.setImageResource(R.drawable.raspberry_pi_online);
-        //     } else {
-        //         holder.imgSensorStatus.setImageResource(R.drawable.offline_raspberrypi);
-        //     }
+        if (sensorList.get(position).isSensorOnline()) {
+            holder.imgSensorStatus.setImageResource(android.R.drawable.presence_online);
+        } else {
+            holder.imgSensorStatus.setImageResource(android.R.drawable.presence_invisible);
+        }
     }
 
     @Override
@@ -74,6 +74,7 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
 
         public TextView txtSensorId;
         public TextView txtSensorValue;
+        public ImageView imgSensorType;
         public ImageView imgSensorStatus;
         public CardView cardViewSensor;
 
@@ -84,7 +85,8 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
             cardViewSensor = view.findViewById(R.id.content_sensor_dashboard_card_view_item_card_view);
             txtSensorId = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_thing_id);
             txtSensorValue = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_value);
-            //   imgSensorStatus = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_status);
+            imgSensorType = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_type);
+            imgSensorStatus = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_status);
 
         }
     }

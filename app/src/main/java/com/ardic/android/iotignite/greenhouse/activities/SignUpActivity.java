@@ -16,7 +16,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -26,6 +25,7 @@ import com.ardic.android.iotignite.greenhouse.controllers.SignUpController;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import com.ardic.android.iotignite.lib.restclient.model.CreateRestrictedUser;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.concurrent.ExecutionException;
 
@@ -44,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     private CheckBox cbAcceptTermsOfUse;
     private Button btnSignUp;
     private Toolbar toolbar;
+    private AVLoadingIndicatorView avi;
 
     private SignUpController mSignUpController;
 
@@ -78,6 +79,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         tbShowHideConfirmPassword = (ToggleButton) findViewById(R.id.activity_sign_up_tb_show_hide_confirm_password);
         cbAcceptTermsOfUse = (CheckBox) findViewById(R.id.activity_sign_up_cb_accept_terms_of_use);
         btnSignUp = (Button) findViewById(R.id.activity_sign_up_btn_sign_up);
+
 
         cbAcceptTermsOfUse.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -259,14 +261,14 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     }
 
     private void startLoginActivity() {
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_loader);
-        progressBar.setVisibility(View.VISIBLE);
+        avi = (AVLoadingIndicatorView) findViewById(R.id.avisign);
+        avi.show();
         Toast.makeText(SignUpActivity.this, "Sign Up Successful !", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Constants.Actions.ACTION_SIGN_UP_SUCCESS);
         intent.putExtra(Constants.Extra.EXTRA_USERNAME, email);
         intent.putExtra(Constants.Extra.EXTRA_PASSWORD, password);
         setResult(RESULT_OK, intent);
-        progressBar.setVisibility(View.GONE);
+        avi.hide();
         finish();
     }
 
