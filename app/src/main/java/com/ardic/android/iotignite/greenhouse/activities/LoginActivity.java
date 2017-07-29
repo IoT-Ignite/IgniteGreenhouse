@@ -27,10 +27,12 @@ import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.controllers.LoginController;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
 
 
 /**
@@ -56,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     private LoginController mLoginController;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
+    private AVLoadingIndicatorView avi;
 
 
     @Override
@@ -77,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         btnSignIn = (Button) findViewById(R.id.activity_login_btn_sign_in);
         txtSignUpNow = (TextView) findViewById(R.id.activity_login_txt_sign_up_now);
         txtForgotPassword = (TextView) findViewById(R.id.activity_login_txt_forgot_password);
+        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
 
         //Set image 'tick' or 'cancel' according to validation of mail input
         editTextMail.setOnFocusChangeListener(this);
@@ -253,8 +257,13 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     }
 
     private void startGatewayDashboardActivity() {
+
+
+        avi.show();
+
         Intent intent = new Intent(LoginActivity.this, GatewayDashboardActivity.class);
         startActivity(intent);
+        avi.hide();
     }
 
 

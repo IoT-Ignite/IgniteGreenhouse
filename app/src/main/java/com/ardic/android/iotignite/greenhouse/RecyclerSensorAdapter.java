@@ -50,14 +50,18 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
         Log.e(TAG, "TxtSensor : " + holder.txtSensorId);
         Log.e(TAG, "TxtValue : " + holder.txtSensorValue);
         Log.e(TAG, "List : " + sensorList);
-        holder.txtSensorId.setText(sensorList.get(position).getSensorId());
-        holder.txtSensorValue.setText(sensorList.get(position).getSensorValue());
 
-        //      if (sensorList.get(position).isSensorOnline()) {
-        //          holder.imgSensorStatus.setImageResource(R.drawable.raspberry_pi_online);
-        //     } else {
-        //         holder.imgSensorStatus.setImageResource(R.drawable.offline_raspberrypi);
-        //     }
+        SensorViewModel mdl = sensorList.get(position);
+        holder.txtSensorId.setText(mdl.getSensorId());
+        holder.txtSensorValue.setText(mdl.getSensorValue());
+        holder.txtNodeId.setText(mdl.getNodeId());
+        holder.txtLastDataTime.setText(mdl.getSensorLastSyncDateString());
+
+        if (sensorList.get(position).isSensorOnline()) {
+            holder.imgSensorStatus.setImageResource(android.R.drawable.presence_online);
+        } else {
+            holder.imgSensorStatus.setImageResource(android.R.drawable.presence_invisible);
+        }
     }
 
     @Override
@@ -76,6 +80,7 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
         public TextView txtSensorValue;
         public TextView txtLastDataTime;
         public TextView txtNodeId;
+        public ImageView imgSensorType;
         public ImageView imgSensorStatus;
         public CardView cardViewSensor;
 
@@ -87,8 +92,9 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
             txtSensorId = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_thing_id);
             txtSensorValue = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_value);
             txtLastDataTime = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_date);
-            //   imgSensorStatus = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_status);
-
+            imgSensorType = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_type);
+            imgSensorStatus = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_status);
+            txtNodeId = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_node_id);
         }
     }
 

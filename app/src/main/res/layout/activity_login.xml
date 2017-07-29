@@ -177,6 +177,23 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.96" />
 
+    <com.rey.material.widget.ProgressView
+        android:id="@+id/login_progress_loading"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:pv_autostart="true"
+        app:pv_circular="true"
+        app:pv_progressMode="indeterminate"
+        app:pv_progressStyle="@style/Material.Drawable.CircularProgress" />
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/avi"
+        style="@style/AVLoadingIndicatorView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:indicatorColor="@color/colorAccent"
+        app:indicatorName="BallTrianglePathIndicator" />
 
 
 </android.support.constraint.ConstraintLayout>

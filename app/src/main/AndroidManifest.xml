@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,20 +23,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.LoginActivity">
+
+        <activity
+            android:name=".activities.LoginActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SignUpActivity" />
-        <activity android:name=".activities.ForgotPasswordActivity" />
+
+        <activity
+            android:name=".activities.SignUpActivity"
+            android:windowSoftInputMode="stateHidden" />
+
+        <activity
+            android:name=".activities.ForgotPasswordActivity"
+            android:windowSoftInputMode="stateHidden" />
+
         <activity android:name=".activities.QRScanActivity" />
+
         <activity
             android:name=".activities.GatewayDashboardActivity"
             android:label="@string/title_activity_gateway_dashboard"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".activities.SensorDashboardActivity"
             android:label="@string/title_activity_sensor_dashboard"
