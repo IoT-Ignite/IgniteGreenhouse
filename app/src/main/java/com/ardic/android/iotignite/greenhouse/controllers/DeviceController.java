@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ardic.android.iotignite.greenhouse.activities.LoginActivity;
+import com.ardic.android.iotignite.greenhouse.listeners.DeviceAsyncTaskListener;
 import com.ardic.android.iotignite.lib.restclient.exception.IgniteRestClientException;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClient;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClientManager;
@@ -24,9 +25,11 @@ public class DeviceController extends AsyncTask<Void, Void, Device> {
     private Context appContext;
     private Device device;
     private String user;
+    private DeviceAsyncTaskListener mDeviceAsyncTaskListener;
 
-    public DeviceController(Context appContext) {
+    public DeviceController(Context appContext, DeviceAsyncTaskListener mListener) {
         this.appContext = appContext;
+        this.mDeviceAsyncTaskListener = mListener;
         user = RestClientHolder.getInstance(appContext).getActiveUser();
     }
 
@@ -53,6 +56,10 @@ public class DeviceController extends AsyncTask<Void, Void, Device> {
                     Log.i(TAG, "Device Content: \n" + content);
                 }
             }
+        }
+
+        if (mDeviceAsyncTaskListener != null) {
+            mDeviceAsyncTaskListener.onDeviceTaskComplete(device);
         }
     }
 }

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ardic.android.iotignite.lib.restclient.constant.Api;
+
 import java.util.List;
 
 /**
@@ -47,9 +49,11 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        Log.e(TAG, "TxtSensor : " + holder.txtSensorId);
-        Log.e(TAG, "TxtValue : " + holder.txtSensorValue);
-        Log.e(TAG, "List : " + sensorList);
+        if (Api.DEBUG) {
+            Log.i(TAG, "TxtSensor : " + holder.txtSensorId);
+            Log.i(TAG, "TxtValue : " + holder.txtSensorValue);
+            Log.i(TAG, "List : " + sensorList);
+        }
 
         SensorViewModel mdl = sensorList.get(position);
         holder.txtSensorId.setText(mdl.getSensorId());

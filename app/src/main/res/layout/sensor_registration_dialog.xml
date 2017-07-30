@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="Please Enter Thing ID:"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:padding="30dp"/>
+    <EditText
+        android:id="@+id/sensor_name_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="10dp"/>
+
+    <Button
+        android:id="@+id/sensor_dialog_btn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text=" Ok"
+        android:padding="20dp"/>
+</LinearLayout>

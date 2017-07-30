@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
+import com.ardic.android.iotignite.greenhouse.listeners.DROMAsyncTaskListener;
+import com.ardic.android.iotignite.greenhouse.listeners.DeviceAsyncTaskListener;
 import com.ardic.android.iotignite.lib.restclient.exception.IgniteRestClientException;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClient;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClientManager;
@@ -31,11 +33,13 @@ public class DROMController extends AsyncTask<Void, Void, Boolean> {
     private DromDevice dromDevice;
     private EndUser endUsers;
     private EndUserContent endUserContent;
+    private DROMAsyncTaskListener mDromAsyncTaskListener;
 
 
-    public DROMController(Context appContext, String deviceId) {
+    public DROMController(Context appContext, String deviceId, DROMAsyncTaskListener mListener) {
         this.appContext = appContext;
         this.deviceId = deviceId;
+        this.mDromAsyncTaskListener = mListener;
     }
 
     @Override
@@ -106,7 +110,11 @@ public class DROMController extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        super.onPostExecute(aBoolean);
+    protected void onPostExecute(Boolean result) {
+        super.onPostExecute(result);
+
+        if (mDromAsyncTaskListener != null) {
+            mDromAsyncTaskListener.onDromTaskComplete(result);
+        }
     }
 }

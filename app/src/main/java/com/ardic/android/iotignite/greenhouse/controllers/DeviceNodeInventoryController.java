@@ -4,9 +4,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ardic.android.iotignite.greenhouse.listeners.DeviceNodeInventoryAsyncTaskListener;
 import com.ardic.android.iotignite.lib.restclient.exception.IgniteRestClientException;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClient;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClientManager;
+import com.ardic.android.iotignite.lib.restclient.model.Device;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventory;
 
 /**
@@ -19,10 +21,12 @@ public class DeviceNodeInventoryController extends AsyncTask<Void, Void, DeviceN
     private String deviceId;
     private IgniteRestClient mIgniteRestClient;
     private Context appContext;
+    private DeviceNodeInventoryAsyncTaskListener mDeviceNodeInventoryAsyncTaskListener;
 
-    public DeviceNodeInventoryController(Context appContext, String deviceId) {
+    public DeviceNodeInventoryController(Context appContext, String deviceId, DeviceNodeInventoryAsyncTaskListener mListener) {
         this.appContext = appContext;
         this.deviceId = deviceId;
+        this.mDeviceNodeInventoryAsyncTaskListener = mListener;
     }
 
     @Override
@@ -45,5 +49,9 @@ public class DeviceNodeInventoryController extends AsyncTask<Void, Void, DeviceN
     protected void onPostExecute(DeviceNodeInventory deviceNodeInventory) {
         super.onPostExecute(deviceNodeInventory);
         Log.i(TAG, "Device Node Inventory: " + deviceNodeInventory);
+
+        if (mDeviceNodeInventoryAsyncTaskListener != null) {
+            mDeviceNodeInventoryAsyncTaskListener.onDeviceNodeInventoryTaskComplete(deviceNodeInventory);
+        }
     }
 }

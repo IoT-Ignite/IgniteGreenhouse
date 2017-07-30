@@ -1,5 +1,6 @@
 package com.ardic.android.iotignite.lib.restclient.model;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
@@ -71,15 +72,17 @@ public class ThingData {
         ArrayList<String> dataList = new ArrayList<>();
         JSONArray dataArray = null;
 
-        try {
-            dataArray = new JSONArray(data);
+        if (!TextUtils.isEmpty(data)) {
+            try {
+                dataArray = new JSONArray(data);
 
-            for (int i = 0; i < dataArray.length(); i++) {
-                dataList.add(dataArray.getString(i));
+                for (int i = 0; i < dataArray.length(); i++) {
+                    dataList.add(dataArray.getString(i));
+                }
+
+            } catch (JSONException e) {
+                Log.e(TAG, "JSONException:" + e);
             }
-
-        } catch (JSONException e) {
-            Log.e(TAG, "JSONException:" + e);
         }
         return dataList;
     }

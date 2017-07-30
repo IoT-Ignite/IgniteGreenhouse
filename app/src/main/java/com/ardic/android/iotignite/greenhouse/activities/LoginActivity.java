@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -27,6 +28,7 @@ import android.widget.ToggleButton;
 import com.ardic.android.iotignite.greenhouse.Constants;
 import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.controllers.LoginController;
+import com.ardic.android.iotignite.greenhouse.listeners.LoginAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -40,7 +42,8 @@ import java.util.concurrent.TimeoutException;
  * Created by pmirkelam on 12.07.2017.
  */
 
-public class LoginActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnFocusChangeListener, View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener,
+        View.OnFocusChangeListener, View.OnClickListener, LoginAsyncTaskListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private String email;
@@ -162,24 +165,8 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             ValidationResult result = ValidationUtils.checkLoginCredentials(email, password);
 
             if (result == ValidationResult.OK) {
-                loadingIndicator.show();
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadingIndicator.hide();
-                            }
-                        });
-                    }
-                }, 5000);
-                if (doLogin()) {
-                    saveLoginInfoToPref();
-                    startGatewayDashboardActivity();
-                } else {
-                    Toast.makeText(this, "Login failed please try again.", Toast.LENGTH_SHORT);
-                }
+                // TODO: start progresing...
+                doLogin();
             }
 
         } else if (view.equals(txtForgotPassword)) {
@@ -246,28 +233,9 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     }
 
 
-    private boolean doLogin() {
-
-        boolean result = false;
-        mLoginController = new LoginController(LoginActivity.this, email, password);
+    private void doLogin() {
+        mLoginController = new LoginController(LoginActivity.this, email, password, this);
         mLoginController.execute();
-
-        //TODO : user login loading start....
-        try {
-            result = mLoginController.get(Constants.ASYNC_GET_TIMEOUT, TimeUnit.MILLISECONDS);
-            Log.i(TAG, "Login RESULT" + result);
-        } catch (InterruptedException e) {
-            result = false;
-            Log.e(TAG, "doLogin(): " + e);
-        } catch (ExecutionException e) {
-            result = false;
-            Log.e(TAG, "doLogin(): " + e);
-        } catch (TimeoutException e) {
-            Log.e(TAG, "doLogin(): " + e);
-        }
-
-        //TODO : user login loading end....
-        return result;
     }
 
     private void startGatewayDashboardActivity() {
@@ -318,4 +286,15 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         }
     }
 
+    @Override
+    public void onLoginTaskComplete(boolean result) {
+        if (result) {
+            //TODO: close progress dialog.
+            saveLoginInfoToPref();
+            startGatewayDashboardActivity();
+        } else {
+            Toast.makeText(this, "Login failed please try again.", Toast.LENGTH_SHORT);
+        }
+
+    }
 }

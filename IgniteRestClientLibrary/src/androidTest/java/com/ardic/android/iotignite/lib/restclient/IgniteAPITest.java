@@ -45,24 +45,15 @@ public class IgniteAPITest {
 
     private static final String TAG = "TEST";
 
-
-    //  private static final String USERNAME = "greenhouse@iot-ignite.com";
-    // private static final String PASSWORD = "gr33nhous3";
+    private static final String USERNAME = "greenhouse@iot-ignite.com";
+    private static final String PASSWORD = "gr33nhous3";
     private static final String APP_KEY = "2bb69ddce24f4021a1c6b77f1ab9302c";
     private static final String TEST_DEVICE_ID = "b8:27:eb:df:c6:11@iotigniteagent";
     private static final String TEST_NODE_ID = "GreenHouse1";
     private static final String TEST_THING_ID = "Temperature";
-    // private static final String TEST_TENANT_DOMAIN = "ignite.com_greenhouse_iot-ignite.com";
-    // private static final String TEST_DROM_CONFIG_ID = "4d6b54d5-43ec-4bc3-a611-ffaab67d02fe";
+    private static final String TEST_TENANT_DOMAIN = "ignite.com_greenhouse_iot-ignite.com";
+    private static final String TEST_DROM_CONFIG_ID = "4d6b54d5-43ec-4bc3-a611-ffaab67d02fe";
 
-
-    // TEST
-
-    private static final String TEST_DEVICE = "10:68:3f:7a:db:1a";
-    private static final String TEST_TENANT_DOMAIN = "modiverse.com_ar.dicc.testt_gmail.com";
-    private static final String TEST_DROM_CONFIG_ID = "6bd45906-9aef-4b46-8d39-eaf66dd8d768";
-    private static final String USERNAME = "ar.dicc.testt@gmail.com";
-    private static final String PASSWORD = "258456159";
 
     private IgniteRestClient mTestClient;
 
@@ -269,13 +260,7 @@ public class IgniteAPITest {
     public void dromDevicePushTest() {
 
         authentication();
-        // mTestClient.pushDromToDevice(TEST_DEVICE_ID);
-
-        /**
-         * Oğuz Test
-         */
-        mTestClient.pushDromToDevice(TEST_DEVICE);
-        mTestClient.pushDromToDevice(TEST_DEVICE);
+        mTestClient.pushDromToDevice(TEST_DEVICE_ID);
     }
 
     @Test
@@ -318,7 +303,7 @@ public class IgniteAPITest {
         Device devices = mTestClient.getDeviceInfo();
 
         for (DeviceContent cnt : devices.getDeviceContents()) {
-            if (cnt.getDeviceId().equals(TEST_DEVICE)) {
+            if (cnt.getDeviceId().equals(TEST_DEVICE_ID)) {
                 deviceCode = cnt.getCode();
                 break;
             }
@@ -337,7 +322,7 @@ public class IgniteAPITest {
         for (DeviceContent cnt : devices.getDeviceContents()) {
             Log.i(TAG, "Device CODEs : " + cnt.getCode());
             Log.i(TAG, "Device ID : " + cnt.getDeviceId());
-            if (cnt.getDeviceId().equals(TEST_DEVICE)) {
+            if (cnt.getDeviceId().equals(TEST_DEVICE_ID)) {
                 deviceCode = cnt.getCode();
                 Log.i(TAG, "Device CODE : " + deviceCode);
                 break;

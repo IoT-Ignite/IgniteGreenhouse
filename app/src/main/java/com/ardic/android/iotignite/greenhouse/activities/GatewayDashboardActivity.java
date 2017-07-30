@@ -30,6 +30,8 @@ import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.RecyclerGatewayAdapter;
 import com.ardic.android.iotignite.greenhouse.controllers.DROMController;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceController;
+import com.ardic.android.iotignite.greenhouse.listeners.DROMAsyncTaskListener;
+import com.ardic.android.iotignite.greenhouse.listeners.DeviceAsyncTaskListener;
 import com.ardic.android.iotignite.lib.restclient.model.Device;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceContent;
 
@@ -41,7 +43,8 @@ import java.util.concurrent.TimeoutException;
 
 public class GatewayDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-        CustomCardViewClickListener, SwipeRefreshLayout.OnRefreshListener {
+        CustomCardViewClickListener, SwipeRefreshLayout.OnRefreshListener, DeviceAsyncTaskListener,
+        DROMAsyncTaskListener {
 
     private static final String TAG = GatewayDashboardActivity.class.getSimpleName();
     private FloatingActionButton fabAddGateway;
@@ -59,6 +62,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private DeviceController mDeviceController;
     private Device devices;
     private String deviceId;
+    private String activeQR = null;
 
 
     private Handler dromDeviceHandler = new Handler();
@@ -213,29 +217,16 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         if (resultCode == RESULT_OK && Constants.Actions.ACTION_GW_QR_CODE_SUCCESS.equals(data.getAction())) {
 
-
             String qr = data.getStringExtra(Constants.Extra.EXTRA_GW_QR_CODE);
             Log.i(TAG, "QR Code Received !" + qr);
             Toast.makeText(this, "QR Code Received !" + qr, Toast.LENGTH_LONG).show();
 
-            mDromController = new DROMController(this, qr);
+            // TODO : start progress here.
+            mDromController = new DROMController(this, qr, this);
 
             mDromController.execute();
 
-            //TODO: LOADING....
-            try {
-                if (mDromController.get()) {
-                    Log.i(TAG, "Starting dromDeviceHandler...");
-                    dromDeviceHandler.postDelayed(dromDeviceRunnable, 2000L);
-                    deviceId = qr;
-                } else {
-                    Toast.makeText(GatewayDashboardActivity.this, "DROM LICENCED FAILURE PLEASE TRY AGAIN !!", Toast.LENGTH_LONG).show();
-                }
-            } catch (InterruptedException e) {
-                Log.e(TAG, "InterruptedException on onActivityResult function:" + e);
-            } catch (ExecutionException e) {
-                Log.e(TAG, "ExecutionException on onActivityResult function:" + e);
-            }
+            deviceId = qr;
         } else {
             Toast.makeText(this, "QR Code Failure Please Try Again...", Toast.LENGTH_LONG).show();
         }
@@ -243,28 +234,14 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
     private synchronized void getDeviceInfo() {
 
-        mDeviceController = new DeviceController(this);
+        mDeviceController = new DeviceController(this, this);
 
         mDeviceController.execute();
-
-        // TODO : LOADING - Getting devices...
-        try {
-            devices = mDeviceController.get(Constants.ASYNC_GET_TIMEOUT, TimeUnit.MILLISECONDS);
-
-            updateGatewayList(devices);
-
-        } catch (InterruptedException e) {
-            Log.e(TAG, "getDeviceInfo(): " + e);
-        } catch (ExecutionException e) {
-            Log.e(TAG, "getDeviceInfo(): " + e);
-        } catch (TimeoutException e) {
-            Log.e(TAG, "getDeviceInfo(): " + e);
-        }
-        // TODO : LOADING - Getting device end...
-
     }
 
     private boolean updateDevice() {
+
+        //TODO : start progress.
         getDeviceInfo();
         return checkDevice();
     }
@@ -291,20 +268,19 @@ public class GatewayDashboardActivity extends AppCompatActivity
     }
 
     private void updateDashboard() {
-        // TODO : GET DEVICE INFO HERE!!!!!!
-
+        // TODO : Start progress
         getDeviceInfo();
-
-        recyclerGatewayAdapter.notifyDataSetChanged();
-        gatewaySwipeRefreshLayout.setRefreshing(false);
     }
 
     private void updateGatewayList(Device device) {
         gatewayList.clear();
-        for (DeviceContent cnt : device.getDeviceContents()) {
-            gatewayList.add(new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), Constants.ONLINE_DEVICE.equals(cnt.getPresence().getState()) ? true : false));
+
+        if (device != null && device.getDeviceContents() != null) {
+            for (DeviceContent cnt : device.getDeviceContents()) {
+                gatewayList.add(new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), Constants.ONLINE_DEVICE.equals(cnt.getPresence().getState()) ? true : false));
+            }
+            recyclerGatewayAdapter.notifyDataSetChanged();
         }
-        recyclerGatewayAdapter.notifyDataSetChanged();
     }
 
     private boolean checkDevice() {
@@ -316,5 +292,26 @@ public class GatewayDashboardActivity extends AppCompatActivity
         return false;
     }
 
+    @Override
+    public void onDeviceTaskComplete(Device mDevice) {
+
+        devices = mDevice;
+        // TODO : stop progress.
+        Log.i(TAG, "Task Complete .\n " + mDevice);
+        updateGatewayList(devices);
+        gatewaySwipeRefreshLayout.setRefreshing(false);
+
+    }
+
+    @Override
+    public void onDromTaskComplete(boolean result) {
+
+        // TODO : stop progress here.
+        if (result) {
+            dromDeviceHandler.postDelayed(dromDeviceRunnable, 2000L);
+        } else {
+            Toast.makeText(GatewayDashboardActivity.this, "DROM LICENCED FAILURE PLEASE TRY AGAIN !!", Toast.LENGTH_LONG).show();
+        }
+    }
 }
 
