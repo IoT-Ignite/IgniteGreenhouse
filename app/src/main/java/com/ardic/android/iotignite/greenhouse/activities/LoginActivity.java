@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,12 +29,11 @@ import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.controllers.LoginController;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
-import com.rey.material.app.Dialog;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
 
 
 /**
@@ -54,14 +55,13 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     private ImageView imgMailValidate;
     private CheckBox cbRememberMe;
     private Toolbar toolbar;
-    private Dialog loadingDialog;
-    private Dialog dialog;
+
+    private AVLoadingIndicatorView loadingIndicator;
 
 
     private LoginController mLoginController;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-
 
 
     @Override
@@ -84,11 +84,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         txtSignUpNow = (TextView) findViewById(R.id.activity_login_txt_sign_up_now);
         txtForgotPassword = (TextView) findViewById(R.id.activity_login_txt_forgot_password);
 
-
-        loadingDialog = new Dialog(this);
-        loadingDialog.setContentView(R.layout.progress_bar);
-        dialog = new Dialog(this);
-        dialog.setContentView(R.layout.progress_bar);
+        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress_login);
 
 
         //Set image 'tick' or 'cancel' according to validation of mail input
@@ -155,8 +151,6 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     public void onClick(View view) {
 
         if (view.equals(btnSignIn)) {
-
-            //   showInfoDialog();
             if (editTextMail != null && !TextUtils.isEmpty(editTextMail.getText())) {
                 email = editTextMail.getText().toString().trim();
             }
@@ -168,12 +162,20 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             ValidationResult result = ValidationUtils.checkLoginCredentials(email, password);
 
             if (result == ValidationResult.OK) {
-
-                dialog.show();
-
+                loadingIndicator.show();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadingIndicator.hide();
+                            }
+                        });
+                    }
+                }, 5000);
                 if (doLogin()) {
                     saveLoginInfoToPref();
-
                     startGatewayDashboardActivity();
                 } else {
                     Toast.makeText(this, "Login failed please try again.", Toast.LENGTH_SHORT);
@@ -250,7 +252,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         mLoginController = new LoginController(LoginActivity.this, email, password);
         mLoginController.execute();
 
-        // TODO : user login loading start....
+        //TODO : user login loading start....
         try {
             result = mLoginController.get(Constants.ASYNC_GET_TIMEOUT, TimeUnit.MILLISECONDS);
             Log.i(TAG, "Login RESULT" + result);
@@ -264,16 +266,13 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             Log.e(TAG, "doLogin(): " + e);
         }
 
-        // TODO : user login loading end....
+        //TODO : user login loading end....
         return result;
     }
 
     private void startGatewayDashboardActivity() {
         Intent intent = new Intent(LoginActivity.this, GatewayDashboardActivity.class);
-        //  closeInfoDialog();
-        dialog.dismiss();
         startActivity(intent);
-
     }
 
 
@@ -318,31 +317,5 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             editTextPassword.setCursorVisible(state);
         }
     }
-
-
-//    private void showInfoDialog() {
-//
-//        if (loadingDialog != null) {
-//            loadingDialog.cancel();
-//            loadingDialog = new Dialog(LoginActivity.this);
-//            loadingDialog.setContentView(R.layout.progress_bar);
-//            loadingDialog.setCancelable(false);
-//            loadingDialog.setCanceledOnTouchOutside(false);
-//            loadingDialog.show();
-//        } else {
-//            Log.i(TAG, "Dialog is NULL");
-//        }
-//    }
-
-//    private void closeInfoDialog() {
-//
-//        if (loadingDialog != null) {
-//
-//            Log.i(TAG, "Closing info dialog.");
-//            loadingDialog.dismiss();
-//            loadingDialog.cancel();
-//        }
-//    }
-
 
 }
