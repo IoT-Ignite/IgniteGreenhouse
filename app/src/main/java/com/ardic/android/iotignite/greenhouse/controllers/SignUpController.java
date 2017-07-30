@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
+import com.ardic.android.iotignite.greenhouse.listeners.SignUpAsyncTaskListener;
 import com.ardic.android.iotignite.lib.restclient.exception.IgniteRestClientException;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClient;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClientManager;
@@ -31,13 +32,16 @@ public class SignUpController extends AsyncTask<Void, Void, CreateRestrictedUser
     private String email;
     private String password;
 
+    private SignUpAsyncTaskListener mSignUpAsyncTaskListener;
 
-    public SignUpController(Context appContext, String fName, String lName, String email, String password) {
+
+    public SignUpController(Context appContext, String fName, String lName, String email, String password, SignUpAsyncTaskListener mListener) {
         mIgniteRestClientManager = IgniteRestClientManager.getInstance(appContext);
         this.firstName = fName;
         this.lastName = lName;
         this.email = email;
         this.password = password;
+        this.mSignUpAsyncTaskListener = mListener;
     }
 
     @Override
@@ -67,5 +71,9 @@ public class SignUpController extends AsyncTask<Void, Void, CreateRestrictedUser
     @Override
     protected void onPostExecute(CreateRestrictedUser mRestrictedUser) {
         super.onPostExecute(mRestrictedUser);
+
+        if (mSignUpAsyncTaskListener != null) {
+            mSignUpAsyncTaskListener.onSignUpTaskComplete(mRestrictedUser);
+        }
     }
 }

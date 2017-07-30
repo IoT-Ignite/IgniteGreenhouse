@@ -4,9 +4,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.ardic.android.iotignite.greenhouse.listeners.LoginAsyncTaskListener;
 import com.ardic.android.iotignite.lib.restclient.exception.IgniteRestClientException;
 import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClient;
-import com.ardic.android.iotignite.lib.restclient.manager.IgniteRestClientManager;
 
 /**
  * Created by codemania on 7/19/17.
@@ -20,12 +20,14 @@ public class LoginController extends AsyncTask<Void, Void, Boolean> {
     private String mail;
     private String password;
     private Context appContext;
+    private LoginAsyncTaskListener mLoginControllerListener;
 
 
-    public LoginController(Context appContext, String mail, String pass) {
+    public LoginController(Context appContext, String mail, String pass, LoginAsyncTaskListener mListener) {
         this.appContext = appContext;
         this.mail = mail;
         this.password = pass;
+        this.mLoginControllerListener = mListener;
     }
 
     @Override
@@ -44,7 +46,12 @@ public class LoginController extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        super.onPostExecute(aBoolean);
+    protected void onPostExecute(Boolean result) {
+        super.onPostExecute(result);
+
+        if (mLoginControllerListener != null) {
+            mLoginControllerListener.onLoginTaskComplete(result);
+        }
+
     }
 }

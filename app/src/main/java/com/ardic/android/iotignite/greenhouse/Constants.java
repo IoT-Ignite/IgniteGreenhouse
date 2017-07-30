@@ -37,6 +37,9 @@ public class Constants {
         public static final String ACTION_GW_QR_CODE = "gw-qr-code";
         public static final String ACTION_QR_CODE_FAILURE = "qr-code-failure";
         public static final String ACTION_SENSOR_QR_CODE = "sensor-qr-code";
+        public static final String ACTION_MESSAGE_NODE_ID = "Configurator";
+        public static final String ACTION_MESSAGE_THING_ID = "Configurator Thing";
+        public static final String ACTION_MESSAGE_TYPE = "Configurator";
     }
 
     public class Extra {

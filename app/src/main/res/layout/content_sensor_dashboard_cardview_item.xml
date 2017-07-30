@@ -100,7 +100,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.50"
                     android:padding="16dp"
-                    android:src="@drawable/thermometer" />
+                    android:src="@drawable/default_sensor" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

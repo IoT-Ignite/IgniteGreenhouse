@@ -22,6 +22,7 @@ import android.widget.ToggleButton;
 import com.ardic.android.iotignite.greenhouse.Constants;
 import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.controllers.SignUpController;
+import com.ardic.android.iotignite.greenhouse.listeners.SignUpAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import com.ardic.android.iotignite.lib.restclient.model.CreateRestrictedUser;
@@ -31,7 +32,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class SignUpActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, View.OnFocusChangeListener, View.OnClickListener {
+public class SignUpActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener,
+        View.OnFocusChangeListener, View.OnClickListener, SignUpAsyncTaskListener {
 
     private String TAG = SignUpActivity.class.getSimpleName();
     private EditText editTextFirstName;
@@ -185,19 +187,12 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
             ValidationResult result = ValidationUtils.checkSignUpCredentials(email,
                     firstName, lastName, password, confirmPassword, cbAcceptTermsOfUse.isChecked());
             if (ValidationResult.OK == result) {
-
-                if (createAccount()) {
-                    startLoginActivity();
-                } else {
-                    Toast.makeText(SignUpActivity.this, "An error occured please try again.", Toast.LENGTH_SHORT).show();
-                }
-
+                // TODO: start progress dialog
+                createAccount();
             } else {
                 Toast.makeText(SignUpActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
-
-
     }
 
     private boolean assignEditTextValues() {
@@ -240,31 +235,10 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         return true;
     }
 
-    private boolean createAccount() {
+    private void createAccount() {
 
-        boolean result = false;
-        mSignUpController = new SignUpController(SignUpActivity.this, firstName, lastName, email, password);
-
+        mSignUpController = new SignUpController(SignUpActivity.this, firstName, lastName, email, password, this);
         mSignUpController.execute();
-
-        // TODO : Creating account LOADING... start
-        try {
-            mCreatedUser = mSignUpController.get(Constants.ASYNC_GET_TIMEOUT, TimeUnit.MILLISECONDS);
-            if (mCreatedUser != null) {
-                result = true;
-            }
-        } catch (InterruptedException e) {
-            Log.e(TAG, "createAccount(): " + e);
-            return result;
-        } catch (ExecutionException e) {
-            Log.e(TAG, "createAccount(): " + e);
-            return result;
-        } catch (TimeoutException e) {
-            Log.e(TAG, "createAccount(): " + e);
-            return result;
-        }
-        // TODO : Creating account LOADING end
-        return result;
     }
 
     private void startLoginActivity() {
@@ -279,5 +253,17 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         finish();
     }
 
+
+    @Override
+    public void onSignUpTaskComplete(CreateRestrictedUser user) {
+        if (user != null) {
+
+            // TODO: stop progress dialog.
+            startLoginActivity();
+        } else {
+            Toast.makeText(SignUpActivity.this, "An error occured please try again.", Toast.LENGTH_SHORT).show();
+        }
+
+    }
 
 }
