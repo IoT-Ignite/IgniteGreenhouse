@@ -198,5 +198,4 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
         app:layout_constraintVertical_bias="0.501" />
 
-
 </android.support.constraint.ConstraintLayout>
