@@ -1,7 +1,5 @@
 package com.ardic.android.iotignite.greenhouse;
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,7 +16,7 @@ public class SensorViewModel {
     private String sensorValue;
     private String sensorLastSyncDateString;
     private Boolean isSensorOnline;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY HH:mm");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
 
     public SensorViewModel(String sensorId, String sensorType, String nodeId, String sensorValue, Date sensorLastSyncDate, Boolean isSensorOnline) {

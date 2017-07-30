@@ -25,7 +25,7 @@ import com.ardic.android.iotignite.greenhouse.controllers.SignUpController;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import com.ardic.android.iotignite.lib.restclient.model.CreateRestrictedUser;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.rey.material.app.Dialog;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -46,7 +46,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     private CheckBox cbAcceptTermsOfUse;
     private Button btnSignUp;
     private Toolbar toolbar;
-    private AVLoadingIndicatorView avi;
+    private Dialog loadingDialog;
 
     private SignUpController mSignUpController;
 
@@ -81,6 +81,10 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         tbShowHideConfirmPassword = (ToggleButton) findViewById(R.id.activity_sign_up_tb_show_hide_confirm_password);
         cbAcceptTermsOfUse = (CheckBox) findViewById(R.id.activity_sign_up_cb_accept_terms_of_use);
         btnSignUp = (Button) findViewById(R.id.activity_sign_up_btn_sign_up);
+
+
+        loadingDialog = new Dialog(this);
+        loadingDialog.setContentView(R.layout.progress_bar);
 
 
         cbAcceptTermsOfUse.setMovementMethod(LinkMovementMethod.getInstance());
@@ -182,10 +186,11 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
 
         if (view.equals(btnSignUp) && assignEditTextValues()) {
 
+
             ValidationResult result = ValidationUtils.checkSignUpCredentials(email,
                     firstName, lastName, password, confirmPassword, cbAcceptTermsOfUse.isChecked());
             if (ValidationResult.OK == result) {
-
+                showInfoDialog();
                 if (createAccount()) {
                     startLoginActivity();
                 } else {
@@ -268,15 +273,40 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     }
 
     private void startLoginActivity() {
-        avi = (AVLoadingIndicatorView) findViewById(R.id.avisign);
-        avi.show();
+
         Toast.makeText(SignUpActivity.this, "Sign Up Successful !", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(Constants.Actions.ACTION_SIGN_UP_SUCCESS);
         intent.putExtra(Constants.Extra.EXTRA_USERNAME, email);
         intent.putExtra(Constants.Extra.EXTRA_PASSWORD, password);
+        closeInfoDialog();
         setResult(RESULT_OK, intent);
-        avi.hide();
+
         finish();
+
+    }
+
+    private void showInfoDialog() {
+
+        if (loadingDialog != null) {
+            loadingDialog.cancel();
+            loadingDialog = new Dialog(SignUpActivity.this);
+            loadingDialog.setContentView(R.layout.progress_bar);
+            loadingDialog.setCancelable(false);
+            loadingDialog.setCanceledOnTouchOutside(false);
+            loadingDialog.show();
+        } else {
+            Log.i(TAG, "Dialog is NULL");
+        }
+    }
+
+    private void closeInfoDialog() {
+
+        if (loadingDialog != null) {
+
+            Log.i(TAG, "Closing info dialog.");
+            loadingDialog.dismiss();
+            loadingDialog.cancel();
+        }
     }
 
 

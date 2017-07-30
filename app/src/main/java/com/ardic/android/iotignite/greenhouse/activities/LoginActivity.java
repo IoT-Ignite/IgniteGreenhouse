@@ -27,7 +27,7 @@ import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.controllers.LoginController;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.rey.material.app.Dialog;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -54,11 +54,14 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     private ImageView imgMailValidate;
     private CheckBox cbRememberMe;
     private Toolbar toolbar;
+    private Dialog loadingDialog;
+    private Dialog dialog;
+
 
     private LoginController mLoginController;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor mEditor;
-    private AVLoadingIndicatorView avi;
+
 
 
     @Override
@@ -80,7 +83,13 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         btnSignIn = (Button) findViewById(R.id.activity_login_btn_sign_in);
         txtSignUpNow = (TextView) findViewById(R.id.activity_login_txt_sign_up_now);
         txtForgotPassword = (TextView) findViewById(R.id.activity_login_txt_forgot_password);
-        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
+
+
+        loadingDialog = new Dialog(this);
+        loadingDialog.setContentView(R.layout.progress_bar);
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.progress_bar);
+
 
         //Set image 'tick' or 'cancel' according to validation of mail input
         editTextMail.setOnFocusChangeListener(this);
@@ -90,7 +99,6 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
         //Show or hide password characters.
         tbShowHidePassword.setOnCheckedChangeListener(this);
-
 
         //Click LOGIN then go to 'Register Gateway Activity'
         btnSignIn.setOnClickListener(this);
@@ -143,12 +151,12 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         }
     }
 
-
     @Override
     public void onClick(View view) {
 
         if (view.equals(btnSignIn)) {
 
+            //   showInfoDialog();
             if (editTextMail != null && !TextUtils.isEmpty(editTextMail.getText())) {
                 email = editTextMail.getText().toString().trim();
             }
@@ -160,8 +168,12 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             ValidationResult result = ValidationUtils.checkLoginCredentials(email, password);
 
             if (result == ValidationResult.OK) {
+
+                dialog.show();
+
                 if (doLogin()) {
                     saveLoginInfoToPref();
+
                     startGatewayDashboardActivity();
                 } else {
                     Toast.makeText(this, "Login failed please try again.", Toast.LENGTH_SHORT);
@@ -257,13 +269,11 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     }
 
     private void startGatewayDashboardActivity() {
-
-
-        avi.show();
-
         Intent intent = new Intent(LoginActivity.this, GatewayDashboardActivity.class);
+        //  closeInfoDialog();
+        dialog.dismiss();
         startActivity(intent);
-        avi.hide();
+
     }
 
 
@@ -308,4 +318,31 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             editTextPassword.setCursorVisible(state);
         }
     }
+
+
+//    private void showInfoDialog() {
+//
+//        if (loadingDialog != null) {
+//            loadingDialog.cancel();
+//            loadingDialog = new Dialog(LoginActivity.this);
+//            loadingDialog.setContentView(R.layout.progress_bar);
+//            loadingDialog.setCancelable(false);
+//            loadingDialog.setCanceledOnTouchOutside(false);
+//            loadingDialog.show();
+//        } else {
+//            Log.i(TAG, "Dialog is NULL");
+//        }
+//    }
+
+//    private void closeInfoDialog() {
+//
+//        if (loadingDialog != null) {
+//
+//            Log.i(TAG, "Closing info dialog.");
+//            loadingDialog.dismiss();
+//            loadingDialog.cancel();
+//        }
+//    }
+
+
 }
