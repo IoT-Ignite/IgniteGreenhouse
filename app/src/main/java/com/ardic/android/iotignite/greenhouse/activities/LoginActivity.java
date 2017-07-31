@@ -87,7 +87,8 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         txtSignUpNow = (TextView) findViewById(R.id.activity_login_txt_sign_up_now);
         txtForgotPassword = (TextView) findViewById(R.id.activity_login_txt_forgot_password);
 
-        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress_login);
+        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress);
+        loadingIndicator.hide();
 
 
         //Set image 'tick' or 'cancel' according to validation of mail input
@@ -165,7 +166,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             ValidationResult result = ValidationUtils.checkLoginCredentials(email, password);
 
             if (result == ValidationResult.OK) {
-                // TODO: start progresing...
+                showLoadingProgress(true);
                 doLogin();
             }
 
@@ -289,12 +290,30 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     @Override
     public void onLoginTaskComplete(boolean result) {
         if (result) {
-            //TODO: close progress dialog.
-            saveLoginInfoToPref();
+            showLoadingProgress(false);
             startGatewayDashboardActivity();
+            saveLoginInfoToPref();
         } else {
             Toast.makeText(this, "Login failed please try again.", Toast.LENGTH_SHORT);
         }
 
+    }
+
+    private void showLoadingProgress(final boolean state) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (loadingIndicator != null) {
+                    loadingIndicator.bringToFront();
+                    if (state) {
+                        Log.i(TAG, "Showing progress..");
+                        loadingIndicator.show();
+                    } else {
+                        Log.i(TAG, "Hiding progress..");
+                        loadingIndicator.hide();
+                    }
+                }
+            }
+        });
     }
 }

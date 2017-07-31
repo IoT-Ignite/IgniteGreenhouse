@@ -31,11 +31,21 @@ import com.ardic.android.iotignite.greenhouse.RecyclerSensorAdapter;
 import com.ardic.android.iotignite.greenhouse.SensorViewModel;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceNodeInventoryController;
 import com.ardic.android.iotignite.greenhouse.controllers.LastThingDataController;
+import com.ardic.android.iotignite.greenhouse.controllers.RegisterSensorController;
+import com.ardic.android.iotignite.greenhouse.listeners.DeviceNodeInventoryAsyncTaskListener;
+import com.ardic.android.iotignite.greenhouse.listeners.LastThingDataAsyncTaskListener;
+import com.ardic.android.iotignite.greenhouse.listeners.RegisterSensorControllerAsyncTaskListener;
+import com.ardic.android.iotignite.lib.restclient.model.ActionMessage;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventory;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventoryExtras;
 import com.ardic.android.iotignite.lib.restclient.model.LastThingData;
 import com.ardic.android.iotignite.lib.restclient.model.Node;
 import com.ardic.android.iotignite.lib.restclient.model.Thing;
+import com.wang.avi.AVLoadingIndicatorView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,7 +56,8 @@ import java.util.concurrent.TimeoutException;
 
 public class SensorDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener, CustomCardViewClickListener {
+        SwipeRefreshLayout.OnRefreshListener, CustomCardViewClickListener,
+        DeviceNodeInventoryAsyncTaskListener, LastThingDataAsyncTaskListener, RegisterSensorControllerAsyncTaskListener {
 
     private static final String TAG = SensorDashboardActivity.class.getSimpleName();
     private FloatingActionButton fabAddSensor;
@@ -63,10 +74,12 @@ public class SensorDashboardActivity extends AppCompatActivity
     private SwipeRefreshLayout sensorSwipeRefreshLayout;
 
     private String deviceId;
+    private String deviceCode;
     private DeviceNodeInventoryController mDeviceNodeInventoryController;
     private String registerThingId;
 
     private Dialog mSensorDialog;
+    private AVLoadingIndicatorView loadingIndicator;
 
 
     @Override
@@ -74,6 +87,7 @@ public class SensorDashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_dashboard);
 
+        //generateActionMessage("10001110", "HelloBabe");
 
         getGatewayInfo();
         initUI();
@@ -122,6 +136,8 @@ public class SensorDashboardActivity extends AppCompatActivity
 
         sensorSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.app_bar_sensor_swipe_refresh_layout);
         sensorSwipeRefreshLayout.setOnRefreshListener(this);
+
+        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress);
     }
 
 
@@ -198,7 +214,6 @@ public class SensorDashboardActivity extends AppCompatActivity
             showSensorDialog(qr);
 
 
-
         }
     }
 
@@ -216,64 +231,9 @@ public class SensorDashboardActivity extends AppCompatActivity
      */
 
     private void updateDashboard() {
-        // TODO : GET SENSOR INFO HERE!!!!!!
-
-        DeviceNodeInventory mDeviceNodeInventory = null;
-        mDeviceNodeInventoryController = new DeviceNodeInventoryController(this, deviceId);
+        showLoadingProgress(true);
+        mDeviceNodeInventoryController = new DeviceNodeInventoryController(this, deviceId, this);
         mDeviceNodeInventoryController.execute();
-
-        try {
-            mDeviceNodeInventory = mDeviceNodeInventoryController.get(Constants.ASYNC_GET_TIMEOUT, TimeUnit.MILLISECONDS);
-
-            if (mDeviceNodeInventory != null) {
-
-            }
-        } catch (InterruptedException e) {
-            Log.e(TAG, "updateDashboard:" + e);
-        } catch (ExecutionException e) {
-            Log.e(TAG, "updateDashboard:" + e);
-        } catch (TimeoutException e) {
-            Log.e(TAG, "updateDashboard:" + e);
-        }
-
-
-        if (mDeviceNodeInventory != null) {
-
-            Log.i(TAG, "Device Inventory:" + mDeviceNodeInventory.toString());
-            sensorList.clear();
-
-            DeviceNodeInventoryExtras extras = mDeviceNodeInventory.getExtras();
-
-            for (Node n : extras.getNodes()) {
-                for (Thing t : n.getThings()) {
-                    LastThingData data = null;
-                    try {
-                        data = new LastThingDataController(this, deviceId, n.getNodeId(), t.getId()).execute().get(Constants.ASYNC_GET_TIMEOUT, TimeUnit.MILLISECONDS);
-                    } catch (InterruptedException e) {
-                        Log.e(TAG, "updateDashboard: " + e);
-                    } catch (ExecutionException e) {
-                        Log.e(TAG, "updateDashboard: " + e);
-                    } catch (TimeoutException e) {
-                        Log.e(TAG, "updateDashboard: " + e);
-                    }
-
-                    String lastData = null;
-                    if (data.getData() != null) {
-                        //  lastData = data.getData().getData().get(0);
-                    }
-
-                    if (TextUtils.isEmpty(lastData)) {
-                        lastData = "N/A";
-                    }
-
-                    SensorViewModel mdl = new SensorViewModel(t.getId(), t.getType(), n.getNodeId(), lastData, new Date(System.currentTimeMillis()), t.getConnected() == 1 ? true : false);
-                    sensorList.add(mdl);
-                }
-            }
-
-            recyclerSensorAdapter.notifyDataSetChanged();
-            sensorSwipeRefreshLayout.setRefreshing(false);
-        }
 
     }
 
@@ -285,14 +245,20 @@ public class SensorDashboardActivity extends AppCompatActivity
     }
 
     private void getGatewayInfo() {
-        if (getIntent() != null && getIntent().hasExtra(Constants.Extra.EXTRA_DEVICE_ID)) {
+        if (getIntent() != null) {
             Intent intent = getIntent();
-            deviceId = intent.getStringExtra(Constants.Extra.EXTRA_DEVICE_ID);
+            if (intent.hasExtra(Constants.Extra.EXTRA_DEVICE_ID)) {
+                deviceId = intent.getStringExtra(Constants.Extra.EXTRA_DEVICE_ID);
+            }
+
+            if (intent.hasExtra(Constants.Extra.EXTRA_DEVICE_CODE)) {
+                deviceCode = intent.getStringExtra(Constants.Extra.EXTRA_DEVICE_CODE);
+            }
         }
     }
 
 
-    private void showSensorDialog(String sensorQr) {
+    private void showSensorDialog(final String sensorQr) {
         // custom dialog
         mSensorDialog = new Dialog(this);
         mSensorDialog.setContentView(R.layout.sensor_registration_dialog);
@@ -310,7 +276,8 @@ public class SensorDashboardActivity extends AppCompatActivity
                 registerThingId = editText.getText().toString();
                 Log.i(TAG, "THING ID: " + registerThingId);
 
-                // TODO : register sensor here.
+                ActionMessage msg = generateActionMessage(sensorQr, registerThingId);
+                new RegisterSensorController(getApplicationContext(), deviceCode, msg, SensorDashboardActivity.this).execute();
                 mSensorDialog.dismiss();
             }
         });
@@ -319,6 +286,119 @@ public class SensorDashboardActivity extends AppCompatActivity
 
 
         mSensorDialog.show();
+    }
+
+    @Override
+    public void onDeviceNodeInventoryTaskComplete(DeviceNodeInventory mDeviceNodeInventory) {
+        if (mDeviceNodeInventory != null) {
+
+            Log.i(TAG, "Device Inventory:" + mDeviceNodeInventory.toString());
+            sensorList.clear();
+
+            DeviceNodeInventoryExtras extras = mDeviceNodeInventory.getExtras();
+
+
+            for (Node n : extras.getNodes()) {
+                for (Thing t : n.getThings()) {
+                    showLoadingProgress(true);
+                    new LastThingDataController(this, deviceId, n.getNodeId(), t.getId(), t.getType(), t.getConnected(), this).execute();
+                }
+            }
+
+
+        }
+    }
+
+
+    private void showLoadingProgress(final boolean state) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (loadingIndicator != null) {
+                    loadingIndicator.bringToFront();
+                    if (state) {
+                        Log.i(TAG, "Showing progress..");
+                        loadingIndicator.show();
+                    } else {
+                        Log.i(TAG, "Hiding progress..");
+                        loadingIndicator.hide();
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onLastThingDataTaskComplete(String nodeId, String thingId, String thingType, int connected, LastThingData data) {
+
+        String lastData = null;
+        if (data.getData() != null) {
+            //  lastData = data.getData().getData().get(0);
+        }
+
+        if (TextUtils.isEmpty(lastData)) {
+            lastData = "N/A";
+        }
+
+        SensorViewModel mdl = new SensorViewModel(thingId, thingType, nodeId, lastData, new Date(System.currentTimeMillis()), connected == 1 ? true : false);
+        sensorList.add(mdl);
+        showLoadingProgress(false);
+        recyclerSensorAdapter.notifyDataSetChanged();
+        sensorSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private ActionMessage generateActionMessage(String thingCode, String thingId) {
+
+        JSONObject actionMsg = new JSONObject();
+        JSONObject actionJsonObject = new JSONObject();
+
+        JSONArray thingsArray = new JSONArray();
+
+        JSONObject thing = new JSONObject();
+
+        try {
+            thing.put(Constants.ActionMessage.THING_CODE, thingCode);
+            thing.put(Constants.ActionMessage.THING_ID, thingId);
+
+            thingsArray.put(thing);
+
+            JSONObject nodeJsonObject = new JSONObject();
+
+            nodeJsonObject.put(Constants.ActionMessage.NODE_ID, Constants.GREENHOUSE_NODE);
+            nodeJsonObject.put(Constants.ActionMessage.THINGS, thingsArray);
+
+            JSONArray addDeviceJsonArray = new JSONArray();
+            addDeviceJsonArray.put(nodeJsonObject);
+
+
+            actionJsonObject.put(Constants.ActionMessage.MESSAGE_ID, "12345");
+            actionJsonObject.put(Constants.ActionMessage.ADD_DEVICE, addDeviceJsonArray);
+
+
+            actionMsg.put(Constants.ActionMessage.MESSAGE, actionJsonObject.toString());
+
+            Log.i(TAG, "ACTION JSON:\n" + actionJsonObject);
+            Log.i(TAG, "FINAL JSON:\n" + actionMsg);
+        } catch (JSONException e) {
+            Log.e(TAG, "generateActionMessage: " + e);
+        }
+
+        ActionMessage msg = new ActionMessage(Constants.Actions.ACTION_MESSAGE_NODE_ID,
+                actionMsg.toString(),
+                Constants.Actions.ACTION_MESSAGE_THING_ID,
+                Constants.Actions.ACTION_MESSAGE_NODE_ID);
+
+
+        return msg;
+    }
+
+    @Override
+    public void onRegisterSensorTaskComplete(boolean result) {
+        if (result) {
+            Log.i(TAG, "Action Message Delivered Successfully");
+        } else {
+            Log.i(TAG, "Action Message Failure");
+        }
     }
 }
 

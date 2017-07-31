@@ -34,6 +34,7 @@ import com.ardic.android.iotignite.greenhouse.listeners.DROMAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.listeners.DeviceAsyncTaskListener;
 import com.ardic.android.iotignite.lib.restclient.model.Device;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceContent;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private DeviceController mDeviceController;
     private Device devices;
     private String deviceId;
-    private String activeQR = null;
+    private String deviceCode;
 
 
     private Handler dromDeviceHandler = new Handler();
@@ -98,6 +99,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
         }
     };
 
+    private AVLoadingIndicatorView loadingIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +148,8 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         gatewaySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.app_bar_gateway_swipe_refresh_layout);
         gatewaySwipeRefreshLayout.setOnRefreshListener(this);
+
+        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress);
 
     }
 
@@ -221,7 +225,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
             Log.i(TAG, "QR Code Received !" + qr);
             Toast.makeText(this, "QR Code Received !" + qr, Toast.LENGTH_LONG).show();
 
-            // TODO : start progress here.
+            showLoadingProgress(true);
             mDromController = new DROMController(this, qr, this);
 
             mDromController.execute();
@@ -234,14 +238,13 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
     private synchronized void getDeviceInfo() {
 
+        showLoadingProgress(true);
         mDeviceController = new DeviceController(this, this);
 
         mDeviceController.execute();
     }
 
     private boolean updateDevice() {
-
-        //TODO : start progress.
         getDeviceInfo();
         return checkDevice();
     }
@@ -255,6 +258,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
             Intent startSensorDashboardActivity = new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class);
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_ID, gateway.getGatewayId());
+            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_CODE,getDeviceCodeById(gateway.getGatewayId()));
             startActivity(startSensorDashboardActivity);
         }
     }
@@ -268,7 +272,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
     }
 
     private void updateDashboard() {
-        // TODO : Start progress
         getDeviceInfo();
     }
 
@@ -295,10 +298,12 @@ public class GatewayDashboardActivity extends AppCompatActivity
     @Override
     public void onDeviceTaskComplete(Device mDevice) {
 
-        devices = mDevice;
-        // TODO : stop progress.
-        Log.i(TAG, "Task Complete .\n " + mDevice);
-        updateGatewayList(devices);
+        if (mDevice != null) {
+            devices = mDevice;
+            showLoadingProgress(false);
+            Log.i(TAG, "Task Complete .\n " + mDevice);
+            updateGatewayList(devices);
+        }
         gatewaySwipeRefreshLayout.setRefreshing(false);
 
     }
@@ -306,12 +311,44 @@ public class GatewayDashboardActivity extends AppCompatActivity
     @Override
     public void onDromTaskComplete(boolean result) {
 
-        // TODO : stop progress here.
+        showLoadingProgress(false);
         if (result) {
             dromDeviceHandler.postDelayed(dromDeviceRunnable, 2000L);
         } else {
             Toast.makeText(GatewayDashboardActivity.this, "DROM LICENCED FAILURE PLEASE TRY AGAIN !!", Toast.LENGTH_LONG).show();
         }
+    }
+
+
+    private void showLoadingProgress(final boolean state) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (loadingIndicator != null) {
+                    loadingIndicator.bringToFront();
+                    if (state) {
+                        Log.i(TAG, "Showing progress..");
+                        loadingIndicator.show();
+                    } else {
+                        Log.i(TAG, "Hiding progress..");
+                        loadingIndicator.hide();
+                    }
+                }
+            }
+        });
+    }
+
+    private String getDeviceCodeById(String deviceId) {
+
+        String deviceCode = null;
+        for (DeviceContent content : devices.getDeviceContents()) {
+
+            if (deviceId.equals(content.getDeviceId())) {
+                deviceCode = content.getCode();
+            }
+        }
+
+        return deviceCode;
     }
 }
 

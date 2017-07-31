@@ -435,6 +435,9 @@ public class IgniteRestClient {
                         Log.i(TAG, "Action message success. Response Code: " + responseCode);
                     }
                     return true;
+                }else {
+                    Log.i(TAG, "Action message failure. Response Code: " + responseCode);
+
                 }
             } catch (IOException e) {
                 Log.e(TAG, "IOException on pushActionMessageToThing() function :" + e);
