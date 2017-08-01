@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private static final String TAG = GatewayDashboardActivity.class.getSimpleName();
     private FloatingActionButton fabAddGateway;
     private Toolbar toolbar;
+    private ImageView mNoGwImageView;
 
     private RecyclerView recyclerView;
     private List<GatewayViewModel> gatewayList = new ArrayList<>();
@@ -64,6 +66,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private Device devices;
     private String deviceId;
     private String deviceCode;
+    private AVLoadingIndicatorView loadingIndicator;
 
 
     private Handler dromDeviceHandler = new Handler();
@@ -99,7 +102,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
         }
     };
 
-    private AVLoadingIndicatorView loadingIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +152,8 @@ public class GatewayDashboardActivity extends AppCompatActivity
         gatewaySwipeRefreshLayout.setOnRefreshListener(this);
 
         loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress);
+
+        mNoGwImageView = (ImageView) findViewById(R.id.no_gateway_image_view);
 
     }
 
@@ -258,7 +262,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
             Intent startSensorDashboardActivity = new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class);
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_ID, gateway.getGatewayId());
-            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_CODE,getDeviceCodeById(gateway.getGatewayId()));
+            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_CODE, getDeviceCodeById(gateway.getGatewayId()));
             startActivity(startSensorDashboardActivity);
         }
     }
@@ -298,13 +302,14 @@ public class GatewayDashboardActivity extends AppCompatActivity
     @Override
     public void onDeviceTaskComplete(Device mDevice) {
 
+        Log.i(TAG, "Task Complete .\n " + mDevice);
         if (mDevice != null) {
             devices = mDevice;
-            showLoadingProgress(false);
-            Log.i(TAG, "Task Complete .\n " + mDevice);
             updateGatewayList(devices);
         }
         gatewaySwipeRefreshLayout.setRefreshing(false);
+        showLoadingProgress(false);
+        setNoGwImage();
 
     }
 
@@ -325,12 +330,9 @@ public class GatewayDashboardActivity extends AppCompatActivity
             @Override
             public void run() {
                 if (loadingIndicator != null) {
-                    loadingIndicator.bringToFront();
                     if (state) {
-                        Log.i(TAG, "Showing progress..");
                         loadingIndicator.show();
                     } else {
-                        Log.i(TAG, "Hiding progress..");
                         loadingIndicator.hide();
                     }
                 }
@@ -349,6 +351,22 @@ public class GatewayDashboardActivity extends AppCompatActivity
         }
 
         return deviceCode;
+    }
+
+
+    private void setNoGwImage() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (gatewayList != null && gatewayList.isEmpty()) {
+                    Log.i(TAG, "Setting no gw image.");
+                    mNoGwImageView.setVisibility(View.VISIBLE);
+                } else {
+                    mNoGwImageView.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
     }
 }
 

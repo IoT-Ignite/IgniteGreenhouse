@@ -27,6 +27,7 @@ import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import com.ardic.android.iotignite.lib.restclient.model.CreateRestrictedUser;
 import com.rey.material.app.Dialog;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +36,7 @@ import java.util.concurrent.TimeoutException;
 public class SignUpActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener,
         View.OnFocusChangeListener, View.OnClickListener, SignUpAsyncTaskListener {
 
-    private String TAG = SignUpActivity.class.getSimpleName();
+    private static final String TAG = SignUpActivity.class.getSimpleName();
     private EditText editTextFirstName;
     private EditText editTextLastName;
     private EditText editTextMail;
@@ -48,7 +49,6 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     private CheckBox cbAcceptTermsOfUse;
     private Button btnSignUp;
     private Toolbar toolbar;
-    private Dialog loadingDialog;
 
     private SignUpController mSignUpController;
 
@@ -61,6 +61,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     private String confirmPassword;
 
     private CreateRestrictedUser mCreatedUser;
+    private AVLoadingIndicatorView loadingIndicator;
 
 
     @Override
@@ -85,9 +86,8 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         btnSignUp = (Button) findViewById(R.id.activity_sign_up_btn_sign_up);
 
 
-        loadingDialog = new Dialog(this);
-        loadingDialog.setContentView(R.layout.progress_bar);
-
+        loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress);
+        showLoadingProgress(false);
 
         cbAcceptTermsOfUse.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -188,11 +188,9 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
 
         if (view.equals(btnSignUp) && assignEditTextValues()) {
 
-
             ValidationResult result = ValidationUtils.checkSignUpCredentials(email,
                     firstName, lastName, password, confirmPassword, cbAcceptTermsOfUse.isChecked());
             if (ValidationResult.OK == result) {
-                // TODO: start progress dialog
                 createAccount();
             } else {
                 Toast.makeText(SignUpActivity.this, result.getMessage(), Toast.LENGTH_SHORT).show();
@@ -244,6 +242,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
 
         mSignUpController = new SignUpController(SignUpActivity.this, firstName, lastName, email, password, this);
         mSignUpController.execute();
+        showLoadingProgress(true);
     }
 
     private void startLoginActivity() {
@@ -252,35 +251,9 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         Intent intent = new Intent(Constants.Actions.ACTION_SIGN_UP_SUCCESS);
         intent.putExtra(Constants.Extra.EXTRA_USERNAME, email);
         intent.putExtra(Constants.Extra.EXTRA_PASSWORD, password);
-        closeInfoDialog();
         setResult(RESULT_OK, intent);
-
         finish();
 
-    }
-
-    private void showInfoDialog() {
-
-        if (loadingDialog != null) {
-            loadingDialog.cancel();
-            loadingDialog = new Dialog(SignUpActivity.this);
-            loadingDialog.setContentView(R.layout.progress_bar);
-            loadingDialog.setCancelable(false);
-            loadingDialog.setCanceledOnTouchOutside(false);
-            loadingDialog.show();
-        } else {
-            Log.i(TAG, "Dialog is NULL");
-        }
-    }
-
-    private void closeInfoDialog() {
-
-        if (loadingDialog != null) {
-
-            Log.i(TAG, "Closing info dialog.");
-            loadingDialog.dismiss();
-            loadingDialog.cancel();
-        }
     }
 
 
@@ -293,7 +266,23 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         } else {
             Toast.makeText(SignUpActivity.this, "An error occured please try again.", Toast.LENGTH_SHORT).show();
         }
+        showLoadingProgress(false);
 
+    }
+
+    private void showLoadingProgress(final boolean state) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (loadingIndicator != null) {
+                    if (state) {
+                        loadingIndicator.show();
+                    } else {
+                        loadingIndicator.hide();
+                    }
+                }
+            }
+        });
     }
 
 }

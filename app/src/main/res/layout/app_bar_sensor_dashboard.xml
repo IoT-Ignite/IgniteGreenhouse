@@ -44,4 +44,12 @@
         app:backgroundTint="@color/fab"
         app:srcCompat="@drawable/add" />
 
+    <ImageView
+        android:id="@+id/no_sensor_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/addasensor"
+        android:layout_gravity="bottom|start"
+        android:visibility="invisible"/>
+
 </android.support.design.widget.CoordinatorLayout>

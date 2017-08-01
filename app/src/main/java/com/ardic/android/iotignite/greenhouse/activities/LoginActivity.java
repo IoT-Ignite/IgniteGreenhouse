@@ -304,12 +304,9 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             @Override
             public void run() {
                 if (loadingIndicator != null) {
-                    loadingIndicator.bringToFront();
                     if (state) {
-                        Log.i(TAG, "Showing progress..");
                         loadingIndicator.show();
                     } else {
-                        Log.i(TAG, "Hiding progress..");
                         loadingIndicator.hide();
                     }
                 }

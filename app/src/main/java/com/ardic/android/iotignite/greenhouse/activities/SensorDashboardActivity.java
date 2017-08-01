@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
@@ -80,6 +81,7 @@ public class SensorDashboardActivity extends AppCompatActivity
 
     private Dialog mSensorDialog;
     private AVLoadingIndicatorView loadingIndicator;
+    private ImageView mNoSensorImageView;
 
 
     @Override
@@ -138,6 +140,8 @@ public class SensorDashboardActivity extends AppCompatActivity
         sensorSwipeRefreshLayout.setOnRefreshListener(this);
 
         loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress);
+
+        mNoSensorImageView = (ImageView) findViewById(R.id.no_sensor_image_view);
     }
 
 
@@ -315,12 +319,9 @@ public class SensorDashboardActivity extends AppCompatActivity
             @Override
             public void run() {
                 if (loadingIndicator != null) {
-                    loadingIndicator.bringToFront();
                     if (state) {
-                        Log.i(TAG, "Showing progress..");
                         loadingIndicator.show();
                     } else {
-                        Log.i(TAG, "Hiding progress..");
                         loadingIndicator.hide();
                     }
                 }
@@ -399,6 +400,22 @@ public class SensorDashboardActivity extends AppCompatActivity
         } else {
             Log.i(TAG, "Action Message Failure");
         }
+    }
+
+
+    private void setNoSensorImage() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (sensorList != null && sensorList.isEmpty()) {
+                    Log.i(TAG, "Setting no gw image.");
+                    mNoSensorImageView.setVisibility(View.VISIBLE);
+                } else {
+                    mNoSensorImageView.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
     }
 }
 
