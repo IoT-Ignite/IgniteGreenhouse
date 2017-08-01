@@ -3,6 +3,7 @@ package com.ardic.android.iotignite.greenhouse.activities;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -84,16 +85,37 @@ public class SensorDashboardActivity extends AppCompatActivity
     private ImageView mNoSensorImageView;
 
 
+    private int sensorAddTryCount = 0;
+
+    private Handler sensorAddHandler = new Handler();
+
+    private Runnable mSensorAddRunnable = new Runnable() {
+        @Override
+        public void run() {
+
+            if (sensorAddTryCount < Constants.SENSOR_TRY_COUNT) {
+                Log.i(TAG, "Waiting Sensor...");
+                showLoadingProgress(true);
+                sensorAddTryCount++;
+                updateDashboard();
+                sensorAddHandler.postDelayed(this, 5000L);
+
+            } else {
+                Toast.makeText(SensorDashboardActivity.this, "Sensor Registration Failure!!!", Toast.LENGTH_LONG).show();
+                showLoadingProgress(false);
+            }
+
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_dashboard);
 
-        //generateActionMessage("10001110", "HelloBabe");
-
         getGatewayInfo();
         initUI();
-
         updateDashboard();
     }
 
@@ -294,6 +316,9 @@ public class SensorDashboardActivity extends AppCompatActivity
 
     @Override
     public void onDeviceNodeInventoryTaskComplete(DeviceNodeInventory mDeviceNodeInventory) {
+
+        boolean isNodeContains = false;
+
         if (mDeviceNodeInventory != null) {
 
             Log.i(TAG, "Device Inventory:" + mDeviceNodeInventory.toString());
@@ -303,13 +328,41 @@ public class SensorDashboardActivity extends AppCompatActivity
 
 
             for (Node n : extras.getNodes()) {
-                for (Thing t : n.getThings()) {
-                    showLoadingProgress(true);
-                    new LastThingDataController(this, deviceId, n.getNodeId(), t.getId(), t.getType(), t.getConnected(), this).execute();
+                if (Constants.GREENHOUSE_NODE.equals(n.getNodeId())) {
+                    for (Thing t : n.getThings()) {
+                        isNodeContains = true;
+                        new LastThingDataController(this, deviceId, n.getNodeId(), t.getId(), t.getType(), t.getConnected(), this).execute();
+
+                        if (!TextUtils.isEmpty(registerThingId) && t.getId().equals(registerThingId)) {
+
+                            sensorAddHandler.removeCallbacks(mSensorAddRunnable);
+                            sensorAddTryCount = 0;
+                            registerThingId = null;
+                            final String thing = t.getId();
+                            final String type = t.getType();
+                            final int connected = t.getConnected();
+
+                            SensorDashboardActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showLoadingProgress(false);
+                                    Toast.makeText(SensorDashboardActivity.this, "AWESOME ! Sensor Added Successfully ", Toast.LENGTH_LONG).show();
+                                    new LastThingDataController(getApplicationContext(), deviceId,
+                                            Constants.GREENHOUSE_NODE, thing, type, connected,
+                                            SensorDashboardActivity.this).execute();
+                                }
+                            });
+                        }
+                    }
                 }
             }
+        }
 
-
+        if (!isNodeContains) {
+            setNoSensorImage();
+            showLoadingProgress(false);
+            recyclerSensorAdapter.notifyDataSetChanged();
+            sensorSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -319,6 +372,7 @@ public class SensorDashboardActivity extends AppCompatActivity
             @Override
             public void run() {
                 if (loadingIndicator != null) {
+                    Log.i(TAG, "INDICATOR STATE: " + state);
                     if (state) {
                         loadingIndicator.show();
                     } else {
@@ -332,19 +386,36 @@ public class SensorDashboardActivity extends AppCompatActivity
     @Override
     public void onLastThingDataTaskComplete(String nodeId, String thingId, String thingType, int connected, LastThingData data) {
 
+        List<String> lastDataList;
+        Date dataDate = null;
         String lastData = null;
         if (data.getData() != null) {
-            //  lastData = data.getData().getData().get(0);
+            lastDataList = data.getData().getData();
+            if (lastDataList != null && !lastDataList.isEmpty()) {
+                lastData = lastDataList.get(0);
+                Log.i(TAG, "LAST DATA : " + lastData);
+                Log.i(TAG, " TYPE : " + thingType);
+
+                if (Constants.GREENHOUSE_TEMPERATURE_THINGTYPE.equals(thingType)) {
+                    lastData += Constants.LAST_DATA_TEMP_PREFIX;
+                } else if (Constants.GREENHOUSE_HUMIDITY_THINGTYPE.equals(thingType)) {
+                    lastData += Constants.LAST_DATA_HUM_PREFIX;
+                }
+                dataDate = new Date(data.getData().getCreateDate());
+            }
         }
 
         if (TextUtils.isEmpty(lastData)) {
             lastData = "N/A";
         }
 
-        SensorViewModel mdl = new SensorViewModel(thingId, thingType, nodeId, lastData, new Date(System.currentTimeMillis()), connected == 1 ? true : false);
-        sensorList.add(mdl);
+        if (dataDate == null) {
+            dataDate = new Date(System.currentTimeMillis());
+        }
+
+        SensorViewModel mdl = new SensorViewModel(thingId, thingType, nodeId, lastData, dataDate, connected == 1 ? true : false);
+        updateSensorList(mdl);
         showLoadingProgress(false);
-        recyclerSensorAdapter.notifyDataSetChanged();
         sensorSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -397,8 +468,10 @@ public class SensorDashboardActivity extends AppCompatActivity
     public void onRegisterSensorTaskComplete(boolean result) {
         if (result) {
             Log.i(TAG, "Action Message Delivered Successfully");
+            sensorAddHandler.postDelayed(mSensorAddRunnable, 5000L);
         } else {
             Log.i(TAG, "Action Message Failure");
+            Toast.makeText(SensorDashboardActivity.this, "Sensor Registration Failure!!!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -416,6 +489,22 @@ public class SensorDashboardActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    private void updateSensorList(SensorViewModel mdl) {
+        boolean isModelContains = false;
+        for (SensorViewModel model : sensorList) {
+            if (model.getSensorId().equals(mdl.getSensorId())) {
+                isModelContains = true;
+                break;
+            }
+        }
+
+        if (!isModelContains) {
+            sensorList.add(mdl);
+            setNoSensorImage();
+            recyclerSensorAdapter.notifyDataSetChanged();
+        }
     }
 }
 

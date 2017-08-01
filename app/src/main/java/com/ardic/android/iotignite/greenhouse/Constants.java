@@ -17,6 +17,7 @@ public class Constants {
     public static final String USER_CONFIG_MODE = "none";
     public static final int ANIM_FRAME_COUNT = 18;
     public static final int DROM_TRY_COUNT = 5;
+    public static final int SENSOR_TRY_COUNT = 5;
     public static final String ONLINE_DEVICE = "ONLINE";
     public static final String OFFLINE_DEVICE = "OFFLINE";
 
@@ -24,6 +25,14 @@ public class Constants {
     public static final int CREATE_NEW_ACCOUNT = 2;
 
     public static final String GREENHOUSE_NODE = "IgniteGreenhouse";
+    public static final String LAST_DATA_TEMP_PREFIX = "°C";
+    public static final String LAST_DATA_HUM_PREFIX = "%";
+    public static final String GREENHOUSE_TEMPERATURE_THINGTYPE = "GHT-Temperature";
+    public static final String GREENHOUSE_HUMIDITY_THINGTYPE = "GHT-Humidity";
+
+    public static final int CAMERA_PERMISSION_REQUEST = 1;
+
+
     /**
      * Shared Pref names.
      */
@@ -37,6 +46,7 @@ public class Constants {
         public static final String ACTION_SENSOR_QR_CODE_SUCCESS = "sensor-qr-code-success";
         public static final String ACTION_GW_QR_CODE = "gw-qr-code";
         public static final String ACTION_QR_CODE_FAILURE = "qr-code-failure";
+        public static final String ACTION_CAMERA_PERMISSION_FAILURE = "camera-permission-failure";
         public static final String ACTION_SENSOR_QR_CODE = "sensor-qr-code";
         public static final String ACTION_MESSAGE_NODE_ID = "Configurator";
         public static final String ACTION_MESSAGE_THING_ID = "Configurator Thing";

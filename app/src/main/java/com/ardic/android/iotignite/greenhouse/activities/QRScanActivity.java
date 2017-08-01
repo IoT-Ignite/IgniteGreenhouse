@@ -1,6 +1,10 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,18 +23,12 @@ public class QRScanActivity extends AppCompatActivity implements ZXingScannerVie
     private ZXingScannerView mScannerView;
     private String action;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
-        setContentView(mScannerView);
 
-        Intent i = getIntent();
-
-        if (i != null) {
-            action = i.getAction();
-        }
-
+        initQR();
     }
 
     @Override
@@ -93,5 +91,14 @@ public class QRScanActivity extends AppCompatActivity implements ZXingScannerVie
         }
         finish();
 
+    }
+
+    private void initQR() {
+        Intent i = getIntent();
+        mScannerView = new ZXingScannerView(this);// Programmatically initialize the scanner view
+        setContentView(mScannerView);
+        if (i != null) {
+            action = i.getAction();
+        }
     }
 }

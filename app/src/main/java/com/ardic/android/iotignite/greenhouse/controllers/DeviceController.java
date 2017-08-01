@@ -38,7 +38,11 @@ public class DeviceController extends AsyncTask<Void, Void, Device> {
 
         mIgniteRestClient = RestClientHolder.getInstance(appContext).getActiveClient();
         try {
-            device = mIgniteRestClient.getDeviceSummary(user);
+            if (mIgniteRestClient != null) {
+                device = mIgniteRestClient.getDeviceSummary(user);
+            } else {
+                Log.e(TAG, "mIgniteRestClient is NULL");
+            }
         } catch (IgniteRestClientException e) {
             Log.e(TAG, "DeviceController:" + e);
         }

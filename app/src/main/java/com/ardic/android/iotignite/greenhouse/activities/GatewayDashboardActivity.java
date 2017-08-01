@@ -1,12 +1,16 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -43,6 +47,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static com.ardic.android.iotignite.greenhouse.Constants.CAMERA_PERMISSION_REQUEST;
+
 public class GatewayDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
         CustomCardViewClickListener, SwipeRefreshLayout.OnRefreshListener, DeviceAsyncTaskListener,
@@ -65,7 +71,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private DeviceController mDeviceController;
     private Device devices;
     private String deviceId;
-    private String deviceCode;
     private AVLoadingIndicatorView loadingIndicator;
 
 
@@ -80,6 +85,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
             if (dromDeviceTryCount < Constants.DROM_TRY_COUNT) {
                 if (!updateDevice()) {
                     Log.i(TAG, "Waiting Device...");
+                    showLoadingProgress(true);
                     dromDeviceTryCount++;
                     dromDeviceHandler.postDelayed(this, 3000L);
                 } else {
@@ -91,7 +97,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
                     GatewayDashboardActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            //TODO End of LOADING
+                            showLoadingProgress(false);
                             Toast.makeText(GatewayDashboardActivity.this, "AWESOME ! DEVICE LICENCED SUCCESSFULLY. ", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -207,9 +213,8 @@ public class GatewayDashboardActivity extends AppCompatActivity
                         @Override
                         public void onDismissed(Snackbar transientBottomBar, int event) {
                             super.onDismissed(transientBottomBar, event);
-                            Intent intent = new Intent(GatewayDashboardActivity.this, QRScanActivity.class);
-                            intent.setAction(Constants.Actions.ACTION_GW_QR_CODE);
-                            startActivityForResult(intent, Constants.READ_QR_CODE);
+//TODO checkCameraPermission
+                            checkCameraPermission();
                         }
 
                         @Override
@@ -367,6 +372,45 @@ public class GatewayDashboardActivity extends AppCompatActivity
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_PERMISSION_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startQRActivity();
+                } else {
+                    Toast.makeText(this, "Camera permission required for read QR CODE!!!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+
+    private void checkCameraPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(GatewayDashboardActivity.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST
+            );
+
+        } else {
+            startQRActivity();
+        }
+    }
+
+    private void startQRActivity() {
+        Intent intent = new Intent(GatewayDashboardActivity.this, QRScanActivity.class);
+        intent.setAction(Constants.Actions.ACTION_GW_QR_CODE);
+        startActivityForResult(intent, Constants.READ_QR_CODE);
     }
 }
 
