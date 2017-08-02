@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.ardic.android.iotignite.greenhouse.Constants.CAMERA_PERMISSION_REQUEST;
+import static com.ardic.android.iotignite.greenhouse.Constants.GATEWAY_DASHBOARD_UPDATE_TIME;
 
 public class GatewayDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
@@ -104,6 +105,18 @@ public class GatewayDashboardActivity extends AppCompatActivity
         }
     };
 
+    private Handler dynamicUiUpdateHandler = new Handler();
+
+    private Runnable dynamicUiUpdateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (gatewayList != null && !gatewayList.isEmpty()) {
+                updateDevice();
+            }
+            dynamicUiUpdateHandler.postDelayed(this, GATEWAY_DASHBOARD_UPDATE_TIME);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +128,19 @@ public class GatewayDashboardActivity extends AppCompatActivity
         // get previous configured gateways..
         updateDashboard();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dynamicUiUpdateHandler.removeCallbacks(dynamicUiUpdateRunnable);
+        dynamicUiUpdateHandler.postDelayed(dynamicUiUpdateRunnable, GATEWAY_DASHBOARD_UPDATE_TIME);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dynamicUiUpdateHandler.removeCallbacks(dynamicUiUpdateRunnable);
     }
 
     private void initUI() {

@@ -33,6 +33,10 @@ public class Constants {
     public static final int CAMERA_PERMISSION_REQUEST = 1;
 
 
+    public static final long GATEWAY_DASHBOARD_UPDATE_TIME = 30000L;
+    public static final long SENSOR_DASHBOARD_UPDATE_TIME = 10000L;
+
+
     /**
      * Shared Pref names.
      */

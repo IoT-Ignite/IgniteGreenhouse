@@ -58,6 +58,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.ardic.android.iotignite.greenhouse.Constants.CAMERA_PERMISSION_REQUEST;
+import static com.ardic.android.iotignite.greenhouse.Constants.SENSOR_DASHBOARD_UPDATE_TIME;
 
 public class SensorDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
@@ -112,6 +113,19 @@ public class SensorDashboardActivity extends AppCompatActivity
     };
 
 
+    private Handler dynamicUiUpdateHandler = new Handler();
+
+    private Runnable dynamicUiUpdateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (sensorList != null && !sensorList.isEmpty()) {
+                updateDashboard();
+            }
+            dynamicUiUpdateHandler.postDelayed(this, SENSOR_DASHBOARD_UPDATE_TIME);
+        }
+    };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,6 +134,20 @@ public class SensorDashboardActivity extends AppCompatActivity
         getGatewayInfo();
         initUI();
         updateDashboard();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dynamicUiUpdateHandler.removeCallbacks(dynamicUiUpdateRunnable);
+        dynamicUiUpdateHandler.postDelayed(dynamicUiUpdateRunnable, SENSOR_DASHBOARD_UPDATE_TIME);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dynamicUiUpdateHandler.removeCallbacks(dynamicUiUpdateRunnable);
     }
 
     private void initUI() {
