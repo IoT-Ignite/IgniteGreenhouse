@@ -16,7 +16,7 @@ public class SensorViewModel {
     private String sensorValue;
     private String sensorLastSyncDateString;
     private Boolean isSensorOnline;
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 
     public SensorViewModel(String sensorId, String sensorType, String nodeId, String sensorValue, Date sensorLastSyncDate, Boolean isSensorOnline) {
@@ -52,5 +52,31 @@ public class SensorViewModel {
         return sensorLastSyncDateString;
     }
 
+    public void setSensorType(String sensorType) {
+        this.sensorType = sensorType;
+    }
 
+    public void setSensorId(String sensorId) {
+        this.sensorId = sensorId;
+    }
+
+    public void setNodeId(String nodeId) {
+        this.nodeId = nodeId;
+    }
+
+    public void setSensorValue(String sensorValue) {
+        this.sensorValue = sensorValue;
+    }
+
+    public void setSensorLastSyncDateString(Date sensorLastSyncDate) {
+        this.sensorLastSyncDateString = sdf.format(sensorLastSyncDate);
+    }
+
+    public void setSensorOnline(Boolean sensorOnline) {
+        isSensorOnline = sensorOnline;
+    }
+
+    public void setSdf(SimpleDateFormat sdf) {
+        this.sdf = sdf;
+    }
 }

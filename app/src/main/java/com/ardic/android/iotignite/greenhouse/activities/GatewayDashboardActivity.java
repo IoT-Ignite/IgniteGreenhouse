@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
@@ -43,9 +42,6 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static com.ardic.android.iotignite.greenhouse.Constants.CAMERA_PERMISSION_REQUEST;
 
@@ -205,15 +201,12 @@ public class GatewayDashboardActivity extends AppCompatActivity
          */
         if (view.equals(fabAddGateway)) {
 
-            //TODO : Check camera permission here. - RunTime and Manifest.
-
             Snackbar.make(view, "Scan your QR code to register your gateway.", Snackbar.LENGTH_SHORT)
                     .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
 
                         @Override
                         public void onDismissed(Snackbar transientBottomBar, int event) {
                             super.onDismissed(transientBottomBar, event);
-//TODO checkCameraPermission
                             checkCameraPermission();
                         }
 
@@ -255,7 +248,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
     private boolean updateDevice() {
         getDeviceInfo();
-        return checkDevice();
+        return checkDeviceId(deviceId);
     }
 
     @Override
@@ -285,17 +278,22 @@ public class GatewayDashboardActivity extends AppCompatActivity
     }
 
     private void updateGatewayList(Device device) {
-        gatewayList.clear();
 
         if (device != null && device.getDeviceContents() != null) {
+
             for (DeviceContent cnt : device.getDeviceContents()) {
-                gatewayList.add(new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), Constants.ONLINE_DEVICE.equals(cnt.getPresence().getState()) ? true : false));
+
+                if (checkDeviceId(cnt.getDeviceId())) {
+                    updateGatewayCardView(cnt);
+                } else {
+                    gatewayList.add(new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), Constants.ONLINE_DEVICE.equals(cnt.getPresence().getState()) ? true : false));
+                }
             }
             recyclerGatewayAdapter.notifyDataSetChanged();
         }
     }
 
-    private boolean checkDevice() {
+    private boolean checkDeviceId(String deviceId) {
         for (GatewayViewModel mdl : gatewayList) {
             if (mdl.getGatewayId().equals(deviceId)) {
                 return true;
@@ -325,7 +323,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
         if (result) {
             dromDeviceHandler.postDelayed(dromDeviceRunnable, 2000L);
         } else {
-            Toast.makeText(GatewayDashboardActivity.this, "DROM LICENCED FAILURE PLEASE TRY AGAIN !!", Toast.LENGTH_LONG).show();
+            Toast.makeText(GatewayDashboardActivity.this, "GATEWAY LICENCE FAILURE PLEASE TRY AGAIN !!!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -419,6 +417,24 @@ public class GatewayDashboardActivity extends AppCompatActivity
             drawer.removeDrawerListener(toggle);
         }
         super.onDestroy();
+    }
+
+    private void updateGatewayCardView(DeviceContent deviceContent) {
+        int gwIndex = getGwViewModelIndexById(deviceContent.getDeviceId());
+        if (gwIndex != -1) {
+            gatewayList.get(gwIndex).setGatewayLabel(deviceContent.getLabeL());
+            gatewayList.get(gwIndex).setGatewayOnline(Constants.ONLINE_DEVICE.equals(deviceContent.getPresence().getState()) ? true : false);
+            recyclerGatewayAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private int getGwViewModelIndexById(String deviceId) {
+        for (GatewayViewModel mdl : gatewayList) {
+            if (mdl.getGatewayId().equals(deviceId)) {
+                return gatewayList.indexOf(mdl);
+            }
+        }
+        return -1;
     }
 }
 

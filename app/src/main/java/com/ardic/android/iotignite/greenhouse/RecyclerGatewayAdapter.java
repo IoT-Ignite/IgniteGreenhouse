@@ -46,14 +46,11 @@ public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGateway
 
         holder.txtGatewayLabel.setText(gatewayList.get(position).getGatewayLabel());
         holder.txtGatewayId.setText(gatewayList.get(position).getGatewayId());
-
+        holder.imgGatewayStatus.setImageResource(R.drawable.raspberry_pi_online);
         if (gatewayList.get(position).isGatewayOnline()) {
-            holder.imgGatewayStatus.setImageResource(R.drawable.raspberry_pi_online);
-            if (gatewayList.get(position).isGatewayOnline()) {
-                holder.imgGatewayStatus.setImageResource(R.drawable.wireless_signal);
-            } else {
-                holder.imgGatewayStatus.setImageResource(R.drawable.wireless_error);
-            }
+            holder.imgGatewayStatus.setImageResource(R.drawable.wireless_signal);
+        } else {
+            holder.imgGatewayStatus.setImageResource(R.drawable.wireless_error);
         }
     }
 

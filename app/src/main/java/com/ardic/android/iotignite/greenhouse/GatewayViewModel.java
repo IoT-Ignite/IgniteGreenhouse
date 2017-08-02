@@ -29,4 +29,15 @@ public class GatewayViewModel {
         return isGatewayOnline;
     }
 
+    public void setGatewayLabel(String gatewayLabel) {
+        this.gatewayLabel = gatewayLabel;
+    }
+
+    public void setGatewayId(String gatewayId) {
+        this.gatewayId = gatewayId;
+    }
+
+    public void setGatewayOnline(Boolean gatewayOnline) {
+        isGatewayOnline = gatewayOnline;
+    }
 }

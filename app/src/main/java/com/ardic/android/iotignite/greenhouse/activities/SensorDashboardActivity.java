@@ -56,9 +56,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static com.ardic.android.iotignite.greenhouse.Constants.CAMERA_PERMISSION_REQUEST;
 
@@ -325,8 +322,6 @@ public class SensorDashboardActivity extends AppCompatActivity
         if (mDeviceNodeInventory != null) {
 
             Log.i(TAG, "Device Inventory:" + mDeviceNodeInventory.toString());
-            sensorList.clear();
-
             DeviceNodeInventoryExtras extras = mDeviceNodeInventory.getExtras();
 
 
@@ -416,8 +411,15 @@ public class SensorDashboardActivity extends AppCompatActivity
             dataDate = new Date(System.currentTimeMillis());
         }
 
-        SensorViewModel mdl = new SensorViewModel(thingId, thingType, nodeId, lastData, dataDate, connected == 1 ? true : false);
-        updateSensorList(mdl);
+        if (checkSensorId(thingId)) {
+            // update
+            updateSensorCardView(thingId, lastData, dataDate, connected);
+        } else {
+            SensorViewModel mdl = new SensorViewModel(thingId, thingType, nodeId, lastData, dataDate, connected == 1 ? true : false);
+            addModelToSensorList(mdl);
+        }
+
+
         showLoadingProgress(false);
         sensorSwipeRefreshLayout.setRefreshing(false);
     }
@@ -494,20 +496,10 @@ public class SensorDashboardActivity extends AppCompatActivity
 
     }
 
-    private void updateSensorList(SensorViewModel mdl) {
-        boolean isModelContains = false;
-        for (SensorViewModel model : sensorList) {
-            if (model.getSensorId().equals(mdl.getSensorId())) {
-                isModelContains = true;
-                break;
-            }
-        }
-
-        if (!isModelContains) {
-            sensorList.add(mdl);
-            setNoSensorImage();
-            recyclerSensorAdapter.notifyDataSetChanged();
-        }
+    private void addModelToSensorList(SensorViewModel mdl) {
+        sensorList.add(mdl);
+        setNoSensorImage();
+        recyclerSensorAdapter.notifyDataSetChanged();
     }
 
 
@@ -556,6 +548,36 @@ public class SensorDashboardActivity extends AppCompatActivity
             drawer.removeDrawerListener(toggle);
         }
         super.onDestroy();
+    }
+
+
+    private void updateSensorCardView(String thingId, String lastData, Date date, int connected) {
+        int sensorIndex = getSensorViewModelIndexById(thingId);
+        if (sensorIndex != -1) {
+            sensorList.get(sensorIndex).setSensorValue(lastData);
+            sensorList.get(sensorIndex).setSensorLastSyncDateString(date);
+            sensorList.get(sensorIndex).setSensorOnline(connected == 1 ? true : false);
+            recyclerSensorAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private int getSensorViewModelIndexById(String sensorId) {
+        for (SensorViewModel mdl : sensorList) {
+            if (mdl.getSensorId().equals(sensorId)) {
+                return sensorList.indexOf(mdl);
+            }
+        }
+        return -1;
+    }
+
+    private boolean checkSensorId(String sensorId) {
+        for (SensorViewModel mdl : sensorList) {
+            if (mdl.getSensorId().equals(sensorId)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
 
