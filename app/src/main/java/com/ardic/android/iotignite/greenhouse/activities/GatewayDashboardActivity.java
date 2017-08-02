@@ -412,5 +412,13 @@ public class GatewayDashboardActivity extends AppCompatActivity
         intent.setAction(Constants.Actions.ACTION_GW_QR_CODE);
         startActivityForResult(intent, Constants.READ_QR_CODE);
     }
+
+    @Override
+    protected void onDestroy() {
+        if (drawer != null) {
+            drawer.removeDrawerListener(toggle);
+        }
+        super.onDestroy();
+    }
 }
 

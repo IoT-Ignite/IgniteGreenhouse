@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
@@ -113,6 +114,8 @@ public class IgniteRestClient {
                 httpClientBuilder.addInterceptor(apiAccessAuthenticatorInterceptor);
             }
         }
+        httpClientBuilder.connectTimeout(Api.CONNECT_TIMEOUT, TimeUnit.SECONDS);
+        httpClientBuilder.readTimeout(Api.READ_TIMEOUT, TimeUnit.SECONDS);
 
         mRetrofitBuilder.client(httpClientBuilder.build());
         mRetrofit = mRetrofitBuilder.build();
@@ -401,12 +404,12 @@ public class IgniteRestClient {
 
         Call<Device> deviceCall = mIgniteService.getDeviceSummary(username);
 
-        Log.i(TAG,"DEVICE CALL : " + deviceCall.request().toString());
+        Log.i(TAG, "DEVICE CALL : " + deviceCall.request().toString());
         try {
             Response<Device> deviceResponse = deviceCall.execute();
 
             responseCode = deviceResponse.code();
-            Log.i(TAG,"response Code : " + responseCode);
+            Log.i(TAG, "response Code : " + responseCode);
 
             if (ResponseCode.SUCCESS == responseCode) {
                 device = deviceResponse.body();
@@ -435,7 +438,7 @@ public class IgniteRestClient {
                         Log.i(TAG, "Action message success. Response Code: " + responseCode);
                     }
                     return true;
-                }else {
+                } else {
                     Log.i(TAG, "Action message failure. Response Code: " + responseCode);
 
                 }

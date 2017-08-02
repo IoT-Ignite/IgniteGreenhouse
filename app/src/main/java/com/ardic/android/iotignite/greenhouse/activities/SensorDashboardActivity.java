@@ -1,13 +1,17 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -55,6 +59,8 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import static com.ardic.android.iotignite.greenhouse.Constants.CAMERA_PERMISSION_REQUEST;
 
 public class SensorDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
@@ -133,7 +139,7 @@ public class SensorDashboardActivity extends AppCompatActivity
         drawer = (DrawerLayout) findViewById(R.id.activity_sensor_dashboard_drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -213,10 +219,7 @@ public class SensorDashboardActivity extends AppCompatActivity
                         @Override
                         public void onDismissed(Snackbar transientBottomBar, int event) {
                             super.onDismissed(transientBottomBar, event);
-
-                            Intent intent = new Intent(SensorDashboardActivity.this, QRScanActivity.class);
-                            intent.setAction(Constants.Actions.ACTION_SENSOR_QR_CODE);
-                            startActivityForResult(intent, Constants.READ_QR_CODE);
+                            checkCameraPermission();
                         }
 
                         @Override
@@ -505,6 +508,54 @@ public class SensorDashboardActivity extends AppCompatActivity
             setNoSensorImage();
             recyclerSensorAdapter.notifyDataSetChanged();
         }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case CAMERA_PERMISSION_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startQRActivity();
+                } else {
+                    Toast.makeText(this, "Camera permission required for read QR CODE!!!", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+
+    private void checkCameraPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(SensorDashboardActivity.this,
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // No explanation needed, we can request the permission.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST
+            );
+
+        } else {
+            startQRActivity();
+        }
+    }
+
+    private void startQRActivity() {
+        Intent intent = new Intent(SensorDashboardActivity.this, QRScanActivity.class);
+        intent.setAction(Constants.Actions.ACTION_SENSOR_QR_CODE);
+        startActivityForResult(intent, Constants.READ_QR_CODE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (drawer != null) {
+            drawer.removeDrawerListener(toggle);
+        }
+        super.onDestroy();
     }
 }
 
