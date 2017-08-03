@@ -39,6 +39,7 @@
                         android:textSize="20sp" />
 
                     <ImageView
+                        android:id="@+id/img_gateway_info_content_gateway_dashboard_card_view_item"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:background="@drawable/info" />

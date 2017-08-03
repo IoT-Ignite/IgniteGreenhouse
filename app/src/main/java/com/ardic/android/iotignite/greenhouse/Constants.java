@@ -64,7 +64,8 @@ public class Constants {
         public static final String EXTRA_SENSOR_QR_CODE = "sensor-qr-data";
         public static final String EXTRA_DEVICE_ID = "device-id";
         public static final String EXTRA_DEVICE_CODE = "device-code";
-
+        public static final String EXTRA_GATEWAY_LABEL = "gateway-label";
+        public static final String EXTRA_USER_MAIL = "user-mail";
     }
 
     public class ActionMessage {

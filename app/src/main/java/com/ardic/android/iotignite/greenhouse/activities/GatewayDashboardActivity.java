@@ -22,9 +22,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
@@ -55,6 +57,9 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private FloatingActionButton fabAddGateway;
     private Toolbar toolbar;
     private ImageView mNoGwImageView;
+    private TextView txtNavMenuUserMail;
+    private String userMail;
+    private ImageView imgGatewayCardInfo;
 
     private RecyclerView recyclerView;
     private List<GatewayViewModel> gatewayList = new ArrayList<>();
@@ -183,6 +188,18 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         mNoGwImageView = (ImageView) findViewById(R.id.no_gateway_image_view);
 
+        /**
+         * Set user mail to TextView on side navigation menu header.
+         */
+        userMail = getIntent().getStringExtra(Constants.Extra.EXTRA_USER_MAIL);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        txtNavMenuUserMail = header.findViewById(R.id.nav_menu_header_user_mail);
+        txtNavMenuUserMail.setText(userMail);
+
+        View dashboard = findViewById(R.id.included_app_bar_gateway_dashboard_on_activity_gateway_dashboard);
+
+
     }
 
     @Override
@@ -200,19 +217,21 @@ public class GatewayDashboardActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_gateways) {
+            txtNavMenuUserMail.setText(userMail);
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_faq) {
             //TODO :
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_buy_device) {
             //TODO :
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_settings) {
             //TODO :
-        } else if (id == R.id.nav_share) {
-            //TODO :
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_about_us) {
             //TODO :
         }
+//        else if (id == R.id.nav_send) {
+//            //TODO :isimlerini değiştirip ekliycem
+//        }
 
         drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -287,6 +306,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
             Intent startSensorDashboardActivity = new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class);
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_ID, gateway.getGatewayId());
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_CODE, getDeviceCodeById(gateway.getGatewayId()));
+            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_GATEWAY_LABEL, gateway.getGatewayLabel());
             startActivity(startSensorDashboardActivity);
         }
     }

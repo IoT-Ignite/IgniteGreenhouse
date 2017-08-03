@@ -9,6 +9,7 @@
     tools:openDrawer="start">
 
     <include
+        android:id="@+id/included_app_bar_gateway_dashboard_on_activity_gateway_dashboard"
         layout="@layout/app_bar_gateway_dashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

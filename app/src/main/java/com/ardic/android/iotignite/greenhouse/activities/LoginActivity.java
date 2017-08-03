@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -32,10 +29,6 @@ import com.ardic.android.iotignite.greenhouse.listeners.LoginAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -241,6 +234,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
     private void startGatewayDashboardActivity() {
         Intent intent = new Intent(LoginActivity.this, GatewayDashboardActivity.class);
+        intent.putExtra(Constants.Extra.EXTRA_USER_MAIL, email);
         startActivity(intent);
     }
 

@@ -44,13 +44,13 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:backgroundTint="@color/fab"
-        app:srcCompat="@drawable/add" />
-
+        app:srcCompat="@drawable/add"
+        />
 
     <ImageView
         android:id="@+id/no_gateway_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_gravity="bottom|center"
         android:src="@drawable/add_a_gateway"
         android:visibility="invisible" />

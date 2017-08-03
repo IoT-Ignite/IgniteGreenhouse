@@ -6,4 +6,12 @@
         android:endColor="#000000"
         android:startColor="#FF424242"
         android:type="linear" />
+<!-- dursun belki kullanırım -->
+   <!-- <gradient
+        android:angle="135"
+        android:centerColor="#FFF"
+        android:endColor="#FFF"
+        android:startColor="#FFF"
+        android:type="linear" />
+        -->
 </shape>

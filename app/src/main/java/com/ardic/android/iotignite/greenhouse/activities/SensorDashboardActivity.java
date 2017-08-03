@@ -79,6 +79,7 @@ public class SensorDashboardActivity extends AppCompatActivity
     private RecyclerSensorAdapter recyclerSensorAdapter;
     private SwipeRefreshLayout sensorSwipeRefreshLayout;
 
+    private String deviceLabel;
     private String deviceId;
     private String deviceCode;
     private DeviceNodeInventoryController mDeviceNodeInventoryController;
@@ -195,6 +196,8 @@ public class SensorDashboardActivity extends AppCompatActivity
         loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress);
 
         mNoSensorImageView = (ImageView) findViewById(R.id.no_sensor_image_view);
+
+        setTitle(deviceLabel);
     }
 
 
@@ -215,19 +218,20 @@ public class SensorDashboardActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_gateways) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_faq) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_buy_device) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_settings) {
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_about_us) {
 
         }
+//        else if (id == R.id.nav_send) {
+// TODO : isimleri değiştirip ekliycem 
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -307,6 +311,9 @@ public class SensorDashboardActivity extends AppCompatActivity
 
             if (intent.hasExtra(Constants.Extra.EXTRA_DEVICE_CODE)) {
                 deviceCode = intent.getStringExtra(Constants.Extra.EXTRA_DEVICE_CODE);
+            }
+            if (intent.hasExtra(Constants.Extra.EXTRA_GATEWAY_LABEL)) {
+                deviceLabel = intent.getStringExtra(Constants.Extra.EXTRA_GATEWAY_LABEL);
             }
         }
     }
