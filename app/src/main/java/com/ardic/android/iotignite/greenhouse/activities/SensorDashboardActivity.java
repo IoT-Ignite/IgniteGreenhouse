@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -79,6 +80,9 @@ public class SensorDashboardActivity extends AppCompatActivity
     private LinearLayoutManager layoutManager;
     private RecyclerSensorAdapter recyclerSensorAdapter;
     private SwipeRefreshLayout sensorSwipeRefreshLayout;
+    private TextView txtNavMenuUserMail;
+    private String userMail;
+    private Uri uri;
 
     private String deviceLabel;
     private String deviceId;
@@ -190,6 +194,18 @@ public class SensorDashboardActivity extends AppCompatActivity
         mNoSensorImageView = (ImageView) findViewById(R.id.no_sensor_image_view);
 
         setTitle(deviceLabel);
+
+        /**
+         * Set user mail to TextView on side navigation menu header.
+         */
+        if(!TextUtils.isEmpty(getIntent().getStringExtra(Constants.Extra.EXTRA_USER_MAIL))) {
+            userMail = getIntent().getStringExtra(Constants.Extra.EXTRA_USER_MAIL);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View header = navigationView.getHeaderView(0);
+            txtNavMenuUserMail = header.findViewById(R.id.nav_menu_header_user_mail);
+            txtNavMenuUserMail.setText(userMail);
+        }
+
     }
 
 
@@ -207,25 +223,37 @@ public class SensorDashboardActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
+        int id = item.getItemId();
         if (id == R.id.nav_gateways) {
-            // Handle the camera action
+            startActivity(new Intent(SensorDashboardActivity.this, GatewayDashboardActivity.class));
+        } else if (id == R.id.nav_settings) {
+            //TODO :
         } else if (id == R.id.nav_faq) {
+
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
         } else if (id == R.id.nav_buy_device) {
 
-        } else if (id == R.id.nav_settings) {
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
         } else if (id == R.id.nav_about_us) {
 
-        }
-//        else if (id == R.id.nav_send) {
-// TODO : isimleri değiştirip ekliycem 
-//        }
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
+        } else if (id == R.id.nav_contact) {
+
+            uri = Uri.parse("http://www.iot-ignite.com/contact");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
+        } else if (id == R.id.nav_log_out) {
+            startActivity(new Intent(SensorDashboardActivity.this, LoginActivity.class));
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_sensor_dashboard_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -292,17 +320,13 @@ public class SensorDashboardActivity extends AppCompatActivity
         Log.i(TAG, "Position on recycler view:" + position);
         SensorViewModel sensor = sensorList.get(position);
         RecyclerSensorAdapter.ViewHolder viewHolder = new RecyclerSensorAdapter.ViewHolder(v);
-        Log.i(TAG, "ehehehehehe1");
         if (v.equals(viewHolder.imgSensorInfo)) {
-            Log.i(TAG, "ehehehehehe2");
             Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.card_view_info_dialog);
             TextView text = dialog.findViewById(R.id.info_text);
             text.setText("Some information here about " + sensor.getSensorType() + " ehehe Patrick :3");
             dialog.show();
-
         } else if (sensor != null && !TextUtils.isEmpty(sensor.getSensorId())) {
-            Log.i(TAG, "ehehehehehe3");
             Toast.makeText(getApplicationContext(), " Position: " + position + " Sensor ID: " + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
         }
     }
@@ -589,7 +613,6 @@ public class SensorDashboardActivity extends AppCompatActivity
         }
         super.onDestroy();
     }
-
 
     private void updateSensorCardView(String thingId, String lastData, Date date, int connected) {
         int sensorIndex = getSensorViewModelIndexById(thingId);

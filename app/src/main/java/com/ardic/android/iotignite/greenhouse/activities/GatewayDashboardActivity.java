@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -23,7 +24,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -60,6 +60,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private ImageView mNoGwImageView;
     private TextView txtNavMenuUserMail;
     private String userMail;
+    private Uri uri;
 
     private RecyclerView recyclerView;
     private List<GatewayViewModel> gatewayList = new ArrayList<>();
@@ -210,24 +211,36 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_gateways) {
-            txtNavMenuUserMail.setText(userMail);
-            // Handle the camera action
-        } else if (id == R.id.nav_faq) {
-            //TODO :
-        } else if (id == R.id.nav_buy_device) {
-            //TODO :
+
         } else if (id == R.id.nav_settings) {
             //TODO :
+        } else if (id == R.id.nav_faq) {
+
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
+        } else if (id == R.id.nav_buy_device) {
+
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
         } else if (id == R.id.nav_about_us) {
-            //TODO :
+
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
+        } else if (id == R.id.nav_contact) {
+
+            uri = Uri.parse("http://www.iot-ignite.com/contact");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
+        } else if (id == R.id.nav_log_out) {
+            startActivity(new Intent(GatewayDashboardActivity.this, LoginActivity.class));
         }
-//        else if (id == R.id.nav_send) {
-//            //TODO :isimlerini değiştirip ekliycem
-//        }
 
         drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -311,6 +324,9 @@ public class GatewayDashboardActivity extends AppCompatActivity
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_ID, gateway.getGatewayId());
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_CODE, getDeviceCodeById(gateway.getGatewayId()));
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_GATEWAY_LABEL, gateway.getGatewayLabel());
+            if(!TextUtils.isEmpty(userMail)) {
+                startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_USER_MAIL, userMail);
+            }
             startActivity(startSensorDashboardActivity);
         }
     }
