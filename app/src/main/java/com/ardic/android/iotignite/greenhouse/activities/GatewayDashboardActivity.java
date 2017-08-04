@@ -1,6 +1,7 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -59,7 +60,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
     private ImageView mNoGwImageView;
     private TextView txtNavMenuUserMail;
     private String userMail;
-    private ImageView imgGatewayCardInfo;
 
     private RecyclerView recyclerView;
     private List<GatewayViewModel> gatewayList = new ArrayList<>();
@@ -163,7 +163,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        // drawer.addDrawerListener(toggle);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -196,9 +195,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
         txtNavMenuUserMail = header.findViewById(R.id.nav_menu_header_user_mail);
         txtNavMenuUserMail.setText(userMail);
-
-        View dashboard = findViewById(R.id.included_app_bar_gateway_dashboard_on_activity_gateway_dashboard);
-
 
     }
 
@@ -300,8 +296,16 @@ public class GatewayDashboardActivity extends AppCompatActivity
     public void onItemClick(View v, int position) {
         Log.i(TAG, "Position on recycler view:" + position);
         GatewayViewModel gateway = gatewayList.get(position);
+        RecyclerGatewayAdapter.ViewHolder viewHolder = new RecyclerGatewayAdapter.ViewHolder(v);
+        if (v.equals(viewHolder.imgGatewayInfo)) {
 
-        if (gateway != null && !TextUtils.isEmpty(gateway.getGatewayId())) {
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.card_view_info_dialog);
+            TextView text = dialog.findViewById(R.id.info_text);
+            text.setText("Some information here about "  + gateway.getGatewayLabel() + " ehehe Patrick :3");
+            dialog.show();
+
+        } else if (gateway != null && !TextUtils.isEmpty(gateway.getGatewayId())) {
             Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
             Intent startSensorDashboardActivity = new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class);
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_ID, gateway.getGatewayId());

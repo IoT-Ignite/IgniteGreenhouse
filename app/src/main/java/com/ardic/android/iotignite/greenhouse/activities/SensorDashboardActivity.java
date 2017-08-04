@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
@@ -175,16 +176,7 @@ public class SensorDashboardActivity extends AppCompatActivity
         recyclerView.setLayoutManager(layoutManager);
 
         sensorList = new ArrayList<>();
-        recyclerSensorAdapter = new RecyclerSensorAdapter(sensorList, new CustomCardViewClickListener() {
-
-            @Override
-            public void onItemClick(View v, int position) {
-                Log.i("position", "Position on recycler view:" + position);
-                SensorViewModel sensor = sensorList.get(position);
-                Toast.makeText(getApplicationContext(), "position:" + " " + position + " " + "Sensor ID:" + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        recyclerSensorAdapter = new RecyclerSensorAdapter(sensorList, this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recyclerSensorAdapter);
@@ -299,7 +291,20 @@ public class SensorDashboardActivity extends AppCompatActivity
     public void onItemClick(View v, int position) {
         Log.i(TAG, "Position on recycler view:" + position);
         SensorViewModel sensor = sensorList.get(position);
-        Toast.makeText(getApplicationContext(), " Position: " + position + " Sensor ID: " + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
+        RecyclerSensorAdapter.ViewHolder viewHolder = new RecyclerSensorAdapter.ViewHolder(v);
+        Log.i(TAG, "ehehehehehe1");
+        if (v.equals(viewHolder.imgSensorInfo)) {
+            Log.i(TAG, "ehehehehehe2");
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.card_view_info_dialog);
+            TextView text = dialog.findViewById(R.id.info_text);
+            text.setText("Some information here about " + sensor.getSensorType() + " ehehe Patrick :3");
+            dialog.show();
+
+        } else if (sensor != null && !TextUtils.isEmpty(sensor.getSensorId())) {
+            Log.i(TAG, "ehehehehehe3");
+            Toast.makeText(getApplicationContext(), " Position: " + position + " Sensor ID: " + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void getGatewayInfo() {
