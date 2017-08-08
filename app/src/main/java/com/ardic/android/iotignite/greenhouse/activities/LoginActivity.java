@@ -164,8 +164,10 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             }
 
         } else if (view.equals(txtForgotPassword)) {
-            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-            startActivity(intent);
+            Toast.makeText(this, getString(R.string.info_disabled_forgot_password_activity), Toast.LENGTH_SHORT).show();
+            //TODO: Forgot password not ready for now.
+            // Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            //startActivity(intent);
 
         } else if (view.equals(txtSignUpNow)) {
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
@@ -210,9 +212,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(TAG, "Login Activity onActivityResult 1");
         if (resultCode == RESULT_OK) {
-            Log.i(TAG, "Login Activity onActivityResult 2");
             email = data.getStringExtra(Constants.Extra.EXTRA_USERNAME);
             password = data.getStringExtra(Constants.Extra.EXTRA_PASSWORD);
             editTextMail.setText(email);

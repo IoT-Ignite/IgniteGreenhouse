@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
-import com.ardic.android.iotignite.greenhouse.CustomCardViewClickListener;
+import com.ardic.android.iotignite.greenhouse.listeners.CardViewClickListener;
 import com.ardic.android.iotignite.greenhouse.GatewayViewModel;
 import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.RecyclerGatewayAdapter;
@@ -51,7 +51,7 @@ import static com.ardic.android.iotignite.greenhouse.Constants.GATEWAY_DASHBOARD
 
 public class GatewayDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-        CustomCardViewClickListener, SwipeRefreshLayout.OnRefreshListener, DeviceAsyncTaskListener,
+        CardViewClickListener, SwipeRefreshLayout.OnRefreshListener, DeviceAsyncTaskListener,
         DROMAsyncTaskListener {
 
     private static final String TAG = GatewayDashboardActivity.class.getSimpleName();

@@ -4,31 +4,31 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_gateways"
-            android:icon="@drawable/wifi"
+            android:icon="@drawable/wifi_nav_drawer_vector"
             android:title="Gateways" />
         <item
             android:id="@+id/nav_settings"
-            android:icon="@drawable/settings"
+            android:icon="@drawable/settings_nav_drawer_vector"
             android:title="Settings" />
         <item
             android:id="@+id/nav_faq"
-            android:icon="@drawable/question"
+            android:icon="@drawable/question_nav_drawer_vector"
             android:title="FAQ" />
         <item
             android:id="@+id/nav_buy_device"
-            android:icon="@drawable/shopping_cart"
+            android:icon="@drawable/cart_nav_drawer_vector"
             android:title="Buy Device" />
         <item
             android:id="@+id/nav_about_us"
-            android:icon="@drawable/group"
+            android:icon="@drawable/about_us_nav_drawer_vector"
             android:title="About Us" />
         <item
             android:id="@+id/nav_contact"
-            android:icon="@drawable/arroba"
+            android:icon="@drawable/contact_nav_drawer_vector"
             android:title="Contact" />
         <item
             android:id="@+id/nav_log_out"
-            android:icon="@drawable/logout"
+            android:icon="@drawable/logout_nav_drawer_vector"
             android:title="Log Out" />
 
 </menu>

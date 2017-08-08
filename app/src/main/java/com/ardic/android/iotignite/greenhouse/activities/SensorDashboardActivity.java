@@ -33,7 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
-import com.ardic.android.iotignite.greenhouse.CustomCardViewClickListener;
+import com.ardic.android.iotignite.greenhouse.listeners.CardViewClickListener;
 import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.RecyclerSensorAdapter;
 import com.ardic.android.iotignite.greenhouse.SensorViewModel;
@@ -64,7 +64,7 @@ import static com.ardic.android.iotignite.greenhouse.Constants.SENSOR_DASHBOARD_
 
 public class SensorDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener, CustomCardViewClickListener,
+        SwipeRefreshLayout.OnRefreshListener, CardViewClickListener,
         DeviceNodeInventoryAsyncTaskListener, LastThingDataAsyncTaskListener, RegisterSensorControllerAsyncTaskListener {
 
     private static final String TAG = SensorDashboardActivity.class.getSimpleName();

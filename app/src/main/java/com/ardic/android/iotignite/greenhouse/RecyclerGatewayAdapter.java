@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ardic.android.iotignite.greenhouse.listeners.CardViewClickListener;
+
 import java.util.List;
 
 /**
@@ -17,9 +19,9 @@ import java.util.List;
 public class RecyclerGatewayAdapter extends RecyclerView.Adapter<RecyclerGatewayAdapter.ViewHolder> {
 
     private List<GatewayViewModel> gatewayList;
-    private CustomCardViewClickListener gatewayCardViewClickListener;
+    private CardViewClickListener gatewayCardViewClickListener;
 
-    public RecyclerGatewayAdapter(List<GatewayViewModel> gatewayList, CustomCardViewClickListener gatewayCardViewClickListener) {
+    public RecyclerGatewayAdapter(List<GatewayViewModel> gatewayList, CardViewClickListener gatewayCardViewClickListener) {
 
         this.gatewayList = gatewayList;
         this.gatewayCardViewClickListener = gatewayCardViewClickListener;

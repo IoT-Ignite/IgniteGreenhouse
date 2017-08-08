@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ardic.android.iotignite.greenhouse.listeners.CardViewClickListener;
 import com.ardic.android.iotignite.lib.restclient.constant.Api;
 
 import java.util.List;
@@ -22,9 +23,9 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
 
     private static final String TAG = RecyclerSensorAdapter.class.getSimpleName();
     private List<SensorViewModel> sensorList;
-    private CustomCardViewClickListener sensorCardViewClickListener;
+    private CardViewClickListener sensorCardViewClickListener;
 
-    public RecyclerSensorAdapter(List<SensorViewModel> sensorList, CustomCardViewClickListener sensorCardViewClickListener) {
+    public RecyclerSensorAdapter(List<SensorViewModel> sensorList, CardViewClickListener sensorCardViewClickListener) {
 
         this.sensorList = sensorList;
         this.sensorCardViewClickListener = sensorCardViewClickListener;
