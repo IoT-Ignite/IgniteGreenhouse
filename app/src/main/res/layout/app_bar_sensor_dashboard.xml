@@ -7,6 +7,7 @@
     tools:context="com.ardic.android.iotignite.greenhouse.activities.SensorDashboardActivity">
 
 <LinearLayout
+    android:id="@+id/app_bar_sensor_dashboard_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -35,15 +36,6 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/sensor_fab"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@color/fab"
-        app:srcCompat="@drawable/add" />
-
     <ImageView
         android:id="@+id/no_sensor_image_view"
         android:layout_width="200dp"
@@ -51,5 +43,16 @@
         android:src="@drawable/add_a_sensor"
         android:layout_gravity="bottom|center"
         android:visibility="invisible"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/sensor_fab"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@color/fab"
+        app:layout_anchor="@+id/app_bar_sensor_dashboard_linear_layout"
+        app:layout_anchorGravity="bottom|right"
+        app:srcCompat="@drawable/add_fab" />
 
 </android.support.design.widget.CoordinatorLayout>
