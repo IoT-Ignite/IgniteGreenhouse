@@ -12,6 +12,7 @@ import com.ardic.android.iotignite.lib.restclient.constant.ErrorMessages;
 import com.ardic.android.iotignite.lib.restclient.constant.ResponseCode;
 import com.ardic.android.iotignite.lib.restclient.exception.IgniteRestClientException;
 import com.ardic.android.iotignite.lib.restclient.exception.IgniteRestClientThrowable;
+import com.ardic.android.iotignite.lib.restclient.listeners.RefreshTokenTaskListener;
 import com.ardic.android.iotignite.lib.restclient.model.AccessToken;
 import com.ardic.android.iotignite.lib.restclient.model.ActionMessage;
 import com.ardic.android.iotignite.lib.restclient.model.AppKey;
@@ -44,13 +45,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by yavuz.erzurumlu on 07/07/2017.
  */
 
-public class IgniteRestClient {
+public class IgniteRestClient implements RefreshTokenTaskListener {
 
     private static final String TAG = IgniteRestClient.class.getSimpleName();
     private boolean autoRefresh = true;
     private static final String AUTH_REQUEST_TOKEN = "Basic ZnJvbnRlbmQ6";
     private static final String GRANT_TYPE = "password";
-    private static final String REFRESH_GRANT_TYPE = "refresh_token";
 
     private Retrofit.Builder mRetrofitBuilder = new Retrofit.Builder()
             .baseUrl(Api.BASE_URL)
@@ -79,7 +79,7 @@ public class IgniteRestClient {
                 Log.i(TAG, "Refresh token watchdog on duty.");
             }
             refreshToken();
-            tokenWatchdogHandler.postDelayed(this, refreshTimeInMillis);
+
         }
     };
 
@@ -171,35 +171,7 @@ public class IgniteRestClient {
     }
 
     public synchronized void refreshToken() {
-
-        int responseCode;
-        AccessToken refreshToken;
-        Call<AccessToken> accessTokenCall = mTokenService.getRefreshToken(REFRESH_GRANT_TYPE, accessToken.getRefreshToken());
-        try {
-            Response<AccessToken> accessTokenResponse = accessTokenCall.execute();
-            responseCode = accessTokenResponse.code();
-
-            refreshToken = accessTokenResponse.body();
-
-            refreshTimeInMillis = (refreshToken.getExpiresIn() * 1000) - 1000L;
-
-            if (Api.DEBUG) {
-                Log.d(TAG, "Code: \n" + responseCode);
-                Log.d(TAG, "Error: \n" + accessTokenResponse.message());
-                Log.d(TAG, "AccessToken: \n" + refreshToken.getAccessToken());
-                Log.d(TAG, "Token Type: \n" + refreshToken.getTokenType());
-                Log.d(TAG, "Refresh Token: \n" + refreshToken.getRefreshToken());
-                Log.d(TAG, "Expires In: \n" + refreshToken.getExpiresIn());
-                Log.d(TAG, "Scope: \n" + refreshToken.getScope());
-                Log.d(TAG, "Response Code: " + refreshToken.getResponseCode());
-            }
-
-            accessToken = refreshToken;
-
-        } catch (IOException e) {
-            Log.e(TAG, "refreshToken(): " + e);
-            throw new IgniteRestClientException(e);
-        }
+        new RefreshTokenAsyncTask(mTokenService, accessToken, this).execute();
     }
 
     public AppKey getAppKey() throws IgniteRestClientException {
@@ -703,6 +675,13 @@ public class IgniteRestClient {
 
         return responseCode;
 
+    }
+
+    @Override
+    public void onTokenRefreshed(AccessToken refreshToken) {
+        accessToken = refreshToken;
+        refreshTimeInMillis = (accessToken.getExpiresIn() * 1000) - 1000L;
+        tokenWatchdogHandler.postDelayed(tokenWatchDog, refreshTimeInMillis);
     }
 
     public static class IgniteRestClientBuilder {
