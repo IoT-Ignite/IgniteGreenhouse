@@ -103,7 +103,6 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         txtForgotPassword.setOnClickListener(this);
 
         imgMailValidate.setVisibility(View.INVISIBLE);
-
         setSupportActionBar(toolbar);
 
         loadLoginInfo();

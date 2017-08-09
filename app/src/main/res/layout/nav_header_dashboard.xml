@@ -13,10 +13,11 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
+        android:layout_marginTop="16dp"
         android:id="@+id/nav_menu_header_user_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        app:srcCompat="@drawable/icon_greenhouse" />
+        app:srcCompat="@mipmap/ic_launcher_round" />
 
 
     <TextView
