@@ -6,9 +6,9 @@ Ignite Greenhouse is an open-source IoT autonomous greenhouse project for data c
 Gateway devices are at center of schema. Gateways interact other elements: Sensors, Cloud and your Android devices.
 
 1. Sensors publish and gateways receive data with using the RF protocol. 
-2. Gateway send the datas to IoT Ignite Cloud platform with using [Gateway App](https://github.com/freeloki/GreenhousePrivate/wiki) for collecting and processing data.
+2. Gateway send the data to IoT-Ignite Cloud platform with using [Gateway App](https://github.com/freeloki/GreenhousePrivate/wiki) that already loaded on gateway for collecting and processing data.
 3. Cloud returns processed data to gateway. 
-4. Finally the data comes from your Android device with using IoT Ignite Rest Client.
+4. Finally the data comes to your Android device with using IoT-Ignite Rest Client.
 
 For more technical details about APIs that used in this application, visit [Wiki](https://github.com/freeloki/GreenhousePrivate/wiki) page.
 
