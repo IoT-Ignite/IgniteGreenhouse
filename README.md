@@ -1,7 +1,7 @@
 # Ignite Greenhouse for Android
 Ignite Greenhouse is an open-source IoT autonomous greenhouse project for data collection, visualization, and device management. You can see various sensor datas from your greenhouse on your Android device.
 
-## Getting Started
+## How is it works?
 
 Gateway devices are at center of schema. Gateways interact other elements: Sensors, Cloud and your Android devices.
 
@@ -12,15 +12,21 @@ Gateway devices are at center of schema. Gateways interact other elements: Senso
 
 For more technical details about APIs that used in this application, visit [Wiki](https://github.com/freeloki/GreenhousePrivate/wiki) page.
 
-### Prerequisite
+## Getting Started
 
-What things you need to install the software and how to install them
+What things you need to get information of your greenhouse.
 
-```
-Give examples
-```
+1. [Install Ignite Greenhouse for Android](https://play.google.com/store/apps/details?id=com.ardic.android.kuuklaparentalcontrol)
 
-### Installing
+2. [Have Ignite Greenhouse Kit](https://www.iot-ignite.com/) (Gateway, Gateway App, Sensors)
+
+   * Hardware that used as Gateway is Raspberry PI
+   * Gateway App perform connection transaction with cloud and your mobile device
+   * You can choose many sensor you want, e.g., soil moisture, temperature, humidity
+   
+3. Register your Ignite Greenhouse Kit with using your Android device.
+
+### Registering your Ignite Greenhouse Kit
 
 A step by step series of examples that tell you have to get a development env running
 
