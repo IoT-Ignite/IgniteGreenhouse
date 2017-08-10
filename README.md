@@ -8,7 +8,7 @@ Gateway devices are at center of schema. Gateways interact other elements: Senso
 1. Sensors publish and gateways receive data with using the RF protocol. 
 2. Gateway send the data to IoT-Ignite Cloud platform with using [Gateway App](https://github.com/freeloki/GreenhousePrivate/wiki) that already loaded on gateway for collecting and processing data.
 3. Cloud returns processed data to gateway. 
-4. Finally the data comes to your Android device with using IoT-Ignite Rest Client.
+4. Finally the data comes to your Android device with using Ignite Rest Client API.
 
 For more technical details about APIs that used in this application, visit [Wiki](https://github.com/freeloki/GreenhousePrivate/wiki) page.
 
@@ -24,13 +24,13 @@ What things you need to get information of your greenhouse.
    * Gateway App perform connection transaction with cloud and your mobile device
    * You can choose many sensor you want, e.g., soil moisture, temperature, humidity
    
+  :zap: Or you can make your own Greenhouse Kit by following [step by step series of examples](www.iot-ignite.com) that tell you have to get a development enviornment. :zap:
+   
 3. Register your Ignite Greenhouse Kit with using your Android device.
 
 ### Registering your Ignite Greenhouse Kit
 
-A step by step series of examples that tell you have to get a development env running
-
-Say what the step will be
+After you logged in 
 
 ```
 Give the example
@@ -70,9 +70,11 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [IoT-Ignite API](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
+* [Ignite REST Client API](https://maven.apache.org/) - Dependency Management
+* [retrofit](http://square.github.io/retrofit/) - For REST calls
+* [barcodescanner](https://github.com/dm77/barcodescanner) - Using QR Scanner for register gateway and sensor
+* [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView) - Using for loading screen
 
 ## Contributing
 
@@ -84,7 +86,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **ARDIC** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
