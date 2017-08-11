@@ -1,7 +1,7 @@
 # Ignite Greenhouse for Android
 Ignite Greenhouse is an open-source IoT autonomous greenhouse project for data collection, visualization, and device management. You can see various sensor datas from your greenhouse on your Android device.
 
-## How is it works?
+## How it works?
 
 Gateway devices are at center of schema. Gateways interact other elements: Sensors, Cloud and your Android devices.
 
