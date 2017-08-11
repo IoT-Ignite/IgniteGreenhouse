@@ -30,39 +30,13 @@ What things you need to get information of your greenhouse.
 
 ### Registering your Ignite Greenhouse Kit
 
-After you logged in 
+* First, you have to log in. 
 
-```
-Give the example
-```
+* You are at the gateway list screen now. Click add button and add your first gateway. Scan QR code on your gateway device to register it.
 
-And repeat
+* The gateway will appear on your dashboard. Now you can add another gateway or going to sensor dashboard by clicking gateway.
 
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
+* On sensor dashboard you can add and register new sensors by clicking add button. Then sensors will appear on sensor dashboard. 
 
 ## Deployment
 
@@ -72,7 +46,7 @@ Add additional notes about how to deploy this on a live system
 
 * [IoT-Ignite API](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
 * [Ignite REST Client API](https://maven.apache.org/) - Dependency Management
-* [retrofit](http://square.github.io/retrofit/) - For REST calls
+* [Retrofit](http://square.github.io/retrofit/) - For REST calls
 * [barcodescanner](https://github.com/dm77/barcodescanner) - Using QR Scanner for register gateway and sensor
 * [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView) - Using for loading screen
 
@@ -86,9 +60,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **ARDIC** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **ARDIC R&D** - [http://www.ardictech.com/](http://www.ardictech.com/)
 
 ## License
 
