@@ -40,10 +40,6 @@ Gateway devices are at the center of the scheme. Gateways interact other element
 
 For more technical details about APIs that used in this application, visit [Wiki](https://github.com/freeloki/GreenhousePrivate/wiki) page.
 
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
 ## Project Dependencies
 
 * [IoT-Ignite API](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
@@ -53,24 +49,7 @@ Add additional notes about how to deploy this on a live system
 * [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView) - Using for loading screen
 * [MPAndroidChart](https://github.com/PhilJay/MPAndroidChart) - Charting
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
 ## Authors
 
 * **ARDIC R&D** - [http://www.ardictech.com/](http://www.ardictech.com/)
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
