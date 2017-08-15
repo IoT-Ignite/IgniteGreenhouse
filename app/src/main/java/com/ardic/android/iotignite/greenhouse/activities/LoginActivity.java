@@ -3,6 +3,7 @@ package com.ardic.android.iotignite.greenhouse.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
     private Toolbar toolbar;
 
     private AVLoadingIndicatorView loadingIndicator;
+    private Uri uri;
 
 
     private LoginController mLoginController;
@@ -130,13 +132,16 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         int id = item.getItemId();
 
         if (id == R.id.menu_main_about) {
-            Toast.makeText(this, "About Clicked", Toast.LENGTH_SHORT).show();
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
         } else if (id == R.id.menu_main_buy_device) {
-            Toast.makeText(this, "Buying Device Clicked", Toast.LENGTH_SHORT).show();
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
         } else if (id == R.id.menu_main_faq) {
-            Toast.makeText(this, "FAQ Clicked", Toast.LENGTH_SHORT).show();
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
         } else {
             return super.onOptionsItemSelected(item);
