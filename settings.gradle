@@ -1,1 +1,3 @@
-include ':app', ':IgniteRestClientLibrary'
+include ':app'
+include ':igniterestclientlib'
+project(':igniterestclientlib').projectDir = new File(settingsDir, '../../libs/IgniteRestClientLibrary/igniterestclientlib')
