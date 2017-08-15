@@ -112,10 +112,12 @@ public class DialogChart extends Dialog {
                                 /**
                                  * Incoming history list is reverse sorted. new to old. So add it to list inverted.
                                  */
-                                for (int k = dataList.size() - 1; k < -1; k--) {
-                                    Log.i(TAG, "Adding entry : " + dataList.get(k).getData().get(0));
-                                    entries.add(new Entry(k, Float.valueOf(dataList.get(k).getData().get(0))));
 
+                                int reverseIteration = dataList.size() - 1;
+                                while (reverseIteration >= 0) {
+                                    Log.i(TAG, "Adding entry : " + dataList.get(reverseIteration).getData().get(0));
+                                    entries.add(new Entry((dataList.size() - reverseIteration), Float.valueOf(dataList.get(reverseIteration).getData().get(0))));
+                                    reverseIteration--;
                                     // TODO : Commented lines are for adding time values to xAxis.
                                     // Log.i(TAG, "Adding entry Create Date: " + dataList.get(k).getCreateDate() + "\nDATE : " + new Date(dataList.get(k).getCreateDate()).toString());
                                     // long difference = dataList.get(k).getCreateDate() - lastData.getCreateDate();

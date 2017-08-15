@@ -813,8 +813,8 @@ public class SensorDashboardActivity extends AppCompatActivity
                 textViewList.get(5).setText("Texas Instruments");
                 textViewList.get(6).setText("Type");
                 textViewList.get(7).setText("Humidity");
-                textViewList.get(8).setText("Operating Range in C");
-                textViewList.get(9).setText("-40 to 125");
+                textViewList.get(8).setText("Operating Range in %");
+                textViewList.get(9).setText("0 to 100");
                 textViewList.get(10).setText("Humidity Accuracy");
                 textViewList.get(11).setText("±0.2% (typical)");
             }
