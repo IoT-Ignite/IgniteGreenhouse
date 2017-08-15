@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ardic.android.iotignite.greenhouse.listeners.CardViewClickListener;
 import com.ardic.android.iotignite.lib.restclient.constant.Api;
 
 import java.util.List;
@@ -22,35 +23,41 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
 
     private static final String TAG = RecyclerSensorAdapter.class.getSimpleName();
     private List<SensorViewModel> sensorList;
-    private CustomCardViewClickListener listenerSensorCardViewClick;
+    private CardViewClickListener sensorCardViewClickListener;
 
-    public RecyclerSensorAdapter(List<SensorViewModel> sensorList, CustomCardViewClickListener listenerSensorCardViewClick) {
+    public RecyclerSensorAdapter(List<SensorViewModel> sensorList, CardViewClickListener sensorCardViewClickListener) {
 
         this.sensorList = sensorList;
-        this.listenerSensorCardViewClick = listenerSensorCardViewClick;
+        this.sensorCardViewClickListener = sensorCardViewClickListener;
     }
 
     @Override
     public RecyclerSensorAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_sensor_dashboard_cardview_item, parent, false);
-        final ViewHolder view_holder = new ViewHolder(v);
+        final ViewHolder viewHolder = new ViewHolder(v);
+
+        viewHolder.imgSensorInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sensorCardViewClickListener.onItemClick(view, viewHolder.getAdapterPosition());
+            }
+        });
 
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listenerSensorCardViewClick.onItemClick(v, view_holder.getAdapterPosition());
+                sensorCardViewClickListener.onItemClick(v, viewHolder.getAdapterPosition());
             }
         });
 
-        return view_holder;
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         if (Api.DEBUG) {
-            ;
             Log.i(TAG, "List : " + sensorList.toString());
         }
 
@@ -83,6 +90,7 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
         public ImageView imgSensorType;
         public ImageView imgSensorStatus;
         public CardView cardViewSensor;
+        public ImageView imgSensorInfo;
 
 
         public ViewHolder(View view) {
@@ -95,6 +103,7 @@ public class RecyclerSensorAdapter extends RecyclerView.Adapter<RecyclerSensorAd
             imgSensorType = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_type);
             imgSensorStatus = view.findViewById(R.id.content_sensor_dashboard_card_view_item_img_sensor_status);
             txtNodeId = view.findViewById(R.id.content_sensor_dashboard_card_view_item_txt_sensor_node_id);
+            imgSensorInfo = view.findViewById(R.id.img_sensor_info_content_sensor_dashboard_card_view_item);
         }
     }
 

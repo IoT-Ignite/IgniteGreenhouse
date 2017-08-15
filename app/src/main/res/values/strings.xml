@@ -26,5 +26,9 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Forgot password activity error msg -->
+    <string name="info_disabled_forgot_password_activity">"Forgot password feature is not enabled. It will be enabled on further releases."</string>
+    <string name="error_gateway_detailed_spec_dialog">"Gateway info error.Please try again later."</string>
+
 
 </resources>

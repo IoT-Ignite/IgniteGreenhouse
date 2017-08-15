@@ -106,7 +106,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View view) {
 
-        if(view.equals(btnSubmit)) {
+        if (view.equals(btnSubmit)) {
             email = edtMail.getText().toString().trim();
 
             if (!TextUtils.isEmpty(email) && email.matches(Constants.PATTERN_EMAIL)) {

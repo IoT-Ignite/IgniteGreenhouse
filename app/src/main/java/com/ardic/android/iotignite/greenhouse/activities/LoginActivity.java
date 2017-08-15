@@ -4,10 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -32,10 +29,6 @@ import com.ardic.android.iotignite.greenhouse.listeners.LoginAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import com.wang.avi.AVLoadingIndicatorView;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -110,7 +103,6 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
         txtForgotPassword.setOnClickListener(this);
 
         imgMailValidate.setVisibility(View.INVISIBLE);
-
         setSupportActionBar(toolbar);
 
         loadLoginInfo();
@@ -171,8 +163,10 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
             }
 
         } else if (view.equals(txtForgotPassword)) {
-            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-            startActivity(intent);
+            Toast.makeText(this, getString(R.string.info_disabled_forgot_password_activity), Toast.LENGTH_SHORT).show();
+            //TODO: Forgot password not ready for now.
+            // Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            //startActivity(intent);
 
         } else if (view.equals(txtSignUpNow)) {
             Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
@@ -217,9 +211,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(TAG, "Login Activity onActivityResult 1");
         if (resultCode == RESULT_OK) {
-            Log.i(TAG, "Login Activity onActivityResult 2");
             email = data.getStringExtra(Constants.Extra.EXTRA_USERNAME);
             password = data.getStringExtra(Constants.Extra.EXTRA_PASSWORD);
             editTextMail.setText(email);
@@ -241,6 +233,7 @@ public class LoginActivity extends AppCompatActivity implements CompoundButton.O
 
     private void startGatewayDashboardActivity() {
         Intent intent = new Intent(LoginActivity.this, GatewayDashboardActivity.class);
+        intent.putExtra(Constants.Extra.EXTRA_USER_MAIL, email);
         startActivity(intent);
     }
 

@@ -53,11 +53,11 @@
                     android:background="@android:drawable/presence_invisible"
                     card_view:layout_constraintHorizontal_bias="1.0"
                     card_view:layout_constraintLeft_toLeftOf="parent"
-                    card_view:layout_constraintRight_toLeftOf="@+id/content_sensor_dashboard_card_view_item_img_sensor_info"
+                    card_view:layout_constraintRight_toLeftOf="@+id/img_sensor_info_content_sensor_dashboard_card_view_item"
                     card_view:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/content_sensor_dashboard_card_view_item_img_sensor_info"
+                    android:id="@+id/img_sensor_info_content_sensor_dashboard_card_view_item"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginLeft="8dp"

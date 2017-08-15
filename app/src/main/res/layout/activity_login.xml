@@ -83,6 +83,7 @@
         android:background="@drawable/button_shape"
         android:text="SIGN IN"
         android:textColor="@android:color/white"
+        android:stateListAnimator="@null"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_login_cb_remember_me" />

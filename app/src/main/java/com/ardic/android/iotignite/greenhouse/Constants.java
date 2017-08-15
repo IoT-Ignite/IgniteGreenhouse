@@ -6,12 +6,12 @@ package com.ardic.android.iotignite.greenhouse;
 
 public class Constants {
     public static final String PATTERN_EMAIL = "[a-zA-Z0-9._-]+@[a-z-]+\\.+[a-z]+";
-    public static final String MASTER_TENANT_DOMAIN = "ignite.com_greenhouse_iot-ignite.com";
-    public static final String MASTER_TENANT_BRAND = "IgniteGreenhouse";
+    public static final String MASTER_TENANT_DOMAIN = "enter-your-tenant-domain-here";
+    public static final String MASTER_TENANT_BRAND = "enter-your-tenant-brand-here";
     public static final String MASTER_TENANT_PROFILE = "Default";
-    public static final String MASTER_TENANT_USER = "greenhouse@iot-ignite.com";
-    public static final String MASTER_TENANT_PASS = "gr33nhous3";
-    public static final String MASTER_APP_KEY = "2bb69ddce24f4021a1c6b77f1ab9302c";
+    public static final String MASTER_TENANT_USER = "enter-your-tenant-user-name-here";
+    public static final String MASTER_TENANT_PASS = "enter-your-tenant-password-here";
+    public static final String MASTER_APP_KEY = "enter-your-tenant-app-4key-here";
     public static final String MASTER_POLICY = "Default";
     public static final String MASTER_PROFILE = "Default";
     public static final String USER_CONFIG_MODE = "none";
@@ -31,6 +31,10 @@ public class Constants {
     public static final String GREENHOUSE_HUMIDITY_THINGTYPE = "GHT-Humidity";
 
     public static final int CAMERA_PERMISSION_REQUEST = 1;
+
+
+    public static final long GATEWAY_DASHBOARD_UPDATE_TIME = 30000L;
+    public static final long SENSOR_DASHBOARD_UPDATE_TIME = 10000L;
 
 
     /**
@@ -60,7 +64,8 @@ public class Constants {
         public static final String EXTRA_SENSOR_QR_CODE = "sensor-qr-data";
         public static final String EXTRA_DEVICE_ID = "device-id";
         public static final String EXTRA_DEVICE_CODE = "device-code";
-
+        public static final String EXTRA_GATEWAY_LABEL = "gateway-label";
+        public static final String EXTRA_USER_MAIL = "user-mail";
     }
 
     public class ActionMessage {

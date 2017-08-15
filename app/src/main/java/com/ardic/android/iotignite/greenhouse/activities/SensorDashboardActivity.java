@@ -4,6 +4,9 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -27,26 +30,43 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
-import com.ardic.android.iotignite.greenhouse.CustomCardViewClickListener;
+import com.ardic.android.iotignite.greenhouse.DialogChart;
+import com.ardic.android.iotignite.greenhouse.controllers.ThingDataHistoryController;
+import com.ardic.android.iotignite.greenhouse.listeners.CardViewClickListener;
 import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.RecyclerSensorAdapter;
 import com.ardic.android.iotignite.greenhouse.SensorViewModel;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceNodeInventoryController;
 import com.ardic.android.iotignite.greenhouse.controllers.LastThingDataController;
 import com.ardic.android.iotignite.greenhouse.controllers.RegisterSensorController;
+import com.ardic.android.iotignite.greenhouse.listeners.ChartDataListener;
 import com.ardic.android.iotignite.greenhouse.listeners.DeviceNodeInventoryAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.listeners.LastThingDataAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.listeners.RegisterSensorControllerAsyncTaskListener;
+import com.ardic.android.iotignite.greenhouse.listeners.ThingDataHistoryAsyncTaskListener;
 import com.ardic.android.iotignite.lib.restclient.model.ActionMessage;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventory;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventoryExtras;
 import com.ardic.android.iotignite.lib.restclient.model.LastThingData;
 import com.ardic.android.iotignite.lib.restclient.model.Node;
 import com.ardic.android.iotignite.lib.restclient.model.Thing;
+import com.ardic.android.iotignite.lib.restclient.model.ThingData;
+import com.ardic.android.iotignite.lib.restclient.model.ThingDataHistory;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -54,17 +74,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static com.ardic.android.iotignite.greenhouse.Constants.CAMERA_PERMISSION_REQUEST;
+import static com.ardic.android.iotignite.greenhouse.Constants.SENSOR_DASHBOARD_UPDATE_TIME;
 
 public class SensorDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-        SwipeRefreshLayout.OnRefreshListener, CustomCardViewClickListener,
+        SwipeRefreshLayout.OnRefreshListener, CardViewClickListener,
         DeviceNodeInventoryAsyncTaskListener, LastThingDataAsyncTaskListener, RegisterSensorControllerAsyncTaskListener {
 
     private static final String TAG = SensorDashboardActivity.class.getSimpleName();
@@ -80,7 +99,11 @@ public class SensorDashboardActivity extends AppCompatActivity
     private LinearLayoutManager layoutManager;
     private RecyclerSensorAdapter recyclerSensorAdapter;
     private SwipeRefreshLayout sensorSwipeRefreshLayout;
+    private TextView txtNavMenuUserMail;
+    private String userMail;
+    private Uri uri;
 
+    private String deviceLabel;
     private String deviceId;
     private String deviceCode;
     private DeviceNodeInventoryController mDeviceNodeInventoryController;
@@ -115,6 +138,25 @@ public class SensorDashboardActivity extends AppCompatActivity
     };
 
 
+    private Handler dynamicUiUpdateHandler = new Handler();
+
+    private Runnable dynamicUiUpdateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (sensorList != null && !sensorList.isEmpty()) {
+                updateDashboard();
+            }
+            dynamicUiUpdateHandler.postDelayed(this, SENSOR_DASHBOARD_UPDATE_TIME);
+        }
+    };
+
+    private List<Thing> activeThingList = new ArrayList<>();
+
+
+    private DialogChart mChart;
+
+    private LastThingData lastActiveThingData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +165,20 @@ public class SensorDashboardActivity extends AppCompatActivity
         getGatewayInfo();
         initUI();
         updateDashboard();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dynamicUiUpdateHandler.removeCallbacks(dynamicUiUpdateRunnable);
+        dynamicUiUpdateHandler.postDelayed(dynamicUiUpdateRunnable, SENSOR_DASHBOARD_UPDATE_TIME);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dynamicUiUpdateHandler.removeCallbacks(dynamicUiUpdateRunnable);
     }
 
     private void initUI() {
@@ -149,16 +205,7 @@ public class SensorDashboardActivity extends AppCompatActivity
         recyclerView.setLayoutManager(layoutManager);
 
         sensorList = new ArrayList<>();
-        recyclerSensorAdapter = new RecyclerSensorAdapter(sensorList, new CustomCardViewClickListener() {
-
-            @Override
-            public void onItemClick(View v, int position) {
-                Log.i("position", "Position on recycler view:" + position);
-                SensorViewModel sensor = sensorList.get(position);
-                Toast.makeText(getApplicationContext(), "position:" + " " + position + " " + "Sensor ID:" + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        recyclerSensorAdapter = new RecyclerSensorAdapter(sensorList, this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recyclerSensorAdapter);
@@ -170,6 +217,20 @@ public class SensorDashboardActivity extends AppCompatActivity
         loadingIndicator = (AVLoadingIndicatorView) findViewById(R.id.progress);
 
         mNoSensorImageView = (ImageView) findViewById(R.id.no_sensor_image_view);
+
+        setTitle(deviceLabel);
+
+        /**
+         * Set user mail to TextView on side navigation menu header.
+         */
+        if (!TextUtils.isEmpty(getIntent().getStringExtra(Constants.Extra.EXTRA_USER_MAIL))) {
+            userMail = getIntent().getStringExtra(Constants.Extra.EXTRA_USER_MAIL);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View header = navigationView.getHeaderView(0);
+            txtNavMenuUserMail = header.findViewById(R.id.nav_menu_header_user_mail);
+            txtNavMenuUserMail.setText(userMail);
+        }
+
     }
 
 
@@ -187,24 +248,37 @@ public class SensorDashboardActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
+        if (id == R.id.nav_gateways) {
+            startActivity(new Intent(SensorDashboardActivity.this, GatewayDashboardActivity.class));
+        } else if (id == R.id.nav_settings) {
+            //TODO :
+        } else if (id == R.id.nav_faq) {
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_buy_device) {
 
-        } else if (id == R.id.nav_manage) {
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_about_us) {
 
-        } else if (id == R.id.nav_send) {
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
+        } else if (id == R.id.nav_contact) {
+
+            uri = Uri.parse("http://www.iot-ignite.com/contact");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
+        } else if (id == R.id.nav_log_out) {
+            startActivity(new Intent(SensorDashboardActivity.this, LoginActivity.class));
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_sensor_dashboard_drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -241,8 +315,6 @@ public class SensorDashboardActivity extends AppCompatActivity
 
             //Register sensor here
             showSensorDialog(qr);
-
-
         }
     }
 
@@ -270,7 +342,20 @@ public class SensorDashboardActivity extends AppCompatActivity
     public void onItemClick(View v, int position) {
         Log.i(TAG, "Position on recycler view:" + position);
         SensorViewModel sensor = sensorList.get(position);
-        Toast.makeText(getApplicationContext(), " Position: " + position + " Sensor ID: " + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
+        RecyclerSensorAdapter.ViewHolder viewHolder = new RecyclerSensorAdapter.ViewHolder(v);
+        if (v.equals(viewHolder.imgSensorInfo)) {
+
+            if (sensor != null && !TextUtils.isEmpty(sensor.getSensorId())) {
+                showSensorInfoDialog(sensor.getSensorId(), sensor.getSensorType());
+            }
+        } else if (sensor != null && !TextUtils.isEmpty(sensor.getSensorId())) {
+            //Toast.makeText(getApplicationContext(), " Position: " + position + " Sensor ID: " + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
+            //TODO: create sensor chart here.
+
+
+            createSensorDataHistoryChart(getThingById(sensor.getSensorId()));
+
+        }
     }
 
     private void getGatewayInfo() {
@@ -282,6 +367,9 @@ public class SensorDashboardActivity extends AppCompatActivity
 
             if (intent.hasExtra(Constants.Extra.EXTRA_DEVICE_CODE)) {
                 deviceCode = intent.getStringExtra(Constants.Extra.EXTRA_DEVICE_CODE);
+            }
+            if (intent.hasExtra(Constants.Extra.EXTRA_GATEWAY_LABEL)) {
+                deviceLabel = intent.getStringExtra(Constants.Extra.EXTRA_GATEWAY_LABEL);
             }
         }
     }
@@ -325,8 +413,6 @@ public class SensorDashboardActivity extends AppCompatActivity
         if (mDeviceNodeInventory != null) {
 
             Log.i(TAG, "Device Inventory:" + mDeviceNodeInventory.toString());
-            sensorList.clear();
-
             DeviceNodeInventoryExtras extras = mDeviceNodeInventory.getExtras();
 
 
@@ -335,6 +421,17 @@ public class SensorDashboardActivity extends AppCompatActivity
                     for (Thing t : n.getThings()) {
                         isNodeContains = true;
                         new LastThingDataController(this, deviceId, n.getNodeId(), t.getId(), t.getType(), t.getConnected(), this).execute();
+
+                        boolean isThingContains = false;
+                        for (Thing thing : activeThingList) {
+                            if (thing.getId().equals(t.getId())) {
+                                isThingContains = true;
+                            }
+                        }
+
+                        if (!isThingContains) {
+                            activeThingList.add(t);
+                        }
 
                         if (!TextUtils.isEmpty(registerThingId) && t.getId().equals(registerThingId)) {
 
@@ -389,6 +486,7 @@ public class SensorDashboardActivity extends AppCompatActivity
     @Override
     public void onLastThingDataTaskComplete(String nodeId, String thingId, String thingType, int connected, LastThingData data) {
 
+
         List<String> lastDataList;
         Date dataDate = null;
         String lastData = null;
@@ -399,7 +497,32 @@ public class SensorDashboardActivity extends AppCompatActivity
                 Log.i(TAG, "LAST DATA : " + lastData);
                 Log.i(TAG, " TYPE : " + thingType);
 
+
+                if (mChart != null && mChart.isShowing() && mChart.getThing().equals(thingId)) {
+                    if (lastActiveThingData == null) {
+                        lastActiveThingData = data;
+                    }
+                    Log.i(TAG, " Triggering new data..." + data.getData().getCreateDate() + " vs " + lastActiveThingData.getData().getCreateDate());
+
+                    Date incomingDate = new Date(data.getData().getCreateDate());
+                    Date oldDate = new Date(lastActiveThingData.getData().getCreateDate());
+
+                    int result = incomingDate.compareTo(oldDate);
+
+                    Log.i(TAG, "DateNEW : " + incomingDate.toString() + " DateOLD : " + oldDate.toString() + " RESULT : " + result);
+                    if (result == 1) {
+                        Log.i(TAG, "New Data ");
+                        mChart.updateChart().onNewData(thingId, data.getData());
+                    }
+
+                    lastActiveThingData = data;
+                } else {
+                    Log.i(TAG, " mCharDataListener is Null");
+                }
+
+
                 if (Constants.GREENHOUSE_TEMPERATURE_THINGTYPE.equals(thingType)) {
+
                     lastData += Constants.LAST_DATA_TEMP_PREFIX;
                 } else if (Constants.GREENHOUSE_HUMIDITY_THINGTYPE.equals(thingType)) {
                     lastData += Constants.LAST_DATA_HUM_PREFIX;
@@ -416,8 +539,15 @@ public class SensorDashboardActivity extends AppCompatActivity
             dataDate = new Date(System.currentTimeMillis());
         }
 
-        SensorViewModel mdl = new SensorViewModel(thingId, thingType, nodeId, lastData, dataDate, connected == 1 ? true : false);
-        updateSensorList(mdl);
+        if (checkSensorId(thingId)) {
+            // update
+            updateSensorCardView(thingId, lastData, dataDate, connected);
+        } else {
+            SensorViewModel mdl = new SensorViewModel(thingId, thingType, nodeId, lastData, dataDate, connected == 1 ? true : false);
+            addModelToSensorList(mdl);
+        }
+
+
         showLoadingProgress(false);
         sensorSwipeRefreshLayout.setRefreshing(false);
     }
@@ -494,20 +624,10 @@ public class SensorDashboardActivity extends AppCompatActivity
 
     }
 
-    private void updateSensorList(SensorViewModel mdl) {
-        boolean isModelContains = false;
-        for (SensorViewModel model : sensorList) {
-            if (model.getSensorId().equals(mdl.getSensorId())) {
-                isModelContains = true;
-                break;
-            }
-        }
-
-        if (!isModelContains) {
-            sensorList.add(mdl);
-            setNoSensorImage();
-            recyclerSensorAdapter.notifyDataSetChanged();
-        }
+    private void addModelToSensorList(SensorViewModel mdl) {
+        sensorList.add(mdl);
+        setNoSensorImage();
+        recyclerSensorAdapter.notifyDataSetChanged();
     }
 
 
@@ -556,6 +676,173 @@ public class SensorDashboardActivity extends AppCompatActivity
             drawer.removeDrawerListener(toggle);
         }
         super.onDestroy();
+    }
+
+    private void updateSensorCardView(String thingId, String lastData, Date date, int connected) {
+        int sensorIndex = getSensorViewModelIndexById(thingId);
+        if (sensorIndex != -1) {
+            sensorList.get(sensorIndex).setSensorValue(lastData);
+            sensorList.get(sensorIndex).setSensorLastSyncDateString(date);
+            sensorList.get(sensorIndex).setSensorOnline(connected == 1 ? true : false);
+            recyclerSensorAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private int getSensorViewModelIndexById(String sensorId) {
+        for (SensorViewModel mdl : sensorList) {
+            if (mdl.getSensorId().equals(sensorId)) {
+                return sensorList.indexOf(mdl);
+            }
+        }
+        return -1;
+    }
+
+    private boolean checkSensorId(String sensorId) {
+        for (SensorViewModel mdl : sensorList) {
+            if (mdl.getSensorId().equals(sensorId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Show specific info about clicked gateway.
+     * GatewayInfo Dialog Order:
+     * <p>
+     * Sensor Specifications
+     * Name
+     * -name
+     * Model
+     * -model
+     * Type
+     * -type
+     * Operating Range
+     * -op range
+     * Accuracy
+     * -accuracy
+     *
+     * @param thingId
+     */
+    private void showSensorInfoDialog(String thingId, String thingType) {
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.card_view_info_dialog);
+
+        LinearLayout mDialogLayout = dialog.findViewById(R.id.card_view_info_dialog_linear_layout);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        mDialogLayout.setLayoutParams(params);
+
+        TextView mHeader = dialog.findViewById(R.id.info_text);
+        mHeader.setPadding(100, 10, 100, 10);
+        mHeader.setTextSize(15);
+        mHeader.setText("Sensor Specifications");
+
+        List<TextView> textViewList = new ArrayList<>();
+
+        // create textviews odd ones background dark, even ones light.
+
+        for (int i = 1; i < 13; i++) {
+            TextView mText = new TextView(this);
+            mText = setTextViewBackground(mText, i);
+            textViewList.add(mText);
+        }
+
+        textViewList = fillTextViews(textViewList, thingId, thingType);
+        for (TextView v : textViewList) {
+            v.setPadding(10, 10, 10, 10);
+            v.setTextSize(15);
+            mDialogLayout.addView(v);
+        }
+        dialog.show();
+    }
+
+
+    private TextView setTextViewBackground(TextView mTextView, int number) {
+
+        if (number % 2 == 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.colorDarkGray, getTheme()));
+                mTextView.setTextColor(getResources().getColor(R.color.white, getTheme()));
+            } else {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.colorDarkGray));
+                mTextView.setTextColor(getResources().getColor(R.color.white));
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background, getTheme()));
+                mTextView.setTextColor(getResources().getColor(R.color.white, getTheme()));
+            } else {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background));
+                mTextView.setTextColor(getResources().getColor(R.color.white));
+            }
+
+        }
+        return mTextView;
+
+    }
+
+
+    private List<TextView> fillTextViews(List<TextView> textViewList, String sensorId, String thingType) {
+
+        if (!textViewList.isEmpty() && textViewList.size() == 12) {
+            if (Constants.GREENHOUSE_TEMPERATURE_THINGTYPE.equals(thingType)) {
+
+                textViewList.get(0).setText("Name");
+                textViewList.get(1).setText(sensorId);
+                textViewList.get(2).setText("Model");
+                textViewList.get(3).setText("HDC 1080");
+                textViewList.get(4).setText("Vendor");
+                textViewList.get(5).setText("Texas Instruments");
+                textViewList.get(6).setText("Type");
+                textViewList.get(7).setText("Temperature");
+                textViewList.get(8).setText("Operating Range in C");
+                textViewList.get(9).setText("-40 to 125");
+                textViewList.get(10).setText("Temperature Accuracy");
+                textViewList.get(11).setText("±0.2°C (typical)");
+            } else if (Constants.GREENHOUSE_HUMIDITY_THINGTYPE.equals(thingType)) {
+
+                textViewList.get(0).setText("Name");
+                textViewList.get(1).setText(sensorId);
+                textViewList.get(2).setText("Model");
+                textViewList.get(3).setText("HDC 1080");
+                textViewList.get(4).setText("Vendor");
+                textViewList.get(5).setText("Texas Instruments");
+                textViewList.get(6).setText("Type");
+                textViewList.get(7).setText("Humidity");
+                textViewList.get(8).setText("Operating Range in %");
+                textViewList.get(9).setText("0 to 100");
+                textViewList.get(10).setText("Humidity Accuracy");
+                textViewList.get(11).setText("±0.2% (typical)");
+            }
+        }
+
+        return textViewList;
+    }
+
+
+    private void createSensorDataHistoryChart(Thing t) {
+        mChart = new DialogChart(this, deviceId, t);
+        mChart.showDialog();
+
+    }
+
+
+    private Thing getThingById(String thingId) {
+        Thing activeThing = null;
+
+        Log.i(TAG, "Active thinglist Size : " + activeThingList.size());
+
+        for (Thing t : activeThingList) {
+            if (t.getId().equals(thingId)) {
+                activeThing = t;
+            }
+        }
+        Log.i(TAG, "Returning thing : " + activeThing.getId());
+        return activeThing;
     }
 }
 

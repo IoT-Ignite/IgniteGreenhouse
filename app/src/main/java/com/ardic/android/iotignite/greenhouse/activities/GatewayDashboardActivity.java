@@ -1,8 +1,12 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -15,8 +19,10 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,12 +30,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
-import com.ardic.android.iotignite.greenhouse.CustomCardViewClickListener;
+import com.ardic.android.iotignite.greenhouse.listeners.CardViewClickListener;
 import com.ardic.android.iotignite.greenhouse.GatewayViewModel;
 import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.RecyclerGatewayAdapter;
@@ -43,21 +52,22 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static com.ardic.android.iotignite.greenhouse.Constants.CAMERA_PERMISSION_REQUEST;
+import static com.ardic.android.iotignite.greenhouse.Constants.GATEWAY_DASHBOARD_UPDATE_TIME;
 
 public class GatewayDashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener,
-        CustomCardViewClickListener, SwipeRefreshLayout.OnRefreshListener, DeviceAsyncTaskListener,
+        CardViewClickListener, SwipeRefreshLayout.OnRefreshListener, DeviceAsyncTaskListener,
         DROMAsyncTaskListener {
 
     private static final String TAG = GatewayDashboardActivity.class.getSimpleName();
     private FloatingActionButton fabAddGateway;
     private Toolbar toolbar;
     private ImageView mNoGwImageView;
+    private TextView txtNavMenuUserMail;
+    private String userMail;
+    private Uri uri;
 
     private RecyclerView recyclerView;
     private List<GatewayViewModel> gatewayList = new ArrayList<>();
@@ -108,6 +118,18 @@ public class GatewayDashboardActivity extends AppCompatActivity
         }
     };
 
+    private Handler dynamicUiUpdateHandler = new Handler();
+
+    private Runnable dynamicUiUpdateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (gatewayList != null && !gatewayList.isEmpty()) {
+                updateDevice();
+            }
+            dynamicUiUpdateHandler.postDelayed(this, GATEWAY_DASHBOARD_UPDATE_TIME);
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +141,19 @@ public class GatewayDashboardActivity extends AppCompatActivity
         // get previous configured gateways..
         updateDashboard();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dynamicUiUpdateHandler.removeCallbacks(dynamicUiUpdateRunnable);
+        dynamicUiUpdateHandler.postDelayed(dynamicUiUpdateRunnable, GATEWAY_DASHBOARD_UPDATE_TIME);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        dynamicUiUpdateHandler.removeCallbacks(dynamicUiUpdateRunnable);
     }
 
     private void initUI() {
@@ -136,7 +171,6 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        // drawer.addDrawerListener(toggle);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -161,6 +195,15 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
         mNoGwImageView = (ImageView) findViewById(R.id.no_gateway_image_view);
 
+        /**
+         * Set user mail to TextView on side navigation menu header.
+         */
+        userMail = getIntent().getStringExtra(Constants.Extra.EXTRA_USER_MAIL);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View header = navigationView.getHeaderView(0);
+        txtNavMenuUserMail = header.findViewById(R.id.nav_menu_header_user_mail);
+        txtNavMenuUserMail.setText(userMail);
+
     }
 
     @Override
@@ -175,21 +218,35 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_gateways) {
+
+        } else if (id == R.id.nav_settings) {
             //TODO :
-        } else if (id == R.id.nav_slideshow) {
-            //TODO :
-        } else if (id == R.id.nav_manage) {
-            //TODO :
-        } else if (id == R.id.nav_share) {
-            //TODO :
-        } else if (id == R.id.nav_send) {
-            //TODO :
+        } else if (id == R.id.nav_faq) {
+
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
+        } else if (id == R.id.nav_buy_device) {
+
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
+        } else if (id == R.id.nav_about_us) {
+
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
+        } else if (id == R.id.nav_contact) {
+
+            uri = Uri.parse("http://www.iot-ignite.com/contact");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
+
+        } else if (id == R.id.nav_log_out) {
+            startActivity(new Intent(GatewayDashboardActivity.this, LoginActivity.class));
         }
 
         drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
@@ -205,15 +262,12 @@ public class GatewayDashboardActivity extends AppCompatActivity
          */
         if (view.equals(fabAddGateway)) {
 
-            //TODO : Check camera permission here. - RunTime and Manifest.
-
             Snackbar.make(view, "Scan your QR code to register your gateway.", Snackbar.LENGTH_SHORT)
                     .addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
 
                         @Override
                         public void onDismissed(Snackbar transientBottomBar, int event) {
                             super.onDismissed(transientBottomBar, event);
-//TODO checkCameraPermission
                             checkCameraPermission();
                         }
 
@@ -255,19 +309,30 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
     private boolean updateDevice() {
         getDeviceInfo();
-        return checkDevice();
+        return checkDeviceId(deviceId);
     }
 
     @Override
     public void onItemClick(View v, int position) {
         Log.i(TAG, "Position on recycler view:" + position);
         GatewayViewModel gateway = gatewayList.get(position);
+        RecyclerGatewayAdapter.ViewHolder viewHolder = new RecyclerGatewayAdapter.ViewHolder(v);
+        if (v.equals(viewHolder.imgGatewayInfo)) {
 
-        if (gateway != null && !TextUtils.isEmpty(gateway.getGatewayId())) {
-            Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
+            // TODO: Create Gateway Info Dialog Here.
+            if (gateway != null && !TextUtils.isEmpty(gateway.getGatewayId())) {
+                showGatewayInfoDialog(gateway.getGatewayId());
+            }
+
+        } else if (gateway != null && !TextUtils.isEmpty(gateway.getGatewayId())) {
+            //Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
             Intent startSensorDashboardActivity = new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class);
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_ID, gateway.getGatewayId());
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_CODE, getDeviceCodeById(gateway.getGatewayId()));
+            startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_GATEWAY_LABEL, gateway.getGatewayLabel());
+            if (!TextUtils.isEmpty(userMail)) {
+                startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_USER_MAIL, userMail);
+            }
             startActivity(startSensorDashboardActivity);
         }
     }
@@ -285,17 +350,22 @@ public class GatewayDashboardActivity extends AppCompatActivity
     }
 
     private void updateGatewayList(Device device) {
-        gatewayList.clear();
 
         if (device != null && device.getDeviceContents() != null) {
+
             for (DeviceContent cnt : device.getDeviceContents()) {
-                gatewayList.add(new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), Constants.ONLINE_DEVICE.equals(cnt.getPresence().getState()) ? true : false));
+
+                if (checkDeviceId(cnt.getDeviceId())) {
+                    updateGatewayCardView(cnt);
+                } else {
+                    gatewayList.add(new GatewayViewModel(cnt.getLabeL(), cnt.getDeviceId(), Constants.ONLINE_DEVICE.equals(cnt.getPresence().getState()) ? true : false));
+                }
             }
             recyclerGatewayAdapter.notifyDataSetChanged();
         }
     }
 
-    private boolean checkDevice() {
+    private boolean checkDeviceId(String deviceId) {
         for (GatewayViewModel mdl : gatewayList) {
             if (mdl.getGatewayId().equals(deviceId)) {
                 return true;
@@ -325,7 +395,7 @@ public class GatewayDashboardActivity extends AppCompatActivity
         if (result) {
             dromDeviceHandler.postDelayed(dromDeviceRunnable, 2000L);
         } else {
-            Toast.makeText(GatewayDashboardActivity.this, "DROM LICENCED FAILURE PLEASE TRY AGAIN !!", Toast.LENGTH_LONG).show();
+            Toast.makeText(GatewayDashboardActivity.this, "GATEWAY LICENCE FAILURE PLEASE TRY AGAIN !!!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -356,6 +426,19 @@ public class GatewayDashboardActivity extends AppCompatActivity
         }
 
         return deviceCode;
+    }
+
+    private DeviceContent getDeviceContentById(String deviceId) {
+        DeviceContent deviceContent = null;
+        for (DeviceContent content : devices.getDeviceContents()) {
+
+            if (deviceId.equals(content.getDeviceId())) {
+                deviceContent = content;
+                break;
+            }
+        }
+
+        return deviceContent;
     }
 
 
@@ -419,6 +502,145 @@ public class GatewayDashboardActivity extends AppCompatActivity
             drawer.removeDrawerListener(toggle);
         }
         super.onDestroy();
+    }
+
+    private void updateGatewayCardView(DeviceContent deviceContent) {
+        int gwIndex = getGwViewModelIndexById(deviceContent.getDeviceId());
+        if (gwIndex != -1) {
+            gatewayList.get(gwIndex).setGatewayLabel(deviceContent.getLabeL());
+            gatewayList.get(gwIndex).setGatewayOnline(Constants.ONLINE_DEVICE.equals(deviceContent.getPresence().getState()) ? true : false);
+            recyclerGatewayAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private int getGwViewModelIndexById(String deviceId) {
+        for (GatewayViewModel mdl : gatewayList) {
+            if (mdl.getGatewayId().equals(deviceId)) {
+                return gatewayList.indexOf(mdl);
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Show specific info about clicked gateway.
+     * GatewayInfo Dialog Order:
+     * <p>
+     * Gateway Specifications
+     * Model
+     * -model
+     * OS Version
+     * -os version
+     * Agent Version
+     * -agent version
+     * Network Type
+     * -wifi
+     * Public Ip
+     * -public ip
+     * Local Ip
+     * -local ip
+     *
+     * @param deviceId
+     */
+    private void showGatewayInfoDialog(String deviceId) {
+
+        DeviceContent content = getDeviceContentById(deviceId);
+
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.card_view_info_dialog);
+
+        LinearLayout mDialogLayout = dialog.findViewById(R.id.card_view_info_dialog_linear_layout);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        mDialogLayout.setLayoutParams(params);
+
+        TextView mHeader = dialog.findViewById(R.id.info_text);
+        mHeader.setPadding(100, 10, 100, 10);
+        mHeader.setTextSize(15);
+        mHeader.setText("Gateway Specifications");
+
+        List<TextView> textViewList = new ArrayList<>();
+
+        if (content != null) {
+            // create textviews odd ones background dark, even ones light.
+
+            for (int i = 1; i < 13; i++) {
+                TextView mText = new TextView(this);
+                mText = setTextViewBackground(mText, i);
+                textViewList.add(mText);
+            }
+
+            textViewList = fillTextViews(textViewList, content);
+            for (TextView v : textViewList) {
+                v.setPadding(10, 10, 10, 10);
+                v.setTextSize(15);
+                mDialogLayout.addView(v);
+            }
+
+        } else {
+            TextView mTextView = new TextView(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background, getTheme()));
+                mTextView.setTextColor(getResources().getColor(R.color.white, getTheme()));
+            } else {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background));
+                mTextView.setTextColor(getResources().getColor(R.color.white));
+            }
+
+            mTextView.setPadding(10, 10, 10, 10);
+            mTextView.setTextSize(15);
+            mTextView.setText(getString(R.string.error_gateway_detailed_spec_dialog));
+            mDialogLayout.addView(mTextView);
+        }
+        dialog.show();
+    }
+
+
+    private TextView setTextViewBackground(TextView mTextView, int number) {
+
+        if (number % 2 == 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.colorDarkGray, getTheme()));
+                mTextView.setTextColor(getResources().getColor(R.color.white, getTheme()));
+            } else {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.colorDarkGray));
+                mTextView.setTextColor(getResources().getColor(R.color.white));
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background, getTheme()));
+                mTextView.setTextColor(getResources().getColor(R.color.white, getTheme()));
+            } else {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background));
+                mTextView.setTextColor(getResources().getColor(R.color.white));
+            }
+
+        }
+        return mTextView;
+
+    }
+
+    private List<TextView> fillTextViews(List<TextView> textViewList, DeviceContent content) {
+
+        if (!textViewList.isEmpty() && textViewList.size() == 12) {
+            textViewList.get(0).setText("Model");
+            textViewList.get(1).setText(content.getModel());
+            textViewList.get(2).setText("OS Version");
+            textViewList.get(3).setText(content.getOsProfile().getModel());
+            textViewList.get(4).setText("Agent Version");
+            textViewList.get(5).setText(content.getModeAppVersion());
+            textViewList.get(6).setText("Network Type");
+            //TODO check here. Only wifi supported for now.
+            textViewList.get(7).setText("WiFi");
+            textViewList.get(8).setText("Public IP");
+            textViewList.get(9).setText(content.getNetwork().getWifi().getIp());
+            textViewList.get(10).setText("Local IP");
+            textViewList.get(11).setText(content.getPresence().getClientIp());
+        }
+
+        return textViewList;
     }
 }
 
