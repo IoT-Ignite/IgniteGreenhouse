@@ -4,7 +4,9 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -28,11 +30,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ardic.android.iotignite.greenhouse.Constants;
+import com.ardic.android.iotignite.greenhouse.DialogChart;
+import com.ardic.android.iotignite.greenhouse.controllers.ThingDataHistoryController;
 import com.ardic.android.iotignite.greenhouse.listeners.CardViewClickListener;
 import com.ardic.android.iotignite.greenhouse.R;
 import com.ardic.android.iotignite.greenhouse.RecyclerSensorAdapter;
@@ -40,15 +46,27 @@ import com.ardic.android.iotignite.greenhouse.SensorViewModel;
 import com.ardic.android.iotignite.greenhouse.controllers.DeviceNodeInventoryController;
 import com.ardic.android.iotignite.greenhouse.controllers.LastThingDataController;
 import com.ardic.android.iotignite.greenhouse.controllers.RegisterSensorController;
+import com.ardic.android.iotignite.greenhouse.listeners.ChartDataListener;
 import com.ardic.android.iotignite.greenhouse.listeners.DeviceNodeInventoryAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.listeners.LastThingDataAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.listeners.RegisterSensorControllerAsyncTaskListener;
+import com.ardic.android.iotignite.greenhouse.listeners.ThingDataHistoryAsyncTaskListener;
 import com.ardic.android.iotignite.lib.restclient.model.ActionMessage;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventory;
 import com.ardic.android.iotignite.lib.restclient.model.DeviceNodeInventoryExtras;
 import com.ardic.android.iotignite.lib.restclient.model.LastThingData;
 import com.ardic.android.iotignite.lib.restclient.model.Node;
 import com.ardic.android.iotignite.lib.restclient.model.Thing;
+import com.ardic.android.iotignite.lib.restclient.model.ThingData;
+import com.ardic.android.iotignite.lib.restclient.model.ThingDataHistory;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.LargeValueFormatter;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
@@ -56,6 +74,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -131,6 +150,12 @@ public class SensorDashboardActivity extends AppCompatActivity
         }
     };
 
+    private List<Thing> activeThingList = new ArrayList<>();
+
+
+    private DialogChart mChart;
+
+    private LastThingData lastActiveThingData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,7 +223,7 @@ public class SensorDashboardActivity extends AppCompatActivity
         /**
          * Set user mail to TextView on side navigation menu header.
          */
-        if(!TextUtils.isEmpty(getIntent().getStringExtra(Constants.Extra.EXTRA_USER_MAIL))) {
+        if (!TextUtils.isEmpty(getIntent().getStringExtra(Constants.Extra.EXTRA_USER_MAIL))) {
             userMail = getIntent().getStringExtra(Constants.Extra.EXTRA_USER_MAIL);
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             View header = navigationView.getHeaderView(0);
@@ -290,8 +315,6 @@ public class SensorDashboardActivity extends AppCompatActivity
 
             //Register sensor here
             showSensorDialog(qr);
-
-
         }
     }
 
@@ -321,13 +344,17 @@ public class SensorDashboardActivity extends AppCompatActivity
         SensorViewModel sensor = sensorList.get(position);
         RecyclerSensorAdapter.ViewHolder viewHolder = new RecyclerSensorAdapter.ViewHolder(v);
         if (v.equals(viewHolder.imgSensorInfo)) {
-            Dialog dialog = new Dialog(this);
-            dialog.setContentView(R.layout.card_view_info_dialog);
-            TextView text = dialog.findViewById(R.id.info_text);
-            text.setText("Some information here about " + sensor.getSensorType() + " ehehe Patrick :3");
-            dialog.show();
+
+            if (sensor != null && !TextUtils.isEmpty(sensor.getSensorId())) {
+                showSensorInfoDialog(sensor.getSensorId(), sensor.getSensorType());
+            }
         } else if (sensor != null && !TextUtils.isEmpty(sensor.getSensorId())) {
-            Toast.makeText(getApplicationContext(), " Position: " + position + " Sensor ID: " + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), " Position: " + position + " Sensor ID: " + sensor.getSensorId(), Toast.LENGTH_SHORT).show();
+            //TODO: create sensor chart here.
+
+
+            createSensorDataHistoryChart(getThingById(sensor.getSensorId()));
+
         }
     }
 
@@ -395,6 +422,17 @@ public class SensorDashboardActivity extends AppCompatActivity
                         isNodeContains = true;
                         new LastThingDataController(this, deviceId, n.getNodeId(), t.getId(), t.getType(), t.getConnected(), this).execute();
 
+                        boolean isThingContains = false;
+                        for (Thing thing : activeThingList) {
+                            if (thing.getId().equals(t.getId())) {
+                                isThingContains = true;
+                            }
+                        }
+
+                        if (!isThingContains) {
+                            activeThingList.add(t);
+                        }
+
                         if (!TextUtils.isEmpty(registerThingId) && t.getId().equals(registerThingId)) {
 
                             sensorAddHandler.removeCallbacks(mSensorAddRunnable);
@@ -448,6 +486,7 @@ public class SensorDashboardActivity extends AppCompatActivity
     @Override
     public void onLastThingDataTaskComplete(String nodeId, String thingId, String thingType, int connected, LastThingData data) {
 
+
         List<String> lastDataList;
         Date dataDate = null;
         String lastData = null;
@@ -458,7 +497,32 @@ public class SensorDashboardActivity extends AppCompatActivity
                 Log.i(TAG, "LAST DATA : " + lastData);
                 Log.i(TAG, " TYPE : " + thingType);
 
+
+                if (mChart != null && mChart.isShowing() && mChart.getThing().equals(thingId)) {
+                    if (lastActiveThingData == null) {
+                        lastActiveThingData = data;
+                    }
+                    Log.i(TAG, " Triggering new data..." + data.getData().getCreateDate() + " vs " + lastActiveThingData.getData().getCreateDate());
+
+                    Date incomingDate = new Date(data.getData().getCreateDate());
+                    Date oldDate = new Date(lastActiveThingData.getData().getCreateDate());
+
+                    int result = incomingDate.compareTo(oldDate);
+
+                    Log.i(TAG, "DateNEW : " + incomingDate.toString() + " DateOLD : " + oldDate.toString() + " RESULT : " + result);
+                    if (result == 1) {
+                        Log.i(TAG, "New Data ");
+                        mChart.updateChart().onNewData(thingId, data.getData());
+                    }
+
+                    lastActiveThingData = data;
+                } else {
+                    Log.i(TAG, " mCharDataListener is Null");
+                }
+
+
                 if (Constants.GREENHOUSE_TEMPERATURE_THINGTYPE.equals(thingType)) {
+
                     lastData += Constants.LAST_DATA_TEMP_PREFIX;
                 } else if (Constants.GREENHOUSE_HUMIDITY_THINGTYPE.equals(thingType)) {
                     lastData += Constants.LAST_DATA_HUM_PREFIX;
@@ -641,6 +705,144 @@ public class SensorDashboardActivity extends AppCompatActivity
         }
 
         return false;
+    }
+
+    /**
+     * Show specific info about clicked gateway.
+     * GatewayInfo Dialog Order:
+     * <p>
+     * Sensor Specifications
+     * Name
+     * -name
+     * Model
+     * -model
+     * Type
+     * -type
+     * Operating Range
+     * -op range
+     * Accuracy
+     * -accuracy
+     *
+     * @param thingId
+     */
+    private void showSensorInfoDialog(String thingId, String thingType) {
+
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.card_view_info_dialog);
+
+        LinearLayout mDialogLayout = dialog.findViewById(R.id.card_view_info_dialog_linear_layout);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        mDialogLayout.setLayoutParams(params);
+
+        TextView mHeader = dialog.findViewById(R.id.info_text);
+        mHeader.setPadding(100, 10, 100, 10);
+        mHeader.setTextSize(15);
+        mHeader.setText("Sensor Specifications");
+
+        List<TextView> textViewList = new ArrayList<>();
+
+        // create textviews odd ones background dark, even ones light.
+
+        for (int i = 1; i < 13; i++) {
+            TextView mText = new TextView(this);
+            mText = setTextViewBackground(mText, i);
+            textViewList.add(mText);
+        }
+
+        textViewList = fillTextViews(textViewList, thingId, thingType);
+        for (TextView v : textViewList) {
+            v.setPadding(10, 10, 10, 10);
+            v.setTextSize(15);
+            mDialogLayout.addView(v);
+        }
+        dialog.show();
+    }
+
+
+    private TextView setTextViewBackground(TextView mTextView, int number) {
+
+        if (number % 2 == 0) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.colorDarkGray, getTheme()));
+                mTextView.setTextColor(getResources().getColor(R.color.white, getTheme()));
+            } else {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.colorDarkGray));
+                mTextView.setTextColor(getResources().getColor(R.color.white));
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background, getTheme()));
+                mTextView.setTextColor(getResources().getColor(R.color.white, getTheme()));
+            } else {
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background));
+                mTextView.setTextColor(getResources().getColor(R.color.white));
+            }
+
+        }
+        return mTextView;
+
+    }
+
+
+    private List<TextView> fillTextViews(List<TextView> textViewList, String sensorId, String thingType) {
+
+        if (!textViewList.isEmpty() && textViewList.size() == 12) {
+            if (Constants.GREENHOUSE_TEMPERATURE_THINGTYPE.equals(thingType)) {
+
+                textViewList.get(0).setText("Name");
+                textViewList.get(1).setText(sensorId);
+                textViewList.get(2).setText("Model");
+                textViewList.get(3).setText("HDC 1080");
+                textViewList.get(4).setText("Vendor");
+                textViewList.get(5).setText("Texas Instruments");
+                textViewList.get(6).setText("Type");
+                textViewList.get(7).setText("Temperature");
+                textViewList.get(8).setText("Operating Range in C");
+                textViewList.get(9).setText("-40 to 125");
+                textViewList.get(10).setText("Temperature Accuracy");
+                textViewList.get(11).setText("±0.2°C (typical)");
+            } else if (Constants.GREENHOUSE_HUMIDITY_THINGTYPE.equals(thingType)) {
+
+                textViewList.get(0).setText("Name");
+                textViewList.get(1).setText(sensorId);
+                textViewList.get(2).setText("Model");
+                textViewList.get(3).setText("HDC 1080");
+                textViewList.get(4).setText("Vendor");
+                textViewList.get(5).setText("Texas Instruments");
+                textViewList.get(6).setText("Type");
+                textViewList.get(7).setText("Humidity");
+                textViewList.get(8).setText("Operating Range in %");
+                textViewList.get(9).setText("0 to 100");
+                textViewList.get(10).setText("Humidity Accuracy");
+                textViewList.get(11).setText("±0.2% (typical)");
+            }
+        }
+
+        return textViewList;
+    }
+
+
+    private void createSensorDataHistoryChart(Thing t) {
+        mChart = new DialogChart(this, deviceId, t);
+        mChart.showDialog();
+
+    }
+
+
+    private Thing getThingById(String thingId) {
+        Thing activeThing = null;
+
+        Log.i(TAG, "Active thinglist Size : " + activeThingList.size());
+
+        for (Thing t : activeThingList) {
+            if (t.getId().equals(thingId)) {
+                activeThing = t;
+            }
+        }
+        Log.i(TAG, "Returning thing : " + activeThing.getId());
+        return activeThing;
     }
 }
 

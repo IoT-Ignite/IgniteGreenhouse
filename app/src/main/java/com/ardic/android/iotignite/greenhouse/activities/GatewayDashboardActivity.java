@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -319,10 +320,12 @@ public class GatewayDashboardActivity extends AppCompatActivity
         if (v.equals(viewHolder.imgGatewayInfo)) {
 
             // TODO: Create Gateway Info Dialog Here.
-            showGatewayInfoDialog(gateway.getGatewayId());
+            if (gateway != null && !TextUtils.isEmpty(gateway.getGatewayId())) {
+                showGatewayInfoDialog(gateway.getGatewayId());
+            }
 
         } else if (gateway != null && !TextUtils.isEmpty(gateway.getGatewayId())) {
-            Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), " Position: " + position + " Gateway ID: " + gateway.getGatewayId(), Toast.LENGTH_SHORT).show();
             Intent startSensorDashboardActivity = new Intent(GatewayDashboardActivity.this, SensorDashboardActivity.class);
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_ID, gateway.getGatewayId());
             startSensorDashboardActivity.putExtra(Constants.Extra.EXTRA_DEVICE_CODE, getDeviceCodeById(gateway.getGatewayId()));
@@ -548,11 +551,15 @@ public class GatewayDashboardActivity extends AppCompatActivity
         dialog.setContentView(R.layout.card_view_info_dialog);
 
         LinearLayout mDialogLayout = dialog.findViewById(R.id.card_view_info_dialog_linear_layout);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        mDialogLayout.setLayoutParams(params);
 
         TextView mHeader = dialog.findViewById(R.id.info_text);
-        mHeader.setPadding(10, 10, 10, 10);
+        mHeader.setPadding(100, 10, 100, 10);
         mHeader.setTextSize(15);
-        mHeader.setText("Gateway Specifications:");
+        mHeader.setText("Gateway Specifications");
 
         List<TextView> textViewList = new ArrayList<>();
 
@@ -575,10 +582,10 @@ public class GatewayDashboardActivity extends AppCompatActivity
         } else {
             TextView mTextView = new TextView(this);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mTextView.setBackgroundColor(getResources().getColor(R.color.colorDarkGray, getTheme()));
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background, getTheme()));
                 mTextView.setTextColor(getResources().getColor(R.color.white, getTheme()));
             } else {
-                mTextView.setBackgroundColor(getResources().getColor(R.color.colorDarkGray));
+                mTextView.setBackgroundColor(getResources().getColor(R.color.cardview_dark_background));
                 mTextView.setTextColor(getResources().getColor(R.color.white));
             }
 
@@ -617,20 +624,21 @@ public class GatewayDashboardActivity extends AppCompatActivity
 
     private List<TextView> fillTextViews(List<TextView> textViewList, DeviceContent content) {
 
-        textViewList.get(0).setText("Model");
-        textViewList.get(1).setText(content.getModel());
-        textViewList.get(2).setText("OS Version");
-        //Log.e(TAG,content.getOsProfile().toString());
-        textViewList.get(3).setText(content.getOsProfile().getModel());
-        textViewList.get(4).setText("Agent Version");
-        textViewList.get(5).setText(content.getModeAppVersion());
-        textViewList.get(6).setText("Network Type");
-        //TODO check here. Only wifi supported for now.
-        textViewList.get(7).setText("WiFi");
-        textViewList.get(8).setText("Public Ip");
-        textViewList.get(9).setText(content.getNetwork().getWifi().getIp());
-        textViewList.get(10).setText("Local Ip");
-        textViewList.get(11).setText(content.getPresence().getClientIp());
+        if (!textViewList.isEmpty() && textViewList.size() == 12) {
+            textViewList.get(0).setText("Model");
+            textViewList.get(1).setText(content.getModel());
+            textViewList.get(2).setText("OS Version");
+            textViewList.get(3).setText(content.getOsProfile().getModel());
+            textViewList.get(4).setText("Agent Version");
+            textViewList.get(5).setText(content.getModeAppVersion());
+            textViewList.get(6).setText("Network Type");
+            //TODO check here. Only wifi supported for now.
+            textViewList.get(7).setText("WiFi");
+            textViewList.get(8).setText("Public IP");
+            textViewList.get(9).setText(content.getNetwork().getWifi().getIp());
+            textViewList.get(10).setText("Local IP");
+            textViewList.get(11).setText(content.getPresence().getClientIp());
+        }
 
         return textViewList;
     }
