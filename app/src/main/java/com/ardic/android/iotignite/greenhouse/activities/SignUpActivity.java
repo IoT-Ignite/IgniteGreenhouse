@@ -1,13 +1,13 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,12 +26,8 @@ import com.ardic.android.iotignite.greenhouse.listeners.SignUpAsyncTaskListener;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationResult;
 import com.ardic.android.iotignite.greenhouse.utils.ValidationUtils;
 import com.ardic.android.iotignite.lib.restclient.model.CreateRestrictedUser;
-import com.rey.material.app.Dialog;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 public class SignUpActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener,
         View.OnFocusChangeListener, View.OnClickListener, SignUpAsyncTaskListener {
@@ -49,6 +45,7 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
     private CheckBox cbAcceptTermsOfUse;
     private Button btnSignUp;
     private Toolbar toolbar;
+    private Uri uri;
 
     private SignUpController mSignUpController;
 
@@ -129,13 +126,16 @@ public class SignUpActivity extends AppCompatActivity implements CompoundButton.
         int id = item.getItemId();
 
         if (id == R.id.menu_main_about) {
-            Toast.makeText(this, "About Clicked", Toast.LENGTH_SHORT).show();
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
         } else if (id == R.id.menu_main_buy_device) {
-            Toast.makeText(this, "Buying Device Clicked", Toast.LENGTH_SHORT).show();
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
         } else if (id == R.id.menu_main_faq) {
-            Toast.makeText(this, "FAQ Clicked", Toast.LENGTH_SHORT).show();
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
         } else {
             return super.onOptionsItemSelected(item);

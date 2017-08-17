@@ -100,7 +100,7 @@ public class DialogChart extends Dialog {
                             @Override
                             public void run() {
                                 avLoadingIndicatorView.hide();
-                                Toast.makeText(mActivity, "READY :" + dataHistory.getList().size(), Toast.LENGTH_LONG).show();
+                                Log.i(TAG,"READY :" + dataHistory.getList().size());
                                 List<Entry> entries = new ArrayList<>();
 
                                 List<ThingData> dataList = dataHistory.getList();

@@ -1,6 +1,7 @@
 package com.ardic.android.iotignite.greenhouse.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
     private EditText edtMail;
     private ImageView imgMailValidate;
     private Button btnSubmit;
+    private Uri uri;
 
 
     @Override
@@ -73,13 +75,16 @@ public class ForgotPasswordActivity extends AppCompatActivity implements View.On
         int id = item.getItemId();
 
         if (id == R.id.menu_main_about) {
-            Toast.makeText(this, "About Clicked", Toast.LENGTH_SHORT).show();
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
         } else if (id == R.id.menu_main_buy_device) {
-            Toast.makeText(this, "Buying Device Clicked", Toast.LENGTH_SHORT).show();
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
         } else if (id == R.id.menu_main_faq) {
-            Toast.makeText(this, "FAQ Clicked", Toast.LENGTH_SHORT).show();
+            uri = Uri.parse("http://www.iot-ignite.com");
+            startActivity(new Intent(Intent.ACTION_VIEW, uri));
             return true;
         } else {
             return super.onOptionsItemSelected(item);
