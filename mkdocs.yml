@@ -1,0 +1,7 @@
+site_name: Ignite Greenhouse
+pages:
+    - Ignite Greenhouse: index.md
+    - Ignite Greenhouse Gateway: gatewayapp.md
+    - About: about.md
+theme: material
+
