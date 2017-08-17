@@ -1,5 +1,7 @@
 # Ignite Greenhouse for Android
-Ignite Greenhouse is an open-source IoT autonomous greenhouse project for data collection, visualization, and device management. You can see various sensor data from your greenhouse on your Android device.
+Ignite Greenhouse is an open-source IoT project for data collection, visualization and managing your greenhouse. You can see various sensor data from your greenhouse on your app.
+
+For more details about project visit [Github Page](https://iot-ignite.github.io/IgniteGreenhouse).
 
 ## Getting Started
 
@@ -12,8 +14,6 @@ What things you need to get information of your greenhouse.
    * Hardware that used as Gateway is Raspberry Pi
    * Gateway App perform connection transaction with cloud
    * You can choose many sensors you want, e.g., soil moisture, temperature, humidity
-   
-  :zap: Or you can make your own Greenhouse Kit by following [step by step series of examples](www.iot-ignite.com) that tell you how to get a development kit. :zap:
    
 3. Register your Ignite Greenhouse Kit with using your Android device.
 
@@ -34,16 +34,14 @@ What things you need to get information of your greenhouse.
 Gateway devices are at the center of the scheme. Gateways interact other elements: Sensors, Cloud and your Android devices.
 
 1. Sensors publish and gateways receive data with using the RF protocol. 
-2. The gateway sends the data to IoT-Ignite Cloud platform with using [Gateway App](https://github.com/freeloki/GreenhousePrivate/wiki) that already loaded on the gateway for collecting and processing data.
+2. The gateway sends the data to IoT-Ignite Cloud platform with using [Gateway App](https://iot-ignite.github.io/IgniteGreenhouse/gatewayapp/) that already loaded on the gateway for collecting and processing data.
 3. Cloud keeps processed data. 
 4. Finally, the data comes to your Android device with using Ignite Rest Client API.
 
-For more technical details about APIs that used in this application, visit [Wiki](https://github.com/freeloki/GreenhousePrivate/wiki) page.
-
 ## Project Dependencies
 
-* [IoT-Ignite API](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Ignite REST Client API](https://maven.apache.org/) - Dependency Management
+* [IoT-Ignite API](https://devzone.iot-ignite.com/knowledge-base/) - The web framework used
+* [Ignite REST Client API](https://github.com/IoT-Ignite/IgniteRestClientLibrary) - Dependency Management
 * [Retrofit](http://square.github.io/retrofit/) - For REST calls
 * [barcodescanner](https://github.com/dm77/barcodescanner) - Using QR Scanner for register gateway and sensor
 * [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView) - Using for loading screen
