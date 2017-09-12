@@ -33,7 +33,7 @@
         android:layout_width="@dimen/edit_text_icon"
         android:layout_height="@dimen/edit_text_icon"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="0dp"
         android:background="@drawable/toggle_selector"
         android:textOff=""
         android:textOn=""
@@ -45,7 +45,7 @@
         android:layout_width="@dimen/edit_text_icon"
         android:layout_height="@dimen/edit_text_icon"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="0dp"
         android:background="@drawable/toggle_selector"
         android:textOff=""
         android:textOn=""
@@ -57,61 +57,58 @@
         android:layout_width="@dimen/edit_text_icon"
         android:layout_height="@dimen/edit_text_icon"
         android:layout_marginRight="0dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintRight_toRightOf="@+id/activity_sign_up_edt_email"
         app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_last_name"
         app:srcCompat="@drawable/cancel" />
 
     <EditText
         android:id="@+id/activity_sign_up_edt_first_name"
-        android:layout_width="@dimen/login_signup_edit_text_width"
-        android:layout_height="@dimen/login_signup_edit_text_height"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="97dp"
-        android:ems="10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
         android:hint="first name"
         android:inputType="textPersonName"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/activity_sign_up_edt_last_name" />
 
 
     <EditText
         android:id="@+id/activity_sign_up_edt_last_name"
-        android:layout_width="@dimen/login_signup_edit_text_width"
-        android:layout_height="@dimen/login_signup_edit_text_height"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="@dimen/edit_text_distance"
-        android:ems="10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
         android:hint="last name"
         android:inputType="textPersonName"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_first_name" />
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/activity_sign_up_edt_email" />
 
     <EditText
         android:id="@+id/activity_sign_up_edt_email"
-        android:layout_width="@dimen/login_signup_edit_text_width"
-        android:layout_height="@dimen/login_signup_edit_text_height"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="@dimen/edit_text_distance"
-        android:ems="10"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
         android:hint="mail@example.com"
         android:inputType="textEmailAddress"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_last_name" />
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_signup"
+        android:layout_marginBottom="-1dp" />
 
     <EditText
         android:id="@+id/activity_sign_up_edt_password"
-        android:layout_width="@dimen/login_signup_edit_text_width"
-        android:layout_height="@dimen/login_signup_edit_text_height"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="@dimen/edit_text_distance"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="0dp"
         android:ems="10"
         android:hint="password"
         android:inputType="textPassword"
@@ -121,11 +118,11 @@
 
     <EditText
         android:id="@+id/activity_sign_up_edt_confirm_password"
-        android:layout_width="@dimen/login_signup_edit_text_width"
-        android:layout_height="@dimen/login_signup_edit_text_height"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="@dimen/margin_edit_text_right_left"
-        android:layout_marginTop="@dimen/edit_text_distance"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_height"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="0dp"
         android:ems="10"
         android:hint="confirm password"
         android:inputType="textPassword"
@@ -137,10 +134,9 @@
         android:id="@+id/activity_sign_up_cb_accept_terms_of_use"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="0dp"
         android:text="@string/activity_sign_up_check_box_terms_of_use"
-
         android:textColor="@color/colorDarkGray"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_sign_up_edt_confirm_password" />
@@ -148,9 +144,9 @@
     <Button
         android:id="@+id/activity_sign_up_btn_sign_up"
         android:layout_width="wrap_content"
-        android:layout_height="54dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="@dimen/edit_text_distance"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button_shape"
         android:text="SIGN UP"
         android:textColor="@android:color/white"
@@ -161,27 +157,11 @@
         app:layout_constraintVertical_bias="0.423" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="0dp" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.82" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"
+        android:id="@+id/guideline_signup"/>
 
     <include
         layout="@layout/progress_bar"
@@ -191,9 +171,10 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/activity_sign_up_btn_sign_up"
-        app:layout_constraintLeft_toLeftOf="@+id/guideline"
-        app:layout_constraintRight_toLeftOf="@+id/guideline2"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2" />
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
