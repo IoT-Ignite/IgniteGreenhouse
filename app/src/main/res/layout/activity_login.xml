@@ -30,41 +30,40 @@
 
     <ImageView
         android:id="@+id/activity_login_img_greenhouse_icon"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
-        app:layout_constraintHorizontal_bias="0.376"
-        app:layout_constraintLeft_toLeftOf="@+id/guideline"
-        app:layout_constraintRight_toLeftOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/greenhouse_icon512" />
+        app:layout_constraintHorizontal_bias="0.409"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:srcCompat="@drawable/greenhouse_icon512"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/activity_login_edt_email"
+        android:layout_marginEnd="8dp" />
 
     <EditText
         android:id="@+id/activity_login_edt_email"
-        android:layout_width="320dp"
-        android:layout_height="44dp"
-        android:layout_marginLeft="@dimen/margin_edit_text_right_left"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="@dimen/margin_edit_text_right_left"
-        android:layout_marginTop="0dp"
-        android:ems="10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginStart="18dp"
         android:hint="mail@example.com"
         android:inputType="textEmailAddress"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_login_img_greenhouse_icon" />
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/appBarLayout"
+        android:layout_marginTop="8dp" />
 
     <EditText
         android:id="@+id/activity_login_edt_password"
-        android:layout_width="320dp"
-        android:layout_height="44dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="@dimen/margin_edit_text_right_left"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginStart="18dp"
         android:layout_marginTop="@dimen/edit_text_distance"
-        android:ems="10"
         android:hint="password"
         android:inputType="textPassword"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -92,11 +91,11 @@
         android:id="@+id/activity_login_txt_sign_up_now"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginEnd="@dimen/activity_margin"
+        android:layout_marginLeft="@dimen/activity_margin"
+        android:layout_marginRight="@dimen/activity_margin"
+        android:layout_marginStart="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/edit_text_distance"
         android:text="@string/activity_login_dont_have_an_acount_sign_up_now"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -111,7 +110,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="@dimen/text_views_distance"
         android:text="@string/reset_pessword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -119,21 +118,16 @@
 
     <ImageView
         android:id="@+id/activity_login_img_mail_validation"
-        android:layout_width="42dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         app:layout_constraintRight_toRightOf="@+id/activity_login_edt_email"
-        app:layout_constraintTop_toBottomOf="@+id/activity_login_img_greenhouse_icon"
-        app:srcCompat="@drawable/cancel" />
+        app:srcCompat="@drawable/cancel"
+        app:layout_constraintTop_toTopOf="@+id/activity_login_edt_email" />
 
     <ToggleButton
         android:id="@+id/activity_login_tb_show_hide_password"
-        android:layout_width="41dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginRight="0dp"
+        android:layout_width="@dimen/edit_text_icon"
+        android:layout_height="@dimen/edit_text_icon"
         android:layout_marginTop="18dp"
         android:background="@drawable/toggle_selector"
         android:textOff=""
@@ -145,52 +139,35 @@
         android:id="@+id/activity_login_cb_remember_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="16dp"
         android:text="Remember Me"
         android:textColor="@color/colorDarkGray"
-        app:layout_constraintHorizontal_bias="0.084"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_login_edt_password" />
+        app:layout_constraintTop_toBottomOf="@+id/activity_login_edt_password"
+        android:layout_marginStart="18dp" />
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline"
+        android:id="@+id/guideline_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="16dp" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="16dp"
-        tools:layout_editor_absoluteX="368dp"
-        tools:layout_editor_absoluteY="0dp" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.96" />
+        app:layout_constraintGuide_begin="180dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="180dp" />
 
     <include layout="@layout/progress_bar"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/guideline3"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintVertical_bias="0.491"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/appBarLayout"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
 </android.support.constraint.ConstraintLayout>
