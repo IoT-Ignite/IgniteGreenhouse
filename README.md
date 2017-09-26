@@ -2,7 +2,7 @@
 
 Ignite Greenhouse is an open-source IoT project for data collection, visualization and mobile management of a greenhouse. Data from sensors can be monitored on [this app](https://github.com/IoT-Ignite/IgniteGreenhouse/releases) or [web console](http://ignitegreenhouse.com/).
 
-Github : [github.com/IoT-Ignite/IgniteGreenhouse](https://github.com/IoT-Ignite/IgniteGreenhouse)
+Github Page: [https://iot-ignite.github.io/IgniteGreenhouse](https://iot-ignite.github.io/IgniteGreenhouse)
 
 # How to use
 
