@@ -21,6 +21,9 @@ What things you need to get information of your greenhouse.
    * Gateway App perform connection transaction with cloud
    * You can choose many sensors you want, e.g., soil moisture, temperature, humidity
 
+   :cactus: You can buy a kit or can find step by step instructions to create your own kit on [here](https://iot-ignite.github.io/IgniteGreenhouse/gatewayapp/) :cactus:
+
+
 ### 3. Register your Ignite Greenhouse Kit with using your Android device.
 
 * First, install the app.
