@@ -14,9 +14,9 @@ For our IoT project documentation visit [www.iot-ignite.com/documents](https://d
 
 What things you need to get information of your greenhouse.
 
-### 1. [Install Ignite Greenhouse for Android](https://play.google.com/store/apps/details?id=com.ardic.android.kuuklaparentalcontrol)
+### 1. [Install Ignite Greenhouse for Android](https://github.com/IoT-Ignite/IgniteGreenhouse/releases)
 
-### 2. [Get Ignite Greenhouse Kit](https://www.iot-ignite.com/) (Gateway, Gateway App, Sensors)
+### 2. [Get Ignite Greenhouse Kit](https://arikovani.com/projeler/akilli-sera/detay) (Gateway, Gateway App, Sensors)
    * Hardware that used as Gateway is Raspberry Pi
    * Gateway App perform connection transaction with cloud
    * You can choose many sensors you want, e.g., soil moisture, temperature, humidity
@@ -45,7 +45,6 @@ Gateway devices are at the center of the scheme. Gateways interact other element
 3. Cloud keeps processed data.
 4. Finally, the data comes to your Android device with using Ignite Rest Client API.
 
-For more technical details about APIs that used in this application, visit [Wiki](https://github.com/freeloki/GreenhousePrivate/wiki) page.
 
 ## Project Dependencies
 

@@ -4,6 +4,8 @@ Ignite Greenhouse is an open-source IoT project for data collection, visualizati
 
 Github Page: [https://iot-ignite.github.io/IgniteGreenhouse](https://iot-ignite.github.io/IgniteGreenhouse)
 
+If you would like to support this project's further development, feel free to donate on [Arıkovanı](https://arikovani.com/projeler/akilli-sera/detay) funding platform. Your donation is highly appreciated.
+
 # How to use
 
 [![Watch the video](http://img.youtube.com/vi/w6tWYsvksHo/0.jpg)](https://www.youtube.com/watch?v=w6tWYsvksHo&feature=youtu.be)
@@ -54,4 +56,3 @@ For more technical details about our IoT projects and APIs visit [IoT-Ignite Doc
 # Authors
 
 * **ARDIC R&D** - [http://www.ardictech.com/](http://www.ardictech.com/)
-
