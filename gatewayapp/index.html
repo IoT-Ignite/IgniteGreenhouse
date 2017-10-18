@@ -113,11 +113,196 @@
         <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
     
+        <li class="first-level active"><a href="#ignite-greenhouse-gateway">Ignite Greenhouse Gateway</a></li>
+        
+    
+        <li class="first-level "><a href="#gateway-app">Gateway App</a></li>
+        
+            <li class="second-level"><a href="#1-preparing-for-implementation">1. Preparing for Implementation</a></li>
+            
+                <li class="third-level"><a href="#step-1-download-the-project">Step 1 : Download the Project</a></li>
+            
+                <li class="third-level"><a href="#step-2-prepare-compiling-environment">Step 2 : Prepare Compiling Environment</a></li>
+            
+        
+            <li class="second-level"><a href="#2-gateway-installation">2. Gateway Installation</a></li>
+            
+                <li class="third-level"><a href="#step-1-raspberry-pi-3">Step 1 : Raspberry Pi 3</a></li>
+            
+                <li class="third-level"><a href="#step-2-set-up-android-things">Step 2 : Set-Up Android Things</a></li>
+            
+        
+    
     </ul>
 </div></div>
         <div class="col-md-9" role="main">
 
-</div>
+<h1 id="ignite-greenhouse-gateway"><strong>Ignite Greenhouse Gateway</strong></h1>
+<p>Ignite Greenhouse is an open source <strong>ARDIC</strong> project. The purpose of this project is to collect information on the environment and soil status in the greenhouses and inform the user in a single area.</p>
+<!--Seradaki ortam ve toprak durumlarının çiftçi için önemi büyüktür. Bu ortamdaki değişiklikler, serada bulunan ürün üstünde oldukça etkilidir. Eğer bu veriler dikkate alınmazsa ürünlerin verimsiz olmasına yol açabilmektedir. -->
+
+<!--**Ignite Greenhouse** projesi bu durumların önüne geçmek için oluşturulmuştur.-->
+
+<p><strong>ARDIC</strong> is publishing source codes to enable anyone to use this technology and to increase the yield of products in the greenhouse.</p>
+<h1 id="gateway-app">Gateway App</h1>
+<p>The codes in this section are the codes that work in <strong>gateway</strong>. We will talk about how to use these codes and the installation steps. After these steps, <strong> gateway </strong> will be ready for use.</p>
+<h2 id="1-preparing-for-implementation">1. Preparing for Implementation</h2>
+<h3 id="step-1-download-the-project">Step 1 : Download the Project</h3>
+<p>Open the terminal and enter the following command.</p>
+<blockquote>
+<p>git clone https://github.com/IoT-Ignite/IgniteGreenhouseGateway.git</p>
+</blockquote>
+<p>Thus, the project will be located at the location you specify.</p>
+<p><img alt="img" src="../img/gitClone.png" title="Git Clone" /></p>
+<h3 id="step-2-prepare-compiling-environment">Step 2 : Prepare Compiling Environment</h3>
+<p>If you don't have <strong>Android Studio</strong> on your computer, go to <a href="https://developer.android.com/studio/index.html">https://developer.android.com/studio/index.html</a> to download the program and perform the installation.</p>
+<p><img alt="img" src="../img/androidStudio.png" title="Android Studio" /></p>
+<h4 id="step-21-open-project">Step 2.1 : Open project</h4>
+<p>Open <strong>Android Studio</strong>. After that click on <strong>File &gt; Open</strong> and then select the file we downloaded in the pop-up window and click the <strong>OK</strong> button.   </p>
+<p><img alt="img" src="../img/androidStudioOpenProject.png" title="Android Studio Open" /></p>
+<h4 id="step-22-creating-application-signature">Step 2.2 : Creating Application Signature</h4>
+<p>We have to compile the project. To compile, we first need to create an application signature.</p>
+<p>To compile with the signature we click on <strong>Build &gt; Generate Signed APK...</strong></p>
+<p><img alt="img" src="../img/signed1.png" title="Signed Apk" /></p>
+<p>If there is no signature you created earlier, we click <strong>"Create new ..."</strong> button in the pop-up window.</p>
+<p>We enter information on the screen.</p>
+<blockquote>
+<p>Key store path : The path of the folder you will sign</p>
+<p>Password : Signature password</p>
+<p>Alias : Signature name</p>
+<p>Password : Password</p>
+</blockquote>
+<p>Click the <strong>OK</strong> button.</p>
+<p><img alt="img" src="../img/signed2.png" title="Signed Apk" /></p>
+<p>Once you have entered the information, your project will be ready to be compiled. The information we create comes on the screen automatically.
+  Press the <strong>Next</strong> button.</p>
+<p><img alt="img" src="../img/signed3.png" title="Signed Apk" /></p>
+<p>The password screen comes up. We enter our password and press the <strong>OK</strong> button.</p>
+<p><img alt="img" src="../img/signed4.png" title="Signed Apk" /></p>
+<p>We're on our last screen. Once you click <strong>Finish</strong> button, our <strong>".apk"</strong> file becomes ready on <strong>"app &gt; app-release.apk"</strong> path.</p>
+<p><img alt="img" src="../img/signed5.png" title="Signed Apk" /></p>
+<h2 id="2-gateway-installation">2. Gateway Installation</h2>
+<h3 id="step-1-raspberry-pi-3">Step 1 : Raspberry Pi 3</h3>
+<p>This application works on <strong>Raspberry Pi 3</strong>. To use this project, you need to purchase a <strong>Raspberry Pi 3</strong>. You can easily obtain this device from many company.</p>
+<p><img alt="img" src="../img/rp3.png" title="Signed Apk" /></p>
+<h3 id="step-2-set-up-android-things">Step 2 : Set-Up Android Things</h3>
+<h4 id="step-21-install-android-things">Step 2.1 : Install Android Things</h4>
+<p>The operating system used in the device is set to <strong>"Android Things OS"</strong> and the codes are written according to this system. To download this operating system, go to <a href="https://partner.android.com/things/console/">https://partner.android.com/things/console/</a>.</p>
+<p>Click <strong>CREATE A PRODUCT</strong> button on the screen.</p>
+<p><img alt="img" src="../img/aT1.png" title="Signed Apk" /></p>
+<p>Fill in the required fields and press the <strong>CREATE</strong> button on the window.</p>
+<p><img alt="img" src="../img/aT2.png" title="Signed Apk" /></p>
+<p>Click <strong>FACTORY IMAGES</strong>.</p>
+<p><img alt="img" src="../img/aT3.png" title="Signed Apk" /></p>
+<p>Click <strong>CREATE BUILD CONFIGURATION</strong> button.</p>
+<p><img alt="img" src="../img/aT4.png" title="Signed Apk" /></p>
+<p>After finishing the process, <strong>"Build configuration list"</strong> will appear below the page. Click here <strong>"Download build"</strong> link then downloading will start.</p>
+<p><img alt="img" src="../img/aT5.png" title="Signed Apk" /></p>
+<h5 id="step-22-download-android-things">Step 2.2 : Download Android Things</h5>
+<p>We extract the compressed file and install it on the <strong>SD Card</strong>. These operations can only be done using methods specific to your operating system. You can learn how to install by choosing your operating system below.</p>
+<blockquote>
+<p><a href="https://www.raspberrypi.org/documentation/installation/installing-images/linux.md">Linux</a></p>
+<p><a href="https://www.raspberrypi.org/documentation/installation/installing-images/windows.md">Windows</a></p>
+<p><a href="https://www.raspberrypi.org/documentation/installation/installing-images/mac.md">Mac</a></p>
+</blockquote>
+<h5 id="step-23-android-things-configuration">Step 2.3 : Android Things Configuration</h5>
+<p>After installing <strong>Android Things</strong>, <strong>Wi-Fi</strong> settings need to be done. For this, go to
+<a href="https://developer.android.com/things/hardware/raspberrypi.html#connecting_wi-fi">https://developer.android.com/things/hardware/raspberrypi.html#connecting_wi-fi</a></p>
+<h4 id="step-3-iot-ignite-agent-installing">Step 3 : IoT - Ignite Agent Installing</h4>
+<p>Iot-Ignite is the cloud system of our project. The remote control mechanism operates through this system.</p>
+<h5 id="step-31-iot-ignite-creating-an-account">Step 3.1 : IoT - Ignite Creating an Account</h5>
+<p>In order to use this platform, it is necessary to create an account first. Go to<br />
+<a href="https://devzone.iot-ignite.com/dpanel/signup.php?page=development">https://devzone.iot-ignite.com/dpanel/signup.php?page=development</a> to create an account.</p>
+<p><img alt="img" src="../img/ign1.png" title="Signed Apk" /></p>
+<p>In the window that appears, fill in the information and press <strong>SIGN UP</strong>.</p>
+<p><img alt="img" src="../img/ign3.png" title="Signed Apk" /></p>
+<h5 id="step-32-install-iot-ignite-agent">Step 3.2 : Install IoT - Ignite Agent</h5>
+<p>After registration, the home screen will come up. Click the <strong>DEVELOPMENT &gt; GATEWAYS</strong> section.</p>
+<p>Click <strong>REGISTER A GATEWAY</strong> button.</p>
+<p><img alt="img" src="../img/ign4.png" title="Signed Apk" /></p>
+<p>Select <strong>Android</strong>.</p>
+<p><img alt="img" src="../img/ign5.png" title="Signed Apk" /></p>
+<p>Click the <strong>from here</strong> link.</p>
+<p><img alt="img" src="../img/ign6.png" title="Signed Apk" /></p>
+<p>Click the link that include <strong>.apk</strong> extension.</p>
+<p><img alt="img" src="../img/ign7.png" title="Signed Apk" /></p>
+<h5 id="step-33-download-agent">Step 3.3 : Download Agent</h5>
+<p>As a first step, you need to connect to the device via Wi-Fi.
+Type the IP address of your Raspberry Pi device after the adb connect statement. This command is used to access the device.</p>
+<blockquote>
+<p>adb connect 192.168.2.79  </p>
+<p>adb shell</p>
+</blockquote>
+<p><strong>GreenhouseSSID</strong> is the name of our network, <strong>123456</strong> is the password. You can change it for yourself.</p>
+<blockquote>
+<p>am startservice -n com.google.wifisetup/.WifiSetupService -a WifiSetupService.Connect -e GreenhouseSSID -e 123456</p>
+</blockquote>
+<p>Reboot the device.</p>
+<p>Perform the installation <strong>IoT-Ignite Agent</strong> process when the boot completed.</p>
+<blockquote>
+<p>adb connect 192.168.2.79</p>
+<p>adb install -r IoTIgniteAgent-AR.IGF.0.8.33-20170427-R.apk</p>
+</blockquote>
+<h5 id="step-34-download-greenhouse-gateway-application">Step 3.4 : Download Greenhouse Gateway Application</h5>
+<p>We upload the project file we have compiled with the signature before with this command.</p>
+<blockquote>
+<p>adb install -r app-release.apk</p>
+<p>adb shell</p>
+</blockquote>
+<p>We are only running this program for a while.</p>
+<blockquote>
+<p>am start -n com.ardic.android.ignitegreenhouse/com.ardic.android.ignitegreenhouse.activities.MainActivity</p>
+</blockquote>
+<p>After these commands, <strong>Gateway</strong> will be ready.</p>
+<h4 id="step-4-registering">Step 4 : Registering</h4>
+<p><strong>Gateway</strong> is now ready for use but it is necessary to perform the licensing procedures to transfer the data to the cloud. For these operations go to <a href="https://github.com/IoT-Ignite/IgniteGreenhouse">https://github.com/IoT-Ignite/IgniteGreenhouse</a> to download and install the <strong>Ignite Greenhouse App</strong> on an Android phone or tablet.
+It will ask for username and password information first. Enter the username and password of the IoT - Ignite platform you were previously registered with.</p>
+<p>Now go to : <a href="http://www.qr-code-generator.com/">http://www.qr-code-generator.com/</a></p>
+<p><img alt="img" src="../img/licence.jpg" title="Licence" /></p>
+<p>On the Qr Code Generator page, enter the <strong>Device ID</strong> code in the upper right corner of the screen connected to Raspberry Pi.</p>
+<p><img alt="img" src="../img/qrcode.png" title="Licence" /></p>
+<p>After clicking <strong>Create QR CODE</strong> button, then scan the code appeared right on the screen via <strong>Ignite Greenhouse App</strong>.</p>
+<p>The licensing process is complete.</p>
+<h4 id="step-4-signing">Step 4 Signing :</h4>
+<p>The last step is to use our product. We will sign the app in this step. This step was created by IoT - Ignite for security reasons.</p>
+<p>We will notify IoT - Ignite the project we have compiled with the signature.</p>
+<p>Login with your username and password you created earlier on: <a href="https://enterprise.iot-ignite.com/v3/access/login">https://enterprise.iot-ignite.com/v3/access/login</a></p>
+<p>We are logging into the apps screen with <strong>Applications &gt; App Store &gt; Categories</strong> section.</p>
+<p><img alt="img" src="../img/categories.png" title="categories" /></p>
+<p>There are categories on the screen. We use <strong>DEFAULT</strong>. Click <strong>Applications</strong> button.</p>
+<p><img alt="img" src="../img/application.png" title="application" /></p>
+<p>Click <strong>Add Application</strong> button.</p>
+<p><img alt="img" src="../img/addApplication.png" title="addApplication" /></p>
+<p>Here are the fields we need to fill in:</p>
+<blockquote>
+<p>File : Ignite Greenhouse App .apk file path</p>
+<p>Start Application : Start on boot?</p>
+<p>Description</p>
+</blockquote>
+<p><img alt="img" src="../img/apk_info.png" title="apk_info" /></p>
+<p>When we click <strong>Change</strong> button next to <strong>File</strong>, we are asked to select a file. We select the <strong>app-release.apk</strong> application that we have compiled with the signature in <strong>app</strong> folder and press <strong>Open</strong> button.</p>
+<p><img alt="img" src="../img/app_release.png" title="app-release" /></p>
+<p>Click <strong>Upload</strong> button.</p>
+<p><img alt="img" src="../img/upload.png" title="upload" /></p>
+<h5 id="step-41-adding-mode">Step 4.1 Adding Mode  :</h5>
+<p>The last action we need to do is to add <strong>Mode</strong> and send it to the device.</p>
+<p>Enter <strong>mode screen</strong> from the section <strong>Gateway Modes &gt; Default Mode</strong></p>
+<p><img alt="img" src="../img/mode.png" title="mode" /></p>
+<p>Enter <strong>Applications</strong> section and click <strong>Add Application</strong> button.</p>
+<p><img alt="img" src="../img/application_mode.png" title="application_mode" /></p>
+<p>Click on the <strong>+</strong> icon next to the application.</p>
+<p><img alt="img" src="../img/addApplicationMode.png" title="addApplicationMode" /></p>
+<p>Click <strong>Application Certificates</strong> section. Click <strong>Add Ceritifitaces</strong> button.</p>
+<p><img alt="img" src="../img/addCertificate.png" title="addCertificate" /></p>
+<p>Click on the <strong>+</strong> icon next to the application.</p>
+<p><img alt="img" src="../img/addcer.png" title="addcer" /></p>
+<h5 id="step-42-sending-mode">Step 4.2 Sending Mode  :</h5>
+<p>We will send <strong>Mode</strong> and finish our operations.</p>
+<p>Follow <strong>Gateways &gt; All Gateways</strong> section. You will see the number of your device on your screen. Mark the box on the left. Then click the <strong>Add To Working Set</strong> button on the top right. Click <strong>Clear and Add</strong> on the pop-up window.</p>
+<p><img alt="img" src="../img/gateway.png" title="gateway" /></p>
+<p>Then click on <strong>Modes</strong> in the top right. We select <strong>DEFAULT</strong> mode on the screen and click <strong>Change Mode</strong> button. We click the <strong>Yes</strong> button on the pop-up screen by selecting <strong>Send Immediately</strong>.</p>
+<p><img alt="img" src="../img/pushMode.png" title="pushMode" /></p>
+<p><strong>We're done.</strong></p></div>
         
     </div>
 
