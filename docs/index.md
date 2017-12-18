@@ -8,7 +8,7 @@ For our IoT project documentation visit [www.iot-ignite.com/documents](https://d
 
 ## How to use
 
-[![Watch the video](http://img.youtube.com/vi/RPMDYocyliY/0.jpg)](https://www.youtube.com/watch?v=RPMDYocyliY)
+[![Watch the video](http://img.youtube.com/vi/w6tWYsvksHo/0.jpg)](https://www.youtube.com/watch?v=w6tWYsvksHo&feature=youtu.be)
 
 ## Getting Started
 
