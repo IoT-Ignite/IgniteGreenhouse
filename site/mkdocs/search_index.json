@@ -2,12 +2,12 @@
     "docs": [
         {
             "location": "/", 
-            "text": "Overview\n\n\nIgnite Greenhouse is an open-source IoT project for data collection, visualization and mobile management of a greenhouse. Data from sensors can be monitored on \nthis app\n or \nweb console\n.\n\n\nGithub : \ngithub.com/IoT-Ignite/IgniteGreenhouse\n\n\nHow to use\n\n\n\n\nGetting Started\n\n\nWhat things you need to get information of your greenhouse.\n\n\n1. \nInstall Ignite Greenhouse for Android\n\n\n2. \nGet Ignite Greenhouse Kit\n (Gateway, Gateway App, Sensors)\n\n\n\n\nHardware that used as Gateway is Raspberry Pi\n\n\nGateway App perform connection transaction with cloud\n\n\nYou can choose many sensors you want, e.g., soil moisture, temperature, humidity\n\n\n\n\n3. Register your Ignite Greenhouse Kit with using your Android device.\n\n\n\n\n\n\nFirst, install the app.\n\n\n\n\n\n\nLog in.\n\n\n\n\n\n\nYou are at the gateway list screen now. Click add button and add your first gateway. Scan QR code on your gateway device to register it.\n\n\n\n\n\n\nThe gateway will appear on your dashboard. Now you can add another gateway or go to sensor dashboard by clicking gateway.\n\n\n\n\n\n\nOn sensor dashboard you can add and register new sensors by clicking the add button. The sensors will appear on sensor dashboard.\n\n\n\n\n\n\nTechnical Structure\n\n\nGateway devices are at the center of the scheme. Gateways interact other elements: Sensors, Cloud and your Android devices.\n\n\n\n\nSensors publish and gateways receive data with using the RF protocol.\n\n\nThe gateway sends the data to IoT-Ignite Cloud platform with using \nGateway App\n that already loaded on the gateway for collecting and processing data.\n\n\nCloud keeps processed data.\n\n\nFinally, the data comes to your Android device with using Ignite Rest Client API.\n\n\n\n\nFor more technical details about our IoT projects and APIs visit \nIoT-Ignite Documentations\n.\n\n\nProject Dependencies\n\n\n\n\nIoT-Ignite API\n - IoT-Ignite platform connections\n\n\nIgnite REST Client API\n - Retrofit based Android library\n\n\nRetrofit\n - For REST calls\n\n\nbarcodescanner\n - Using QR Scanner for register gateway and sensor\n\n\nAVLoadingIndicatorView\n - Using for loading screen\n\n\nMPAndroidChart\n - Charting", 
+            "text": "Overview\n\n\nIgnite Greenhouse is an open-source IoT project for data collection, visualization and managing your greenhouse. You can see various sensor data from your greenhouse on your app.\n\n\nGithub : \ngithub.com/IoT-Ignite/IgniteGreenhouse\n\n\nFor our IoT project documentation visit \nwww.iot-ignite.com/documents\n\n\nHow to use\n\n\n\n\nGetting Started\n\n\nWhat things you need to get information of your greenhouse.\n\n\n1. \nInstall Ignite Greenhouse for Android\n\n\n2. \nGet Ignite Greenhouse Kit\n (Gateway, Gateway App, Sensors)\n\n\n\n\nHardware that used as Gateway is Raspberry Pi\n\n\nGateway App perform connection transaction with cloud\n\n\nYou can choose many sensors you want, e.g., soil moisture, temperature, humidity\n\n\n\n\n:cactus: You can buy a kit or can find step by step instructions to create your own kit on \nhere\n :cactus:\n\n\n3. Register your Ignite Greenhouse Kit with using your Android device.\n\n\n\n\n\n\nFirst, install the app.\n\n\n\n\n\n\nLog in.\n\n\n\n\n\n\nYou are at the gateway list screen now. Click add button and add your first gateway. Scan QR code on your gateway device to register it.\n\n\n\n\n\n\nThe gateway will appear on your dashboard. Now you can add another gateway or go to sensor dashboard by clicking gateway.\n\n\n\n\n\n\nOn sensor dashboard you can add and register new sensors by clicking the add button. The sensors will appear on sensor dashboard.\n\n\n\n\n\n\nTechnical Structure\n\n\nGateway devices are at the center of the scheme. Gateways interact other elements: Sensors, Cloud and your Android devices.\n\n\n\n\nSensors publish and gateways receive data with using the RF protocol.\n\n\nThe gateway sends the data to IoT-Ignite Cloud platform with using \nGateway App\n that already loaded on the gateway for collecting and processing data.\n\n\nCloud keeps processed data.\n\n\nFinally, the data comes to your Android device with using Ignite Rest Client API.\n\n\n\n\nProject Dependencies\n\n\n\n\nIoT-Ignite API\n - IoT-Ignite platform connections\n\n\nIgnite REST Client API\n - Retrofit based Android library\n\n\nRetrofit\n - For REST calls\n\n\nbarcodescanner\n - Using QR Scanner for register gateway and sensor\n\n\nAVLoadingIndicatorView\n - Using for loading screen\n\n\nMPAndroidChart\n - Charting", 
             "title": "Ignite Greenhouse"
         }, 
         {
             "location": "/#overview", 
-            "text": "Ignite Greenhouse is an open-source IoT project for data collection, visualization and mobile management of a greenhouse. Data from sensors can be monitored on  this app  or  web console .  Github :  github.com/IoT-Ignite/IgniteGreenhouse", 
+            "text": "Ignite Greenhouse is an open-source IoT project for data collection, visualization and managing your greenhouse. You can see various sensor data from your greenhouse on your app.  Github :  github.com/IoT-Ignite/IgniteGreenhouse  For our IoT project documentation visit  www.iot-ignite.com/documents", 
             "title": "Overview"
         }, 
         {
@@ -27,7 +27,7 @@
         }, 
         {
             "location": "/#2-get-ignite-greenhouse-kit-gateway-gateway-app-sensors", 
-            "text": "Hardware that used as Gateway is Raspberry Pi  Gateway App perform connection transaction with cloud  You can choose many sensors you want, e.g., soil moisture, temperature, humidity", 
+            "text": "Hardware that used as Gateway is Raspberry Pi  Gateway App perform connection transaction with cloud  You can choose many sensors you want, e.g., soil moisture, temperature, humidity   :cactus: You can buy a kit or can find step by step instructions to create your own kit on  here  :cactus:", 
             "title": "2. Get Ignite Greenhouse Kit (Gateway, Gateway App, Sensors)"
         }, 
         {
@@ -37,7 +37,7 @@
         }, 
         {
             "location": "/#technical-structure", 
-            "text": "Gateway devices are at the center of the scheme. Gateways interact other elements: Sensors, Cloud and your Android devices.   Sensors publish and gateways receive data with using the RF protocol.  The gateway sends the data to IoT-Ignite Cloud platform with using  Gateway App  that already loaded on the gateway for collecting and processing data.  Cloud keeps processed data.  Finally, the data comes to your Android device with using Ignite Rest Client API.   For more technical details about our IoT projects and APIs visit  IoT-Ignite Documentations .", 
+            "text": "Gateway devices are at the center of the scheme. Gateways interact other elements: Sensors, Cloud and your Android devices.   Sensors publish and gateways receive data with using the RF protocol.  The gateway sends the data to IoT-Ignite Cloud platform with using  Gateway App  that already loaded on the gateway for collecting and processing data.  Cloud keeps processed data.  Finally, the data comes to your Android device with using Ignite Rest Client API.", 
             "title": "Technical Structure"
         }, 
         {
@@ -47,13 +47,128 @@
         }, 
         {
             "location": "/gatewayapp/", 
-            "text": "", 
+            "text": "Ignite Greenhouse Gateway\n\n\nIgnite Greenhouse is an open source \nARDIC\n project. The purpose of this project is to collect information on the environment and soil status in the greenhouses and inform the user in a single area.\n\n\n\n\n\n\n\n\nARDIC\n is publishing source codes to enable anyone to use this technology and to increase the yield of products in the greenhouse.\n\n\nGateway App\n\n\nThe codes in this section are the codes that work in \ngateway\n. We will talk about how to use these codes and the installation steps. After these steps, \n gateway \n will be ready for use.\n\n\n1. Preparing for Implementation\n\n\nStep 1 : Download the Project\n\n\nOpen the terminal and enter the following command.\n\n\n\n\ngit clone https://github.com/IoT-Ignite/IgniteGreenhouseGateway.git\n\n\n\n\nThus, the project will be located at the location you specify.\n\n\n\n\nStep 2 : Prepare Compiling Environment\n\n\nIf you don't have \nAndroid Studio\n on your computer, go to \nhttps://developer.android.com/studio/index.html\n to download the program and perform the installation.\n\n\n\n\nStep 2.1 : Open project\n\n\nOpen \nAndroid Studio\n. After that click on \nFile \n Open\n and then select the file we downloaded in the pop-up window and click the \nOK\n button.   \n\n\n\n\nStep 2.2 : Creating Application Signature\n\n\nWe have to compile the project. To compile, we first need to create an application signature.\n\n\nTo compile with the signature we click on \nBuild \n Generate Signed APK...\n\n\n\n\nIf there is no signature you created earlier, we click \n\"Create new ...\"\n button in the pop-up window.\n\n\nWe enter information on the screen.\n\n\n\n\nKey store path : The path of the folder you will sign\n\n\nPassword : Signature password\n\n\nAlias : Signature name\n\n\nPassword : Password\n\n\n\n\nClick the \nOK\n button.\n\n\n\n\nOnce you have entered the information, your project will be ready to be compiled. The information we create comes on the screen automatically.\n  Press the \nNext\n button.\n\n\n\n\nThe password screen comes up. We enter our password and press the \nOK\n button.\n\n\n\n\nWe're on our last screen. Once you click \nFinish\n button, our \n\".apk\"\n file becomes ready on \n\"app \n app-release.apk\"\n path.\n\n\n\n\n2. Gateway Installation\n\n\nStep 1 : Raspberry Pi 3\n\n\nThis application works on \nRaspberry Pi 3\n. To use this project, you need to purchase a \nRaspberry Pi 3\n. You can easily obtain this device from many company.\n\n\n\n\nStep 2 : Set-Up Android Things\n\n\nStep 2.1 : Install Android Things\n\n\nThe operating system used in the device is set to \n\"Android Things OS\"\n and the codes are written according to this system. To download this operating system, go to \nhttps://partner.android.com/things/console/\n.\n\n\nClick \nCREATE A PRODUCT\n button on the screen.\n\n\n\n\nFill in the required fields and press the \nCREATE\n button on the window.\n\n\n\n\nClick \nFACTORY IMAGES\n.\n\n\n\n\nClick \nCREATE BUILD CONFIGURATION\n button.\n\n\n\n\nAfter finishing the process, \n\"Build configuration list\"\n will appear below the page. Click here \n\"Download build\"\n link then downloading will start.\n\n\n\n\nStep 2.2 : Download Android Things\n\n\nWe extract the compressed file and install it on the \nSD Card\n. These operations can only be done using methods specific to your operating system. You can learn how to install by choosing your operating system below.\n\n\n\n\nLinux\n\n\nWindows\n\n\nMac\n\n\n\n\nStep 2.3 : Android Things Configuration\n\n\nAfter installing \nAndroid Things\n, \nWi-Fi\n settings need to be done. For this, go to\n\nhttps://developer.android.com/things/hardware/raspberrypi.html#connecting_wi-fi\n\n\nStep 3 : IoT - Ignite Agent Installing\n\n\nIot-Ignite is the cloud system of our project. The remote control mechanism operates through this system.\n\n\nStep 3.1 : IoT - Ignite Creating an Account\n\n\nIn order to use this platform, it is necessary to create an account first. Go to\n\n\nhttps://devzone.iot-ignite.com/dpanel/signup.php?page=development\n to create an account.\n\n\n\n\nIn the window that appears, fill in the information and press \nSIGN UP\n.\n\n\n\n\nStep 3.2 : Install IoT - Ignite Agent\n\n\nAfter registration, the home screen will come up. Click the \nDEVELOPMENT \n GATEWAYS\n section.\n\n\nClick \nREGISTER A GATEWAY\n button.\n\n\n\n\nSelect \nAndroid\n.\n\n\n\n\nClick the \nfrom here\n link.\n\n\n\n\nClick the link that include \n.apk\n extension.\n\n\n\n\nStep 3.3 : Download Agent\n\n\nAs a first step, you need to connect to the device via Wi-Fi.\nType the IP address of your Raspberry Pi device after the adb connect statement. This command is used to access the device.\n\n\n\n\nadb connect 192.168.2.79  \n\n\nadb shell\n\n\n\n\nGreenhouseSSID\n is the name of our network, \n123456\n is the password. You can change it for yourself.\n\n\n\n\nam startservice -n com.google.wifisetup/.WifiSetupService -a WifiSetupService.Connect -e GreenhouseSSID -e 123456\n\n\n\n\nReboot the device.\n\n\nPerform the installation \nIoT-Ignite Agent\n process when the boot completed.\n\n\n\n\nadb connect 192.168.2.79\n\n\nadb install -r IoTIgniteAgent-AR.IGF.0.8.33-20170427-R.apk\n\n\n\n\nStep 3.4 : Download Greenhouse Gateway Application\n\n\nWe upload the project file we have compiled with the signature before with this command.\n\n\n\n\nadb install -r app-release.apk\n\n\nadb shell\n\n\n\n\nWe are only running this program for a while.\n\n\n\n\nam start -n com.ardic.android.ignitegreenhouse/com.ardic.android.ignitegreenhouse.activities.MainActivity\n\n\n\n\nAfter these commands, \nGateway\n will be ready.\n\n\nStep 4 : Registering\n\n\nGateway\n is now ready for use but it is necessary to perform the licensing procedures to transfer the data to the cloud. For these operations go to \nhttps://github.com/IoT-Ignite/IgniteGreenhouse\n to download and install the \nIgnite Greenhouse App\n on an Android phone or tablet.\nIt will ask for username and password information first. Enter the username and password of the IoT - Ignite platform you were previously registered with.\n\n\nNow go to : \nhttp://www.qr-code-generator.com/\n\n\n\n\nOn the Qr Code Generator page, enter the \nDevice ID\n code in the upper right corner of the screen connected to Raspberry Pi.\n\n\n\n\nAfter clicking \nCreate QR CODE\n button, then scan the code appeared right on the screen via \nIgnite Greenhouse App\n.\n\n\nThe licensing process is complete.\n\n\nStep 4 Signing :\n\n\nThe last step is to use our product. We will sign the app in this step. This step was created by IoT - Ignite for security reasons.\n\n\nWe will notify IoT - Ignite the project we have compiled with the signature.\n\n\nLogin with your username and password you created earlier on: \nhttps://enterprise.iot-ignite.com/v3/access/login\n\n\nWe are logging into the apps screen with \nApplications \n App Store \n Categories\n section.\n\n\n\n\nThere are categories on the screen. We use \nDEFAULT\n. Click \nApplications\n button.\n\n\n\n\nClick \nAdd Application\n button.\n\n\n\n\nHere are the fields we need to fill in:\n\n\n\n\nFile : Ignite Greenhouse App .apk file path\n\n\nStart Application : Start on boot?\n\n\nDescription\n\n\n\n\n\n\nWhen we click \nChange\n button next to \nFile\n, we are asked to select a file. We select the \napp-release.apk\n application that we have compiled with the signature in \napp\n folder and press \nOpen\n button.\n\n\n\n\nClick \nUpload\n button.\n\n\n\n\nStep 4.1 Adding Mode  :\n\n\nThe last action we need to do is to add \nMode\n and send it to the device.\n\n\nEnter \nmode screen\n from the section \nGateway Modes \n Default Mode\n\n\n\n\nEnter \nApplications\n section and click \nAdd Application\n button.\n\n\n\n\nClick on the \n+\n icon next to the application.\n\n\n\n\nClick \nApplication Certificates\n section. Click \nAdd Ceritifitaces\n button.\n\n\n\n\nClick on the \n+\n icon next to the application.\n\n\n\n\nStep 4.2 Sending Mode  :\n\n\nWe will send \nMode\n and finish our operations.\n\n\nFollow \nGateways \n All Gateways\n section. You will see the number of your device on your screen. Mark the box on the left. Then click the \nAdd To Working Set\n button on the top right. Click \nClear and Add\n on the pop-up window.\n\n\n\n\nThen click on \nModes\n in the top right. We select \nDEFAULT\n mode on the screen and click \nChange Mode\n button. We click the \nYes\n button on the pop-up screen by selecting \nSend Immediately\n.\n\n\n\n\nWe're done.", 
             "title": "Ignite Greenhouse Gateway"
         }, 
         {
-            "location": "/about/", 
+            "location": "/gatewayapp/#ignite-greenhouse-gateway", 
+            "text": "Ignite Greenhouse is an open source  ARDIC  project. The purpose of this project is to collect information on the environment and soil status in the greenhouses and inform the user in a single area.    ARDIC  is publishing source codes to enable anyone to use this technology and to increase the yield of products in the greenhouse.", 
+            "title": "Ignite Greenhouse Gateway"
+        }, 
+        {
+            "location": "/gatewayapp/#gateway-app", 
+            "text": "The codes in this section are the codes that work in  gateway . We will talk about how to use these codes and the installation steps. After these steps,   gateway   will be ready for use.", 
+            "title": "Gateway App"
+        }, 
+        {
+            "location": "/gatewayapp/#1-preparing-for-implementation", 
             "text": "", 
+            "title": "1. Preparing for Implementation"
+        }, 
+        {
+            "location": "/gatewayapp/#step-1-download-the-project", 
+            "text": "Open the terminal and enter the following command.   git clone https://github.com/IoT-Ignite/IgniteGreenhouseGateway.git   Thus, the project will be located at the location you specify.", 
+            "title": "Step 1 : Download the Project"
+        }, 
+        {
+            "location": "/gatewayapp/#step-2-prepare-compiling-environment", 
+            "text": "If you don't have  Android Studio  on your computer, go to  https://developer.android.com/studio/index.html  to download the program and perform the installation.", 
+            "title": "Step 2 : Prepare Compiling Environment"
+        }, 
+        {
+            "location": "/gatewayapp/#step-21-open-project", 
+            "text": "Open  Android Studio . After that click on  File   Open  and then select the file we downloaded in the pop-up window and click the  OK  button.", 
+            "title": "Step 2.1 : Open project"
+        }, 
+        {
+            "location": "/gatewayapp/#step-22-creating-application-signature", 
+            "text": "We have to compile the project. To compile, we first need to create an application signature.  To compile with the signature we click on  Build   Generate Signed APK...   If there is no signature you created earlier, we click  \"Create new ...\"  button in the pop-up window.  We enter information on the screen.   Key store path : The path of the folder you will sign  Password : Signature password  Alias : Signature name  Password : Password   Click the  OK  button.   Once you have entered the information, your project will be ready to be compiled. The information we create comes on the screen automatically.\n  Press the  Next  button.   The password screen comes up. We enter our password and press the  OK  button.   We're on our last screen. Once you click  Finish  button, our  \".apk\"  file becomes ready on  \"app   app-release.apk\"  path.", 
+            "title": "Step 2.2 : Creating Application Signature"
+        }, 
+        {
+            "location": "/gatewayapp/#2-gateway-installation", 
+            "text": "", 
+            "title": "2. Gateway Installation"
+        }, 
+        {
+            "location": "/gatewayapp/#step-1-raspberry-pi-3", 
+            "text": "This application works on  Raspberry Pi 3 . To use this project, you need to purchase a  Raspberry Pi 3 . You can easily obtain this device from many company.", 
+            "title": "Step 1 : Raspberry Pi 3"
+        }, 
+        {
+            "location": "/gatewayapp/#step-2-set-up-android-things", 
+            "text": "", 
+            "title": "Step 2 : Set-Up Android Things"
+        }, 
+        {
+            "location": "/gatewayapp/#step-21-install-android-things", 
+            "text": "The operating system used in the device is set to  \"Android Things OS\"  and the codes are written according to this system. To download this operating system, go to  https://partner.android.com/things/console/ .  Click  CREATE A PRODUCT  button on the screen.   Fill in the required fields and press the  CREATE  button on the window.   Click  FACTORY IMAGES .   Click  CREATE BUILD CONFIGURATION  button.   After finishing the process,  \"Build configuration list\"  will appear below the page. Click here  \"Download build\"  link then downloading will start.", 
+            "title": "Step 2.1 : Install Android Things"
+        }, 
+        {
+            "location": "/gatewayapp/#step-22-download-android-things", 
+            "text": "We extract the compressed file and install it on the  SD Card . These operations can only be done using methods specific to your operating system. You can learn how to install by choosing your operating system below.   Linux  Windows  Mac", 
+            "title": "Step 2.2 : Download Android Things"
+        }, 
+        {
+            "location": "/gatewayapp/#step-23-android-things-configuration", 
+            "text": "After installing  Android Things ,  Wi-Fi  settings need to be done. For this, go to https://developer.android.com/things/hardware/raspberrypi.html#connecting_wi-fi", 
+            "title": "Step 2.3 : Android Things Configuration"
+        }, 
+        {
+            "location": "/gatewayapp/#step-3-iot-ignite-agent-installing", 
+            "text": "Iot-Ignite is the cloud system of our project. The remote control mechanism operates through this system.", 
+            "title": "Step 3 : IoT - Ignite Agent Installing"
+        }, 
+        {
+            "location": "/gatewayapp/#step-31-iot-ignite-creating-an-account", 
+            "text": "In order to use this platform, it is necessary to create an account first. Go to  https://devzone.iot-ignite.com/dpanel/signup.php?page=development  to create an account.   In the window that appears, fill in the information and press  SIGN UP .", 
+            "title": "Step 3.1 : IoT - Ignite Creating an Account"
+        }, 
+        {
+            "location": "/gatewayapp/#step-32-install-iot-ignite-agent", 
+            "text": "After registration, the home screen will come up. Click the  DEVELOPMENT   GATEWAYS  section.  Click  REGISTER A GATEWAY  button.   Select  Android .   Click the  from here  link.   Click the link that include  .apk  extension.", 
+            "title": "Step 3.2 : Install IoT - Ignite Agent"
+        }, 
+        {
+            "location": "/gatewayapp/#step-33-download-agent", 
+            "text": "As a first step, you need to connect to the device via Wi-Fi.\nType the IP address of your Raspberry Pi device after the adb connect statement. This command is used to access the device.   adb connect 192.168.2.79    adb shell   GreenhouseSSID  is the name of our network,  123456  is the password. You can change it for yourself.   am startservice -n com.google.wifisetup/.WifiSetupService -a WifiSetupService.Connect -e GreenhouseSSID -e 123456   Reboot the device.  Perform the installation  IoT-Ignite Agent  process when the boot completed.   adb connect 192.168.2.79  adb install -r IoTIgniteAgent-AR.IGF.0.8.33-20170427-R.apk", 
+            "title": "Step 3.3 : Download Agent"
+        }, 
+        {
+            "location": "/gatewayapp/#step-34-download-greenhouse-gateway-application", 
+            "text": "We upload the project file we have compiled with the signature before with this command.   adb install -r app-release.apk  adb shell   We are only running this program for a while.   am start -n com.ardic.android.ignitegreenhouse/com.ardic.android.ignitegreenhouse.activities.MainActivity   After these commands,  Gateway  will be ready.", 
+            "title": "Step 3.4 : Download Greenhouse Gateway Application"
+        }, 
+        {
+            "location": "/gatewayapp/#step-4-registering", 
+            "text": "Gateway  is now ready for use but it is necessary to perform the licensing procedures to transfer the data to the cloud. For these operations go to  https://github.com/IoT-Ignite/IgniteGreenhouse  to download and install the  Ignite Greenhouse App  on an Android phone or tablet.\nIt will ask for username and password information first. Enter the username and password of the IoT - Ignite platform you were previously registered with.  Now go to :  http://www.qr-code-generator.com/   On the Qr Code Generator page, enter the  Device ID  code in the upper right corner of the screen connected to Raspberry Pi.   After clicking  Create QR CODE  button, then scan the code appeared right on the screen via  Ignite Greenhouse App .  The licensing process is complete.", 
+            "title": "Step 4 : Registering"
+        }, 
+        {
+            "location": "/gatewayapp/#step-4-signing", 
+            "text": "The last step is to use our product. We will sign the app in this step. This step was created by IoT - Ignite for security reasons.  We will notify IoT - Ignite the project we have compiled with the signature.  Login with your username and password you created earlier on:  https://enterprise.iot-ignite.com/v3/access/login  We are logging into the apps screen with  Applications   App Store   Categories  section.   There are categories on the screen. We use  DEFAULT . Click  Applications  button.   Click  Add Application  button.   Here are the fields we need to fill in:   File : Ignite Greenhouse App .apk file path  Start Application : Start on boot?  Description    When we click  Change  button next to  File , we are asked to select a file. We select the  app-release.apk  application that we have compiled with the signature in  app  folder and press  Open  button.   Click  Upload  button.", 
+            "title": "Step 4 Signing :"
+        }, 
+        {
+            "location": "/gatewayapp/#step-41-adding-mode", 
+            "text": "The last action we need to do is to add  Mode  and send it to the device.  Enter  mode screen  from the section  Gateway Modes   Default Mode   Enter  Applications  section and click  Add Application  button.   Click on the  +  icon next to the application.   Click  Application Certificates  section. Click  Add Ceritifitaces  button.   Click on the  +  icon next to the application.", 
+            "title": "Step 4.1 Adding Mode  :"
+        }, 
+        {
+            "location": "/gatewayapp/#step-42-sending-mode", 
+            "text": "We will send  Mode  and finish our operations.  Follow  Gateways   All Gateways  section. You will see the number of your device on your screen. Mark the box on the left. Then click the  Add To Working Set  button on the top right. Click  Clear and Add  on the pop-up window.   Then click on  Modes  in the top right. We select  DEFAULT  mode on the screen and click  Change Mode  button. We click the  Yes  button on the pop-up screen by selecting  Send Immediately .   We're done.", 
+            "title": "Step 4.2 Sending Mode  :"
+        }, 
+        {
+            "location": "/about/", 
+            "text": "ARDIC R\nD\n\n\nhttp://www.ardictech.com/\n\n\nhttps://www.iot-ignite.com/", 
             "title": "About"
+        }, 
+        {
+            "location": "/about/#ardic-rd", 
+            "text": "http://www.ardictech.com/  https://www.iot-ignite.com/", 
+            "title": "ARDIC R&amp;D"
         }
     ]
 }
