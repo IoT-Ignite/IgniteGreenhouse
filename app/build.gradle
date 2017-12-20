@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.ardic.android.iotignite.greenhouse"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 2
+        versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         setProperty("archivesBaseName", "Ignite-Greenhouse-$versionName")
     }
@@ -16,6 +16,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            minifyEnabled false;
+            debuggable true;
         }
     }
 
@@ -36,24 +40,30 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    testImplementation 'junit:junit:4.12'
 
-    compile project(':igniterestclientlib')
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.+'
-    compile 'com.android.support:design:26.+'
-    compile 'com.android.support:cardview-v7:26.+'
-    compile 'com.android.support:support-v4:26.+'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
-    compile 'me.dm7.barcodescanner:zxing:1.9.4'
-    compile 'com.github.rey5137:material:1.2.4'
-    compile 'com.wang.avi:library:2.1.3'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 
-    testCompile 'junit:junit:4.12'
+    implementation project(':igniterestclientlib')
+
+    /** Android Support Libraries **/
+    implementation 'com.android.support:appcompat-v7:26.+'
+    implementation 'com.android.support.constraint:constraint-layout:1.+'
+    implementation 'com.android.support:design:26.+'
+    implementation 'com.android.support:cardview-v7:26.+'
+    implementation 'com.android.support:support-v4:26.+'
+
+    /** Retrofit Dependencies **/
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.1'
+
+    /** UI Dependencies **/
+    implementation 'me.dm7.barcodescanner:zxing:1.9.4'
+    implementation 'com.github.rey5137:material:1.2.4'
+    implementation 'com.wang.avi:library:2.1.3'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }
