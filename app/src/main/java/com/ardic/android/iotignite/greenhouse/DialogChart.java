@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
+import android.os.Handler;
 
 import com.ardic.android.iotignite.greenhouse.controllers.ThingDataHistoryController;
 import com.ardic.android.iotignite.greenhouse.listeners.ChartDataListener;
@@ -95,68 +96,76 @@ public class DialogChart extends Dialog {
                     @Override
                     public void onDataHistoryTaskComplete(final ThingDataHistory dataHistory) {
 
-                        Log.i(TAG, "History Task Complete!!" + dataHistory.getList().size());
-                        mActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                avLoadingIndicatorView.hide();
-                                Log.i(TAG,"READY :" + dataHistory.getList().size());
-                                List<Entry> entries = new ArrayList<>();
+                        if (dataHistory != null) {
+                            Log.i(TAG, "History Task Complete!!" + dataHistory.getList().size());
+                            mActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    avLoadingIndicatorView.hide();
+                                    Log.i(TAG, "Showing last " + dataHistory.getList().size() + " data.");
+                                    List<Entry> entries = new ArrayList<>();
 
-                                List<ThingData> dataList = dataHistory.getList();
+                                    List<ThingData> dataList = dataHistory.getList();
 
                                 /*     if (!dataList.isEmpty()) {
                                     lastData = dataList.get(dataList.size() - 1);
                                     xAxisDateValueFormatter.setDate(new Date(lastData.getCreateDate()));
                                 }*/
-                                /**
-                                 * Incoming history list is reverse sorted. new to old. So add it to list inverted.
-                                 */
+                                    /**
+                                     * Incoming history list is reverse sorted. new to old. So add it to list inverted.
+                                     */
 
-                                int reverseIteration = dataList.size() - 1;
-                                while (reverseIteration >= 0) {
-                                    Log.i(TAG, "Adding entry : " + dataList.get(reverseIteration).getData().get(0));
-                                    entries.add(new Entry((dataList.size() - reverseIteration), Float.valueOf(dataList.get(reverseIteration).getData().get(0))));
-                                    reverseIteration--;
-                                    // TODO : Commented lines are for adding time values to xAxis.
-                                    // Log.i(TAG, "Adding entry Create Date: " + dataList.get(k).getCreateDate() + "\nDATE : " + new Date(dataList.get(k).getCreateDate()).toString());
-                                    // long difference = dataList.get(k).getCreateDate() - lastData.getCreateDate();
-                                    // Log.i(TAG, "DIFF : " + difference);
-                                    // entries.add(new Entry(difference, Float.valueOf(dataList.get(k).getData().get(0))));
+                                    int reverseIteration = dataList.size() - 1;
+                                    while (reverseIteration >= 0) {
+                                        Log.i(TAG, "Adding entry : " + dataList.get(reverseIteration).getData().get(0));
+                                        entries.add(new Entry((dataList.size() - reverseIteration), Float.valueOf(dataList.get(reverseIteration).getData().get(0))));
+                                        reverseIteration--;
+                                        // TODO : Commented lines are for adding time values to xAxis.
+                                        // Log.i(TAG, "Adding entry Create Date: " + dataList.get(k).getCreateDate() + "\nDATE : " + new Date(dataList.get(k).getCreateDate()).toString());
+                                        // long difference = dataList.get(k).getCreateDate() - lastData.getCreateDate();
+                                        // Log.i(TAG, "DIFF : " + difference);
+                                        // entries.add(new Entry(difference, Float.valueOf(dataList.get(k).getData().get(0))));
+                                    }
+
+                                    dataSet = new LineDataSet(entries, dialogThing.getId());
+
+                                    if (Constants.GREENHOUSE_TEMPERATURE_THINGTYPE.equals(dialogThing.getType())) {
+                                        dataSet.setCircleColor(Color.RED);
+                                        dataSet.setColor(Color.RED);
+                                        lineChart.getDescription().setText("Temperature °C");
+
+                                    } else {
+                                        dataSet.setCircleColor(Color.CYAN);
+                                        dataSet.setColor(Color.CYAN);
+                                        lineChart.getDescription().setText("Humidity %");
+                                    }
+
+                                    // add entries to dataset
+                                    dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+                                    dataSet.setCircleRadius(7f);
+                                    dataSet.setCircleHoleRadius(2f);
+                                    dataSet.setLineWidth(4f);
+                                    dataSet.setValueTextSize(10f);
+
+                                    dataSet.setMode(LineDataSet.Mode.LINEAR);
+                                    /// dataSet.set
+                                    LineData lineData = new LineData(dataSet);
+                                    lineChart.setData(lineData);
+                                    lineChart.setVisibleXRangeMaximum(6);
+                                    lineChart.getLegend().setTextSize(12f);
+                                    lineChart.getDescription().setTextSize(12f);
+
+                                    lineChart.moveViewToAnimated(lineData.getEntryCount() - lineChart.getVisibleXRange(), lineData.getEntryCount(), YAxis.AxisDependency.RIGHT, 10000L);
+                                    isChartCreating = false;
                                 }
+                            });
+                        } else {
+                            Log.i(TAG, "No recent data for today.");
+                            Toast.makeText(mActivity, "No recent data for today.", Toast.LENGTH_SHORT).show();
+                            avLoadingIndicatorView.hide();
+                            closeDialogDelayed(3000L);
 
-                                dataSet = new LineDataSet(entries, dialogThing.getId());
-
-                                if (Constants.GREENHOUSE_TEMPERATURE_THINGTYPE.equals(dialogThing.getType())) {
-                                    dataSet.setCircleColor(Color.RED);
-                                    dataSet.setColor(Color.RED);
-                                    lineChart.getDescription().setText("Temperature °C");
-
-                                } else {
-                                    dataSet.setCircleColor(Color.CYAN);
-                                    dataSet.setColor(Color.CYAN);
-                                    lineChart.getDescription().setText("Humidity %");
-                                }
-
-                                // add entries to dataset
-                                dataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-                                dataSet.setCircleRadius(7f);
-                                dataSet.setCircleHoleRadius(2f);
-                                dataSet.setLineWidth(4f);
-                                dataSet.setValueTextSize(10f);
-
-                                dataSet.setMode(LineDataSet.Mode.LINEAR);
-                                /// dataSet.set
-                                LineData lineData = new LineData(dataSet);
-                                lineChart.setData(lineData);
-                                lineChart.setVisibleXRangeMaximum(6);
-                                lineChart.getLegend().setTextSize(12f);
-                                lineChart.getDescription().setTextSize(12f);
-
-                                lineChart.moveViewToAnimated(lineData.getEntryCount() - lineChart.getVisibleXRange(), lineData.getEntryCount(), YAxis.AxisDependency.RIGHT, 10000L);
-                                isChartCreating = false;
-                            }
-                        });
+                        }
                     }
                 }).execute();
 
@@ -238,5 +247,19 @@ public class DialogChart extends Dialog {
         public void setDate(Date d) {
             this.refDate = d;
         }
+    }
+
+    public void closeDialogDelayed(final long delay) {
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+               closeDialog();
+            }
+        }, delay);
+    }
+
+    public void closeDialog() {
+        dismiss();
     }
 }
