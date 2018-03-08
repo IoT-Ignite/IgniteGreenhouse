@@ -251,7 +251,10 @@ public class SensorDashboardActivity extends AppCompatActivity
 
         int id = item.getItemId();
         if (id == R.id.nav_gateways) {
-            startActivity(new Intent(SensorDashboardActivity.this, GatewayDashboardActivity.class));
+            Intent intent = new Intent(SensorDashboardActivity.this, GatewayDashboardActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(Constants.Extra.EXTRA_USER_MAIL, userMail);
+            startActivity(intent);
         } else if (id == R.id.nav_settings) {
             //TODO :
         } else if (id == R.id.nav_faq) {
@@ -275,7 +278,9 @@ public class SensorDashboardActivity extends AppCompatActivity
             startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
         } else if (id == R.id.nav_log_out) {
-            startActivity(new Intent(SensorDashboardActivity.this, LoginActivity.class));
+            Intent intent = new Intent(SensorDashboardActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.activity_sensor_dashboard_drawer_layout);

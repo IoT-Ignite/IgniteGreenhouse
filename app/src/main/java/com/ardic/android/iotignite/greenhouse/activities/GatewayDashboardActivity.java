@@ -246,7 +246,9 @@ public class GatewayDashboardActivity extends AppCompatActivity
             startActivity(new Intent(Intent.ACTION_VIEW, uri));
 
         } else if (id == R.id.nav_log_out) {
-            startActivity(new Intent(GatewayDashboardActivity.this, LoginActivity.class));
+            Intent intent = new Intent(GatewayDashboardActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
 
         drawer = (DrawerLayout) findViewById(R.id.activity_gateway_dashboard_drawer_layout);
