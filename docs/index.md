@@ -48,8 +48,8 @@ Gateway devices are at the center of the scheme. Gateways interact other element
 
 ## Project Dependencies
 
-* [IoT-Ignite API](http://www.dropwizard.io/1.0.2/docs/) - IoT-Ignite platform connections
-* [Ignite REST Client API](https://maven.apache.org/) - Retrofit based Android library
+* [IoT-Ignite API](https://devzone.iot-ignite.com/article-categories/api/) - IoT-Ignite platform connections
+* [Ignite REST Client API](https://github.com/IoT-Ignite/IgniteRestClientLibrary) - Retrofit based Android library
 * [Retrofit](http://square.github.io/retrofit/) - For REST calls
 * [barcodescanner](https://github.com/dm77/barcodescanner) - Using QR Scanner for register gateway and sensor
 * [AVLoadingIndicatorView](https://github.com/81813780/AVLoadingIndicatorView) - Using for loading screen
